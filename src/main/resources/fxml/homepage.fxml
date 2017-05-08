@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="window" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.imageEnhancement.HomepageController">
+   <children>
+      <Label layoutX="368.0" layoutY="45.0" text="Image Enhancement">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <Label layoutX="32.0" layoutY="92.0" text="Frames">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="32.0" layoutY="127.0" text="Select a folder containing the frames captured. Be sure to use a tripod! If high ISO is used, be sure to take many photos (~ 32 to 64)" />
+      <Button fx:id="framesBtn" layoutX="32.0" layoutY="159.0" mnemonicParsing="false" onMouseClicked="#selectFrames" text="Upload frames" />
+      <Label fx:id="frames" layoutX="158.0" layoutY="164.0" prefHeight="21.0" prefWidth="828.0" />
+      <Label layoutX="32.0" layoutY="227.0" text="Black Frames">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="32.0" layoutY="262.0" prefHeight="47.0" prefWidth="952.0" text="Cover the lense of your camera with something black like tape or a black bag. Take about the same number of frames as the actual frames above with the exact same settings. This is optional, but recommended to remove a great deal of sensor noise." wrapText="true" />
+      <Button fx:id="blackFramesBtn" layoutX="32.0" layoutY="319.0" mnemonicParsing="false" onMouseClicked="#selectBlackFrames" text="Upload black frames" />
+      <Label fx:id="blackFrames" layoutX="198.0" layoutY="324.0" prefHeight="21.0" prefWidth="802.0" />
+      <Button fx:id="enhanceBtn" layoutX="424.0" layoutY="528.0" mnemonicParsing="false" onMouseClicked="#createEnhancedImage" text="Create enhanced image" />
+      <Label fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="224.0" layoutY="587.0" prefHeight="21.0" prefWidth="577.0" textFill="RED" />
+      <ProgressBar fx:id="progressBar" layoutX="266.0" layoutY="619.0" prefHeight="23.0" prefWidth="494.0" progress="0.0" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="186.0" layoutY="233.0" onMouseClicked="#blackFrameHelp" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/help.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="30.0" layoutY="712.0" text="Inspired by this article: " />
+      <Hyperlink layoutX="186.0" layoutY="708.0" onMouseClicked="#openResearchBlog" text="https://research.googleblog.com/2017/04/experimental-nighttime-photography-with.html" />
+      <Label layoutX="30.0" layoutY="687.0" text="Created by Kyle Corry" />
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="119.0" layoutY="98.0" onMouseClicked="#frameHelp" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/help.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
