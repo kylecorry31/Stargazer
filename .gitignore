@@ -190,3 +190,5 @@ gradle-app.setting
 
 *.log
 *.dat
+
+Output/

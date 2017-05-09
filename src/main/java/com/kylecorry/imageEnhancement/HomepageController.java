@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
@@ -36,6 +37,9 @@ public class HomepageController implements Initializable {
 
     private List<String> darkFiles, lightFiles;
 
+    public static Point startStar1, endStar1, startStar2, endStar2;
+    public static BufferedImage hdrImage;
+
     @FXML
     Button framesBtn;
 
@@ -59,6 +63,9 @@ public class HomepageController implements Initializable {
 
     @FXML
     ProgressBar progressBar;
+
+    @FXML
+    CheckBox alignStars;
 
     public HomepageController() {
         darkFiles = new LinkedList<>();
@@ -87,6 +94,7 @@ public class HomepageController implements Initializable {
 
     public void createEnhancedImage() {
         enhanceBtn.setDisable(true);
+        final boolean stars = alignStars.isSelected();
         Service service = new Service<BufferedImage>() {
 
 
@@ -150,6 +158,77 @@ public class HomepageController implements Initializable {
                 };
             }
         };
+
+        Service alignmentService = new Service<BufferedImage>() {
+
+
+            @Override
+            protected Task<BufferedImage> createTask() {
+                return new Task<BufferedImage>() {
+
+                    private double progress;
+                    private boolean black = true;
+
+                    private boolean isProcessingBlack() {
+                        return black;
+                    }
+
+                    private double getInnerProgress() {
+                        return progress;
+                    }
+
+                    private void addToProgress(double amount) {
+                        progress += amount;
+                    }
+
+                    @Override
+                    protected BufferedImage call() throws Exception {
+                        HDR hdr = new HDR();
+                        StarAligner starAligner = new StarAligner();
+                        updateProgress(0, 1);
+
+                        final double totalWork = darkFiles.size() + lightFiles.size() + (darkFiles.isEmpty() ? 0 : 1);
+
+                        hdr.imageNumber.addListener((observable, oldValue, newValue) -> {
+                            Platform.runLater(() -> {
+                                if (oldValue.intValue() != newValue.intValue())
+                                    addToProgress(1 / totalWork);
+                                updateMessage("Processing black frame " + newValue.intValue() + " of " + darkFiles.size());
+                                updateProgress(getInnerProgress(), 1);
+                            });
+                        });
+
+                        starAligner.imageNumber.addListener((observable, oldValue, newValue) -> {
+                            Platform.runLater(() -> {
+                                if (oldValue.intValue() != newValue.intValue())
+                                    addToProgress(1 / totalWork);
+                                updateMessage("Aligning stars " + newValue.intValue() + " of " + lightFiles.size());
+                                updateProgress(getInnerProgress(), 1);
+
+                            });
+                        });
+
+                        BufferedImage dark = null;
+                        if (!darkFiles.isEmpty()) {
+                            updateMessage("Creating black average");
+                            dark = hdr.averageImagesLazy(darkFiles);
+                        }
+                        black = false;
+                        updateMessage("Creating average");
+                        BufferedImage light = starAligner.alignStars(lightFiles, startStar1, endStar1, startStar2, endStar2);
+                        BufferedImage diff = light;
+                        if (!darkFiles.isEmpty()) {
+                            updateMessage("Subtracting images");
+                            ImageSubtractor subtractor = new ImageSubtractor();
+                            diff = subtractor.subtract(light, dark);
+                        }
+                        updateProgress(1, 1);
+                        return diff;
+                    }
+                };
+            }
+        };
+
         service.setOnSucceeded((event) -> {
             progressText.textProperty().unbind();
             progressText.setText("Done");
@@ -170,6 +249,47 @@ public class HomepageController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            progressBar.progressProperty().unbind();
+            progressBar.setProgress(0);
+            progressText.setText("");
+
+            if (!stars) {
+                frames.setText("");
+                blackFrames.setText("");
+                lightFiles = new LinkedList<>();
+                darkFiles = new LinkedList<>();
+                enhanceBtn.setDisable(true);
+            } else {
+                hdrImage = (BufferedImage) service.getValue();
+                displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
+                progressText.textProperty().bind(alignmentService.messageProperty());
+                progressBar.progressProperty().bind(alignmentService.progressProperty());
+                alignmentService.start();
+            }
+
+        });
+
+        alignmentService.setOnSucceeded(event -> {
+            progressText.textProperty().unbind();
+            progressText.setText("Done");
+
+            String outputFileName = "hdr-stars.jpg";
+            FileChooser fileChooser = new FileChooser();
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.jpeg");
+            fileChooser.getExtensionFilters().add(extFilter);
+            File imageFile = fileChooser.showSaveDialog(null);
+            if (imageFile != null) {
+                outputFileName = imageFile.getAbsolutePath();
+            } else {
+                System.out.println("No Selection ");
+            }
+
+            try {
+                ImageIO.write((BufferedImage) alignmentService.getValue(), "JPEG", new File(outputFileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             progressBar.progressProperty().unbind();
             progressBar.setProgress(0);
             progressText.setText("");
@@ -179,10 +299,11 @@ public class HomepageController implements Initializable {
             darkFiles = new LinkedList<>();
             enhanceBtn.setDisable(true);
         });
+
+
         progressText.textProperty().bind(service.messageProperty());
         progressBar.progressProperty().bind(service.progressProperty());
         service.start();
-
 
     }
 
@@ -218,7 +339,7 @@ public class HomepageController implements Initializable {
         displayPopup("/fxml/BlackFrameHelp.fxml", "Subtracting Black Frames");
     }
 
-    public void frameHelp(){
+    public void frameHelp() {
         displayPopup("/fxml/FrameHelp.fxml", "Averaging Frames");
     }
 
