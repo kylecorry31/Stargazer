@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.image.BufferedImage;
@@ -35,20 +36,10 @@ public class Main extends Application {
     }
 
 
-//    public static List<BufferedImage> getImages(String directory) {
-//        List<BufferedImage> images = new LinkedList<>();
-//        List<String> files = getAllFileNames(directory);
-//        for (String file : files)
-//            images.add(getImage(file));
-//        return images;
-//    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/homepage.fxml"));
         Parent root = loader.load();
-//            root.getStylesheets().add("/style/material.css");
-//            primaryStage.getIcons().add(new Image(("images/logo.png")));
         primaryStage.setTitle("Image Enhancement");
         primaryStage.setScene(new Scene(root, 1024, 768));
         primaryStage.show();

@@ -1,5 +1,7 @@
 package com.kylecorry.imageEnhancement;
 
+import composite.BlendComposite;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -9,6 +11,19 @@ import java.awt.image.BufferedImage;
 public class ImageSubtractor {
 
     public BufferedImage subtract(BufferedImage first, BufferedImage second) {
+//        BlendComposite composite = BlendComposite.Subtract;
+//        BufferedImage difference = ImageUtils.copyImage(first, BufferedImage.TYPE_INT_ARGB);
+//        Graphics2D graphics2D = difference.createGraphics();
+//        graphics2D.setComposite(composite.derive(0.5f));
+//        try {
+//            graphics2D.drawImage(ImageUtils.copyImage(second, BufferedImage.TYPE_INT_ARGB), 0, 0, null);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        graphics2D.dispose();
+//
+//        difference = ImageUtils.copyImage(difference, BufferedImage.TYPE_INT_RGB);
+
         BufferedImage difference = new BufferedImage(first.getWidth(), first.getHeight(), first.getType());
         Color pixelColors;
         for (int i = 0; i < difference.getHeight(); i++) {

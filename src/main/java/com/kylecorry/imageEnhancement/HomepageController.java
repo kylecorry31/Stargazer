@@ -1,7 +1,6 @@
 package com.kylecorry.imageEnhancement;
 
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -66,6 +65,9 @@ public class HomepageController implements Initializable {
 
     @FXML
     CheckBox alignStars;
+
+    BufferedImage darkImage;
+
 
     public HomepageController() {
         darkFiles = new LinkedList<>();
@@ -138,19 +140,19 @@ public class HomepageController implements Initializable {
                         });
 
 
-                        BufferedImage dark = null;
+                        darkImage = null;
                         if (!darkFiles.isEmpty()) {
                             updateMessage("Creating black average");
-                            dark = hdr.averageImagesLazy(darkFiles);
+                            darkImage = hdr.averageImages(darkFiles);
                         }
                         black = false;
                         updateMessage("Creating average");
-                        BufferedImage light = hdr.averageImagesLazy(lightFiles);
+                        BufferedImage light = hdr.averageImages(lightFiles);
                         BufferedImage diff = light;
                         if (!darkFiles.isEmpty()) {
                             updateMessage("Subtracting images");
                             ImageSubtractor subtractor = new ImageSubtractor();
-                            diff = subtractor.subtract(light, dark);
+                            diff = subtractor.subtract(light, darkImage);
                         }
                         updateProgress(1, 1);
                         return diff;
@@ -183,20 +185,11 @@ public class HomepageController implements Initializable {
 
                     @Override
                     protected BufferedImage call() throws Exception {
-                        HDR hdr = new HDR();
                         StarAligner starAligner = new StarAligner();
                         updateProgress(0, 1);
 
-                        final double totalWork = darkFiles.size() + lightFiles.size() + (darkFiles.isEmpty() ? 0 : 1);
+                        final double totalWork = lightFiles.size() + (darkFiles.isEmpty() ? 0 : 1);
 
-                        hdr.imageNumber.addListener((observable, oldValue, newValue) -> {
-                            Platform.runLater(() -> {
-                                if (oldValue.intValue() != newValue.intValue())
-                                    addToProgress(1 / totalWork);
-                                updateMessage("Processing black frame " + newValue.intValue() + " of " + darkFiles.size());
-                                updateProgress(getInnerProgress(), 1);
-                            });
-                        });
 
                         starAligner.imageNumber.addListener((observable, oldValue, newValue) -> {
                             Platform.runLater(() -> {
@@ -208,19 +201,13 @@ public class HomepageController implements Initializable {
                             });
                         });
 
-                        BufferedImage dark = null;
-                        if (!darkFiles.isEmpty()) {
-                            updateMessage("Creating black average");
-                            dark = hdr.averageImagesLazy(darkFiles);
-                        }
-                        black = false;
                         updateMessage("Creating average");
                         BufferedImage light = starAligner.alignStars(lightFiles, startStar1, endStar1, startStar2, endStar2);
                         BufferedImage diff = light;
-                        if (!darkFiles.isEmpty()) {
+                        if (darkImage != null) {
                             updateMessage("Subtracting images");
                             ImageSubtractor subtractor = new ImageSubtractor();
-                            diff = subtractor.subtract(light, dark);
+                            diff = subtractor.subtract(light, darkImage);
                         }
                         updateProgress(1, 1);
                         return diff;
@@ -260,6 +247,7 @@ public class HomepageController implements Initializable {
                 lightFiles = new LinkedList<>();
                 darkFiles = new LinkedList<>();
                 enhanceBtn.setDisable(true);
+                darkImage = null;
             } else {
                 hdrImage = (BufferedImage) service.getValue();
                 displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
@@ -295,6 +283,7 @@ public class HomepageController implements Initializable {
             progressText.setText("");
             frames.setText("");
             blackFrames.setText("");
+            darkImage = null;
             lightFiles = new LinkedList<>();
             darkFiles = new LinkedList<>();
             enhanceBtn.setDisable(true);

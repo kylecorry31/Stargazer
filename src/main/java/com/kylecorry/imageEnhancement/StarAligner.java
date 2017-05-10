@@ -32,12 +32,7 @@ public class StarAligner {
             System.out.println("Aligning stars image " + i+1 + " of " + files.size());
             BufferedImage image = Main.getImage(files.get(i));
 
-            BufferedImage alphaSecond = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-            for (int x = 0; x < image.getWidth(); x++) {
-                for (int y = 0; y < image.getHeight(); y++) {
-                    alphaSecond.setRGB(x, y, image.getRGB(x, y));
-                }
-            }
+            BufferedImage alphaSecond = ImageUtils.copyImage(image, BufferedImage.TYPE_INT_ARGB);
             float[] scales = {1f, 1f, 1f, (float) (1.0 / (i + 1))};
             float[] offsets = new float[4];
             RescaleOp rop = new RescaleOp(scales, offsets, null);
@@ -55,6 +50,8 @@ public class StarAligner {
             graphics2D.setTransform(oldTransform);
 
         }
+
+        graphics2D.dispose();
 
         return base;
     }
