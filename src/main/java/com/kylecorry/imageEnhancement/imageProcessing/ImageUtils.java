@@ -8,7 +8,7 @@ import java.awt.image.*;
  */
 public class ImageUtils {
 
-    static BufferedImage copyImage(BufferedImage source, int type) {
+    public static BufferedImage copyImage(BufferedImage source, int type) {
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), type);
         Graphics2D g = b.createGraphics();
         g.drawImage(source, 0, 0, null);

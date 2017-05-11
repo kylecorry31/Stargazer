@@ -1,14 +1,18 @@
 package com.kylecorry.imageEnhancement.ui;
 
+import com.kylecorry.imageEnhancement.imageProcessing.ImageUtils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -25,23 +29,101 @@ public class StarStreakController implements Initializable {
     AnchorPane window;
 
     @FXML
+    javafx.scene.control.ScrollPane scrollPane;
+
+    @FXML
     javafx.scene.control.Label helpText;
 
     StarPair firstStar, secondStar;
 
     javafx.scene.image.Image image;
 
+    BufferedImage drawImage;
+
+
+    double initX;
+    double initY;
+    int counter;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        firstStar = new StarPair(null, null);
-        secondStar = new StarPair(null, null);
+        firstStar = null;
+        secondStar = null;
         image = SwingFXUtils.toFXImage(HomepageController.hdrImage, null);
+        drawImage = ImageUtils.copyImage(HomepageController.hdrImage, HomepageController.hdrImage.getType());
         hdrImage.setFitWidth(image.getWidth());
         hdrImage.setFitHeight(image.getHeight());
         hdrImage.setImage(image);
         centerImage(hdrImage);
+        counter = 0;
 
-        hdrImage.setOnMouseClicked(event -> setStarPoint(new Point((int) event.getX(), (int) event.getY())));
+        final double maxX = image.getWidth();
+        final double maxY = image.getHeight();
+
+//        hdrImage.setOnMousePressed(me -> {
+//            initX = me.getX();
+//            initY = me.getY();
+//            me.consume();
+//        });
+
+
+        helpText.setText("Drag across a star streak, then press done");
+        hdrImage.setOnMousePressed(me -> {
+            drawImage = ImageUtils.copyImage(HomepageController.hdrImage, HomepageController.hdrImage.getType());
+            hdrImage.setImage(SwingFXUtils.toFXImage(drawImage, null));
+            initX = me.getX();
+            initY = me.getY();
+            System.out.println(initX + " " + initY);
+            me.consume();
+        });
+
+        hdrImage.setOnMouseReleased(me -> {
+            if (me.getX() < maxX && me.getY() < maxY) {
+                Graphics2D graphics2D = drawImage.createGraphics();
+                graphics2D.setColor(java.awt.Color.GREEN);
+                graphics2D.drawLine((int) initX, (int) initY, (int) me.getX(), (int) me.getY());
+                graphics2D.dispose();
+                hdrImage.setImage(SwingFXUtils.toFXImage(drawImage, null));
+                switch (counter) {
+                    case 0:
+                        firstStar = new StarPair(new Point((int) initX, (int) initY), new Point((int) me.getX(), (int) me.getY()));
+                        break;
+                    case 1:
+                        secondStar = new StarPair(new Point((int) initX, (int) initY), new Point((int) me.getX(), (int) me.getY()));
+                        break;
+                }
+            }
+
+            initX = me.getX() > maxX ? maxX : me.getX();
+            initY = me.getY() > maxY ? maxY : me.getY();
+        });
+
+//        hdrImage.setOnMouseClicked(event -> setStarPoint(new Point((int) event.getX(), (int) event.getY())));
+    }
+
+    public void doneBtnClicked() {
+        switch (counter) {
+            case 0:
+                if (firstStar != null) {
+                    HomepageController.startStar1 = firstStar.first;
+                    HomepageController.endStar1 = firstStar.second;
+                    counter++;
+                    helpText.setText("Drag across a second star streak, then press done");
+                }
+                break;
+            case 1:
+                if (secondStar != null) {
+                    HomepageController.startStar2 = secondStar.first;
+                    HomepageController.endStar2 = secondStar.second;
+                    counter++;
+                    Stage stage = (Stage) window.getScene().getWindow();
+                    stage.close();
+                }
+                break;
+            default:
+                Stage stage = (Stage) window.getScene().getWindow();
+                stage.close();
+        }
     }
 
 
