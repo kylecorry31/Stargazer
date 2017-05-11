@@ -1,9 +1,8 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.ui;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;

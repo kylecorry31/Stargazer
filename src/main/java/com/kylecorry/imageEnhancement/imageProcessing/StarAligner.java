@@ -1,5 +1,6 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.imageProcessing;
 
+import com.kylecorry.imageEnhancement.Main;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -12,12 +13,12 @@ import java.util.List;
 /**
  * Created by Kylec on 5/9/2017.
  */
-public class StarAligner {
+class StarAligner {
 
-    public IntegerProperty imageNumber = new SimpleIntegerProperty(1, "imageNumber");
+    IntegerProperty imageNumber = new SimpleIntegerProperty(1, "imageNumber");
 
 
-    public BufferedImage alignStars(List<String> files, Point a, Point aP, Point b, Point bP) {
+    BufferedImage alignStars(List<String> files, Point a, Point aP, Point b, Point bP) {
         imageNumber.set(1);
         BufferedImage base = Main.getImage(files.get(0));
 
@@ -29,7 +30,7 @@ public class StarAligner {
 
         for (int i = 1; i < files.size(); i++) {
             imageNumber.set(i + 1);
-            System.out.println("Aligning stars image " + (i+1) + " of " + files.size());
+            System.out.println("Aligning stars image " + (i + 1) + " of " + files.size());
             BufferedImage image = Main.getImage(files.get(i));
 
             BufferedImage alphaSecond = ImageUtils.copyImage(image, BufferedImage.TYPE_INT_ARGB);

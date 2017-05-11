@@ -1,13 +1,10 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.imageProcessing;
 
 import java.awt.*;
 
-/**
- * Created by Kylec on 5/9/2017.
- */
-public class RotationMath {
+class RotationMath {
 
-    public static Point centerOfRotation(Point a, Point aPrime, Point b, Point bPrime) {
+    static Point centerOfRotation(Point a, Point aPrime, Point b, Point bPrime) {
         Pair mA = midPoint(a, aPrime);
         double sPA = -1 / slope(a, aPrime);
         Pair mB = midPoint(b, bPrime);
@@ -26,7 +23,7 @@ public class RotationMath {
         return new Pair((a.x + b.x) / 2.0, (a.y + b.y) / 2.0);
     }
 
-    public static double angleBetween(Point origin, Point a, Point b) {
+    static double angleBetween(Point origin, Point a, Point b) {
 
         Point normA = new Point(a.x - origin.x, a.y - origin.y);
         Point normB = new Point(b.x - origin.x, b.y - origin.y);
@@ -36,15 +33,17 @@ public class RotationMath {
 
 
     static class Pair {
-        public double x, y;
+        double x, y;
 
-        public Pair(double x, double y) {
+        Pair(double x, double y) {
             this.x = x;
             this.y = y;
         }
 
         @Override
         public boolean equals(Object obj) {
+            if (!(obj instanceof Pair))
+                return false;
             Pair other = (Pair) obj;
             return other.x == x && other.y == y;
         }

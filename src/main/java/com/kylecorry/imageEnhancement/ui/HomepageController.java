@@ -1,5 +1,7 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.ui;
 
+import com.kylecorry.imageEnhancement.imageProcessing.*;
+import com.kylecorry.imageEnhancement.storage.FileManager;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -18,7 +20,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -71,10 +72,13 @@ public class HomepageController implements Initializable {
 
     BufferedImage darkImage;
 
+    private FileManager fileManager;
+
 
     public HomepageController() {
         darkFiles = new LinkedList<>();
         lightFiles = new LinkedList<>();
+        fileManager = new FileManager();
     }
 
 
@@ -128,12 +132,12 @@ public class HomepageController implements Initializable {
 
                     @Override
                     protected BufferedImage call() throws Exception {
-                        HDR hdr = new HDR();
+                        ImageProcessor imageProcessor = new ImageProcessor(new FileManager());
                         updateProgress(0, 1);
 
                         final double totalWork = darkFiles.size() + lightFiles.size() + (darkFiles.isEmpty() ? 0 : 1);
 
-                        hdr.imageNumber.addListener((observable, oldValue, newValue) -> {
+                        imageProcessor.imageNumber.addListener((observable, oldValue, newValue) -> {
                             Platform.runLater(() -> {
                                 if (oldValue.intValue() != newValue.intValue())
                                     addToProgress(1 / totalWork);
@@ -150,16 +154,15 @@ public class HomepageController implements Initializable {
                         darkImage = null;
                         if (!darkFiles.isEmpty()) {
                             updateMessage("Creating black average");
-                            darkImage = hdr.averageImages(darkFiles);
+                            darkImage = imageProcessor.reduceNoise(darkFiles);
                         }
                         black = false;
                         updateMessage("Creating average");
-                        BufferedImage light = hdr.averageImages(lightFiles);
+                        BufferedImage light = imageProcessor.reduceNoise(lightFiles);
                         BufferedImage diff = light;
                         if (!darkFiles.isEmpty()) {
                             updateMessage("Subtracting images");
-                            ImageSubtractor subtractor = new ImageSubtractor();
-                            diff = subtractor.subtract(light, darkImage);
+                            diff = imageProcessor.subtractImages(light, darkImage);
                         }
                         updateProgress(1, 1);
                         return diff;
@@ -176,11 +179,6 @@ public class HomepageController implements Initializable {
                 return new Task<BufferedImage>() {
 
                     private double progress;
-                    private boolean black = true;
-
-                    private boolean isProcessingBlack() {
-                        return black;
-                    }
 
                     private double getInnerProgress() {
                         return progress;
@@ -192,13 +190,13 @@ public class HomepageController implements Initializable {
 
                     @Override
                     protected BufferedImage call() throws Exception {
-                        StarAligner starAligner = new StarAligner();
+                        ImageProcessor imageProcessor = new ImageProcessor(new FileManager());
                         updateProgress(0, 1);
 
                         final double totalWork = lightFiles.size() + (darkFiles.isEmpty() ? 0 : 1);
 
 
-                        starAligner.imageNumber.addListener((observable, oldValue, newValue) -> {
+                        imageProcessor.imageNumber.addListener((observable, oldValue, newValue) -> {
                             Platform.runLater(() -> {
                                 if (oldValue.intValue() != newValue.intValue())
                                     addToProgress(1 / totalWork);
@@ -209,12 +207,11 @@ public class HomepageController implements Initializable {
                         });
 
                         updateMessage("Creating average");
-                        BufferedImage light = starAligner.alignStars(lightFiles, startStar1, endStar1, startStar2, endStar2);
+                        BufferedImage light = imageProcessor.alignStars(lightFiles, new StarStreak(startStar1, endStar1), new StarStreak(startStar2, endStar2));
                         BufferedImage diff = light;
                         if (darkImage != null) {
                             updateMessage("Subtracting images");
-                            ImageSubtractor subtractor = new ImageSubtractor();
-                            diff = subtractor.subtract(light, darkImage);
+                            diff = imageProcessor.subtractImages(light, darkImage);
                         }
                         updateProgress(1, 1);
                         return diff;
@@ -238,11 +235,7 @@ public class HomepageController implements Initializable {
                 System.out.println("No Selection ");
             }
 
-            try {
-                ImageIO.write((BufferedImage) service.getValue(), "JPEG", new File(outputFileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fileManager.saveImage((BufferedImage) service.getValue(), outputFileName);
 
             progressBar.progressProperty().unbind();
             progressBar.setProgress(0);
@@ -280,11 +273,7 @@ public class HomepageController implements Initializable {
                 System.out.println("No Selection ");
             }
 
-            try {
-                ImageIO.write((BufferedImage) alignmentService.getValue(), "JPEG", new File(outputFileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fileManager.saveImage((BufferedImage) alignmentService.getValue(), outputFileName);
 
             if (autoMergeStars.isSelected()) {
                 progressBar.progressProperty().unbind();
@@ -302,14 +291,7 @@ public class HomepageController implements Initializable {
                 } else {
                     System.out.println("No Selection ");
                 }
-
-
-
-                try {
-                    ImageIO.write(mergedImage, "JPEG", new File(outputFileName));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                fileManager.saveImage(mergedImage, outputFileName);
             }
 
             progressBar.progressProperty().unbind();

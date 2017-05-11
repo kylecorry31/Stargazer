@@ -1,4 +1,4 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.imageProcessing;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -8,7 +8,7 @@ import java.awt.image.*;
  */
 public class ImageUtils {
 
-    public static BufferedImage copyImage(BufferedImage source, int type) {
+    static BufferedImage copyImage(BufferedImage source, int type) {
         BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), type);
         Graphics2D g = b.createGraphics();
         g.drawImage(source, 0, 0, null);

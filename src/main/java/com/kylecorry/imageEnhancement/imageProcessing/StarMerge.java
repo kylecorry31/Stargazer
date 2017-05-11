@@ -1,8 +1,7 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.imageProcessing;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 
 /**
  * Created by Kylec on 5/11/2017.
@@ -23,14 +22,10 @@ public class StarMerge {
 
 
                 boolean bright = inRange(c.getBlue(), 100, 180) || inRange(c2.getBlue(), 120, 255);
-                boolean hue = inRange(c.getRed(), 100, 200);
-                boolean sat = inRange(c.getRed(), 145, 160);
+                boolean hue = inRange(c.getRed(), 145, 160);
 
-                if (!(bright && hue && sat)) {
-//                    output.setRGB(x, y, Color.BLACK.getRGB());
+                if (!(bright && hue)) {
                     output.setRGB(x, y, hdrColor.getRGB());
-                } else {
-//                    output.setRGB(x, y, Color.WHITE.getRGB());
                 }
             }
         }

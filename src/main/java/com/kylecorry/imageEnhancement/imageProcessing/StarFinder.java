@@ -1,4 +1,4 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.imageProcessing;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -36,13 +36,13 @@ public class StarFinder {
         return points;
     }
 
-    public Color getAverage(Color color) {
+    private Color getAverage(Color color) {
         int total = color.getRed() + color.getBlue() + color.getGreen();
         int average = total / 3;
         return new Color(average, average, average);
     }
 
-    public BufferedImage filterStars(BufferedImage gray) {
+    private BufferedImage filterStars(BufferedImage gray) {
         BufferedImage mask = new BufferedImage(gray.getWidth(), gray.getHeight(), gray.getType());
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
@@ -104,7 +104,7 @@ public class StarFinder {
         return mask;
     }
 
-    public BufferedImage grayscale() {
+    private BufferedImage grayscale() {
         BufferedImage gray = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {

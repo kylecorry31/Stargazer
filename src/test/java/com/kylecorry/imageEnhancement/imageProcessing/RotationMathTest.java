@@ -1,5 +1,6 @@
-package com.kylecorry.imageEnhancement;
+package com.kylecorry.imageEnhancement.imageProcessing;
 
+import com.kylecorry.imageEnhancement.imageProcessing.RotationMath;
 import org.junit.Test;
 
 import java.awt.*;
