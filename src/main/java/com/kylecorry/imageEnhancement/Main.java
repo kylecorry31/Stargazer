@@ -4,18 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by Kylec on 5/8/2017.
@@ -28,7 +22,8 @@ public class Main extends Application {
 
     public static BufferedImage getImage(String filename) {
         try {
-            return ImageIO.read(new File(filename));
+            BufferedImage image =  ImageIO.read(new File(filename));
+            return image;
         } catch (IOException e) {
             e.printStackTrace();
         }

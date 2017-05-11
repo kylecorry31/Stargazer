@@ -49,6 +49,7 @@
             <Image url="@../images/help.png" />
          </image>
       </ImageView>
-      <CheckBox fx:id="alignStars" layoutX="26.0" layoutY="384.0" mnemonicParsing="false" text="Align Stars (experimental)" />
+      <CheckBox fx:id="alignStars" layoutX="32.0" layoutY="384.0" mnemonicParsing="false" text="Align Stars (experimental)" />
+      <CheckBox fx:id="autoMergeStars" disable="true" layoutX="32.0" layoutY="421.0" mnemonicParsing="false" text="Automatically merge hdr and star alignment (highly experimental)" />
    </children>
 </AnchorPane>

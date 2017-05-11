@@ -66,6 +66,9 @@ public class HomepageController implements Initializable {
     @FXML
     CheckBox alignStars;
 
+    @FXML
+    CheckBox autoMergeStars;
+
     BufferedImage darkImage;
 
 
@@ -78,6 +81,10 @@ public class HomepageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         enhanceBtn.setDisable(true);
+        autoMergeStars.setDisable(true);
+        alignStars.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            autoMergeStars.setDisable(!newValue);
+        });
     }
 
     public void selectFrames() {
@@ -278,6 +285,33 @@ public class HomepageController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            if (autoMergeStars.isSelected()) {
+                progressBar.progressProperty().unbind();
+                progressText.textProperty().unbind();
+                progressText.setText("Merging HDR and star alignment");
+                progressBar.setProgress(0);
+                StarMerge starMerge = new StarMerge();
+                BufferedImage mergedImage = starMerge.mergeStars((BufferedImage) alignmentService.getValue(), (BufferedImage) service.getValue());
+                progressBar.setProgress(1);
+                progressText.setText("Done");
+                outputFileName = "hdr-stars-merged.jpg";
+                File imageFile2 = fileChooser.showSaveDialog(null);
+                if (imageFile2 != null) {
+                    outputFileName = imageFile2.getAbsolutePath();
+                } else {
+                    System.out.println("No Selection ");
+                }
+
+
+
+                try {
+                    ImageIO.write(mergedImage, "JPEG", new File(outputFileName));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             progressBar.progressProperty().unbind();
             progressBar.setProgress(0);
             progressText.setText("");

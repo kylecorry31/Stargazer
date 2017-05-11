@@ -23,11 +23,7 @@ public class StarFinder {
         List<Point> points = new LinkedList<>();
         BufferedImage gray = grayscale();
         BufferedImage stars = filterStars(gray);
-        try {
-            ImageIO.write(stars, "JPEG", new File("Output/" + System.currentTimeMillis() + ".jpg"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         int border = 800;
         for (int x = border; x < stars.getWidth() - border; x++) {
             for (int y = border; y < stars.getHeight() - border; y++) {
@@ -51,7 +47,7 @@ public class StarFinder {
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 Color color = new Color(image.getRGB(x, y));
-                if (color.getRed() > 200) {
+                if (color.getRed() > 80) {
                     mask.setRGB(x, y, Color.WHITE.getRGB());
                 } else {
                     mask.setRGB(x, y, Color.BLACK.getRGB());
@@ -84,22 +80,26 @@ public class StarFinder {
                             }
                         }
                     }
-                    if(pixelCount > 50 || pixelCount < 3){
+                    if(pixelCount > 50 || pixelCount < 20){
                         for(Point p: points){
                             mask.setRGB(p.x, p.y, Color.BLACK.getRGB());
                         }
                     } else {
-                        for(Point p: points){
-                            mask.setRGB(p.x, p.y, Color.BLACK.getRGB());
-                        }
-                        mask.setRGB(points.get(0).x, points.get(0).y, Color.WHITE.getRGB());
+//                        for(Point p: points){
+//                            mask.setRGB(p.x, p.y, Color.BLACK.getRGB());
+//                        }
+//                        mask.setRGB(points.get(0).x, points.get(0).y, Color.WHITE.getRGB());
                     }
                 }
 
             }
         }
 
-
+        try {
+            ImageIO.write(mask, "JPEG", new File("Output/" + System.currentTimeMillis() + ".jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return mask;
     }

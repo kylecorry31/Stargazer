@@ -29,7 +29,7 @@ public class StarAligner {
 
         for (int i = 1; i < files.size(); i++) {
             imageNumber.set(i + 1);
-            System.out.println("Aligning stars image " + i+1 + " of " + files.size());
+            System.out.println("Aligning stars image " + (i+1) + " of " + files.size());
             BufferedImage image = Main.getImage(files.get(i));
 
             BufferedImage alphaSecond = ImageUtils.copyImage(image, BufferedImage.TYPE_INT_ARGB);
