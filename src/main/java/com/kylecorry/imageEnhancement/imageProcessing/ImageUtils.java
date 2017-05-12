@@ -1,7 +1,15 @@
 package com.kylecorry.imageEnhancement.imageProcessing;
 
+import com.kylecorry.imageEnhancement.storage.FileManager;
+import javafx.scene.image.*;
+import javafx.scene.image.Image;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
+
 import java.awt.*;
 import java.awt.image.*;
+import java.io.ByteArrayInputStream;
 
 /**
  * Created by Kylec on 5/9/2017.
@@ -16,7 +24,16 @@ public class ImageUtils {
         return b;
     }
 
-    public static BufferedImage toRGB(BufferedImage source){
+    // TODO: fix this mess
+    public static Image toImage(Mat m) {
+        MatOfByte buffer = new MatOfByte();
+        Imgcodecs.imencode(".jpg", m, buffer);
+        Image image = new Image(new ByteArrayInputStream(buffer.toArray()));
+        buffer.release();
+        return image;
+    }
+
+    public static BufferedImage toRGB(BufferedImage source) {
         return copyImage(source, BufferedImage.TYPE_INT_RGB);
     }
 }

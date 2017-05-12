@@ -1,10 +1,15 @@
 package com.kylecorry.imageEnhancement.imageProcessing;
 
 import com.kylecorry.imageEnhancement.Main;
+import com.kylecorry.imageEnhancement.storage.FileManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import org.opencv.calib3d.Calib3d;
+import org.opencv.core.*;
+import org.opencv.imgproc.Imgproc;
 
 import java.awt.*;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
@@ -16,45 +21,41 @@ import java.util.List;
 class StarAligner {
 
     IntegerProperty imageNumber = new SimpleIntegerProperty(1, "imageNumber");
+    private FileManager fileManager;
+
+    public StarAligner(FileManager fileManager) {
+        this.fileManager = fileManager;
+    }
 
 
-    BufferedImage alignStars(List<String> files, Point a, Point aP, Point b, Point bP) {
+    Mat alignStars(List<String> files, Point a, Point aP, Point b, Point bP) {
         imageNumber.set(1);
-        BufferedImage base = Main.getImage(files.get(0));
-
         Point center = RotationMath.centerOfRotation(a, aP, b, bP);
+        org.opencv.core.Point cvCenter = new org.opencv.core.Point(center.x, center.y);
         double totalAngleChange = RotationMath.angleBetween(center, a, aP);
 
-        Graphics2D graphics2D = base.createGraphics();
-        AffineTransform oldTransform = graphics2D.getTransform();
+        Mat current = fileManager.openImage(files.get(0));
+        Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
+        Imgproc.accumulate(current, average);
 
         for (int i = 1; i < files.size(); i++) {
             imageNumber.set(i + 1);
             System.out.println("Aligning stars image " + (i + 1) + " of " + files.size());
-            BufferedImage image = Main.getImage(files.get(i));
+            current = fileManager.openImage(files.get(i));
 
-            BufferedImage alphaSecond = ImageUtils.copyImage(image, BufferedImage.TYPE_INT_ARGB);
-            float[] scales = {1f, 1f, 1f, (float) (1.0 / (i + 1))};
-            float[] offsets = new float[4];
-            RescaleOp rop = new RescaleOp(scales, offsets, null);
+            double angle = -Math.toDegrees(totalAngleChange * i / (double) files.size());
 
+            Mat rot = Imgproc.getRotationMatrix2D(cvCenter, angle, 1);
+            Imgproc.warpAffine(current, current, rot, current.size());
 
-            double angle = totalAngleChange * i / (double) files.size();
-
-            AffineTransform rotation = new AffineTransform();
-            rotation.rotate(angle, center.x, center.y);
-
-            graphics2D.transform(rotation);
-
-            graphics2D.drawImage(alphaSecond, rop, 0, 0);
-
-            graphics2D.setTransform(oldTransform);
-
+            Imgproc.accumulate(current, average);
+            current.release();
+            rot.release();
         }
 
-        graphics2D.dispose();
-
-        return base;
+        current.release();
+        Core.divide(average, Scalar.all(files.size()), average);
+        return average;
     }
 
 

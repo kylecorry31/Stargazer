@@ -4,6 +4,11 @@ import com.kylecorry.imageEnhancement.Main;
 import com.kylecorry.imageEnhancement.storage.FileManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -23,6 +28,22 @@ class HDR {
     }
 
     IntegerProperty imageNumber = new SimpleIntegerProperty(1, "imageNumber");
+
+    Mat reduceNoise(List<String> imageFiles) {
+        imageNumber.set(1);
+        Mat current = fileManager.openImage(imageFiles.get(0));
+        Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
+        Imgproc.accumulate(current, average);
+        for (int i = 1; i < imageFiles.size(); i++) {
+            imageNumber.set(i + 1);
+            current = fileManager.openImage(imageFiles.get(i));
+            Imgproc.accumulate(current, average);
+            current.release();
+        }
+        current.release();
+        Core.divide(average, Scalar.all(imageFiles.size()), average);
+        return average;
+    }
 
     BufferedImage averageImages(List<String> imageFiles) {
         imageNumber.set(1);

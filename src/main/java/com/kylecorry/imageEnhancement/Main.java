@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.opencv.core.Core;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -17,6 +18,8 @@ import java.io.IOException;
 public class Main extends Application {
 
     public static void main(String args[]) {
+        String opencvpath = System.getProperty("user.dir") + "\\libs\\";
+        System.load(opencvpath + Core.NATIVE_LIBRARY_NAME + ".dll");
         launch(args);
     }
 

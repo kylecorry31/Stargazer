@@ -19,6 +19,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.opencv.core.Mat;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -38,7 +39,7 @@ public class HomepageController implements Initializable {
     private List<String> darkFiles, lightFiles;
 
     public static Point startStar1, endStar1, startStar2, endStar2;
-    public static BufferedImage hdrImage;
+    public static Mat hdrImage;
 
     @FXML
     Button framesBtn;
@@ -70,9 +71,12 @@ public class HomepageController implements Initializable {
     @FXML
     CheckBox autoMergeStars;
 
-    BufferedImage darkImage;
+    Mat darkImage;
+
+    private ImageProcessor imageProcessor;
 
     private FileManager fileManager;
+    private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
 
 
     public HomepageController() {
@@ -107,208 +111,128 @@ public class HomepageController implements Initializable {
 
     public void createEnhancedImage() {
         enhanceBtn.setDisable(true);
-        final boolean stars = alignStars.isSelected();
-        Service service = new Service<BufferedImage>() {
+        imageProcessor = new ImageProcessor(fileManager);
 
-
-            @Override
-            protected Task<BufferedImage> createTask() {
-                return new Task<BufferedImage>() {
-
-                    private double progress;
-                    private boolean black = true;
-
-                    private boolean isProcessingBlack() {
-                        return black;
-                    }
-
-                    private double getInnerProgress() {
-                        return progress;
-                    }
-
-                    private void addToProgress(double amount) {
-                        progress += amount;
-                    }
-
-                    @Override
-                    protected BufferedImage call() throws Exception {
-                        ImageProcessor imageProcessor = new ImageProcessor(new FileManager());
-                        updateProgress(0, 1);
-
-                        final double totalWork = darkFiles.size() + lightFiles.size() + (darkFiles.isEmpty() ? 0 : 1);
-
-                        imageProcessor.imageNumber.addListener((observable, oldValue, newValue) -> {
-                            Platform.runLater(() -> {
-                                if (oldValue.intValue() != newValue.intValue())
-                                    addToProgress(1 / totalWork);
-                                if (isProcessingBlack()) {
-                                    updateMessage("Processing black frame " + newValue.intValue() + " of " + darkFiles.size());
-                                } else {
-                                    updateMessage("Processing frame " + newValue.intValue() + " of " + lightFiles.size());
-                                }
-                                updateProgress(getInnerProgress(), 1);
-                            });
-                        });
-
-
-                        darkImage = null;
-                        if (!darkFiles.isEmpty()) {
-                            updateMessage("Creating black average");
-                            darkImage = imageProcessor.reduceNoise(darkFiles);
-                        }
-                        black = false;
-                        updateMessage("Creating average");
-                        BufferedImage light = imageProcessor.reduceNoise(lightFiles);
-                        BufferedImage diff = light;
-                        if (!darkFiles.isEmpty()) {
-                            updateMessage("Subtracting images");
-                            diff = imageProcessor.subtractImages(light, darkImage);
-                        }
-                        updateProgress(1, 1);
-                        return diff;
-                    }
-                };
-            }
-        };
-
-        Service alignmentService = new Service<BufferedImage>() {
-
-
-            @Override
-            protected Task<BufferedImage> createTask() {
-                return new Task<BufferedImage>() {
-
-                    private double progress;
-
-                    private double getInnerProgress() {
-                        return progress;
-                    }
-
-                    private void addToProgress(double amount) {
-                        progress += amount;
-                    }
-
-                    @Override
-                    protected BufferedImage call() throws Exception {
-                        ImageProcessor imageProcessor = new ImageProcessor(new FileManager());
-                        updateProgress(0, 1);
-
-                        final double totalWork = lightFiles.size() + (darkFiles.isEmpty() ? 0 : 1);
-
-
-                        imageProcessor.imageNumber.addListener((observable, oldValue, newValue) -> {
-                            Platform.runLater(() -> {
-                                if (oldValue.intValue() != newValue.intValue())
-                                    addToProgress(1 / totalWork);
-                                updateMessage("Aligning stars " + newValue.intValue() + " of " + lightFiles.size());
-                                updateProgress(getInnerProgress(), 1);
-
-                            });
-                        });
-
-                        updateMessage("Creating average");
-                        BufferedImage light = imageProcessor.alignStars(lightFiles, new StarStreak(startStar1, endStar1), new StarStreak(startStar2, endStar2));
-                        BufferedImage diff = light;
-                        if (darkImage != null) {
-                            updateMessage("Subtracting images");
-                            diff = imageProcessor.subtractImages(light, darkImage);
-                        }
-                        updateProgress(1, 1);
-                        return diff;
-                    }
-                };
-            }
-        };
-
-        service.setOnSucceeded((event) -> {
-            progressText.textProperty().unbind();
-            progressText.setText("Done");
-
-            String outputFileName = "hdr.jpg";
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.jpeg");
-            fileChooser.getExtensionFilters().add(extFilter);
-            File imageFile = fileChooser.showSaveDialog(null);
-            if (imageFile != null) {
-                outputFileName = imageFile.getAbsolutePath();
+        blackImageService = null;
+        hdrService = new HDRService(imageProcessor, lightFiles);
+        hdrService.setOnSucceeded(event -> {
+            unbindUIFromServices();
+            if (blackImageService != null) {
+                subtractionService = new SubtractionService(imageProcessor, blackImageService.getValue(), hdrService.getValue());
+                bindUIToService(subtractionService);
+                subtractionService.start();
+                subtractionService.setOnSucceeded(event1 -> {
+                    unbindUIFromServices();
+                    hdrService.getValue().release();
+                    hdrService = null;
+                    saveImage(subtractionService.getValue());
+                    if (alignStars.isSelected())
+                        locateStars(subtractionService.getValue());
+                    else
+                        resetUI();
+                });
             } else {
-                System.out.println("No Selection ");
+                saveImage(hdrService.getValue());
+                if (alignStars.isSelected())
+                    locateStars(hdrService.getValue());
+                else
+                    resetUI();
             }
-
-            fileManager.saveImage((BufferedImage) service.getValue(), outputFileName);
-
-            progressBar.progressProperty().unbind();
-            progressBar.setProgress(0);
-            progressText.setText("");
-
-            if (!stars) {
-                frames.setText("");
-                blackFrames.setText("");
-                lightFiles = new LinkedList<>();
-                darkFiles = new LinkedList<>();
-                enhanceBtn.setDisable(true);
-                darkImage = null;
-            } else {
-                hdrImage = (BufferedImage) service.getValue();
-                displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
-                progressText.textProperty().bind(alignmentService.messageProperty());
-                progressBar.progressProperty().bind(alignmentService.progressProperty());
-                alignmentService.start();
-            }
-
         });
 
-        alignmentService.setOnSucceeded(event -> {
+        // Process black frames and/or start hdr service
+        if (!darkFiles.isEmpty()) {
+            blackImageService = new BlackImageService(new ImageProcessor(fileManager), darkFiles);
+            bindUIToService(blackImageService);
+            blackImageService.start();
+            blackImageService.setOnSucceeded(event -> {
+                bindUIToService(hdrService);
+                hdrService.start();
+            });
+        } else {
+            bindUIToService(hdrService);
+            hdrService.start();
+        }
+
+    }
+
+    private void resetUI() {
+        unbindUIFromServices();
+        progressBar.setProgress(0);
+        progressText.setText("");
+        frames.setText("");
+        blackFrames.setText("");
+        if (darkImage != null)
+            darkImage.release();
+        darkImage = null;
+        lightFiles = new LinkedList<>();
+        darkFiles = new LinkedList<>();
+        enhanceBtn.setDisable(true);
+        if (hdrImage != null)
+            hdrImage.release();
+        alignStars.setSelected(false);
+        autoMergeStars.setSelected(false);
+        System.gc();
+    }
+
+    private void unbindUIFromServices() {
+        if (progressText.textProperty().isBound())
             progressText.textProperty().unbind();
-            progressText.setText("Done");
-
-            String outputFileName = "hdr-stars.jpg";
-            FileChooser fileChooser = new FileChooser();
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.jpeg");
-            fileChooser.getExtensionFilters().add(extFilter);
-            File imageFile = fileChooser.showSaveDialog(null);
-            if (imageFile != null) {
-                outputFileName = imageFile.getAbsolutePath();
-            } else {
-                System.out.println("No Selection ");
-            }
-
-            fileManager.saveImage((BufferedImage) alignmentService.getValue(), outputFileName);
-
-            if (autoMergeStars.isSelected()) {
-                progressBar.progressProperty().unbind();
-                progressText.textProperty().unbind();
-                progressText.setText("Merging HDR and star alignment");
-                progressBar.setProgress(0);
-                StarMerge starMerge = new StarMerge();
-                BufferedImage mergedImage = starMerge.mergeStars((BufferedImage) alignmentService.getValue(), (BufferedImage) service.getValue());
-                progressBar.setProgress(1);
-                progressText.setText("Done");
-                outputFileName = "hdr-stars-merged.jpg";
-                File imageFile2 = fileChooser.showSaveDialog(null);
-                if (imageFile2 != null) {
-                    outputFileName = imageFile2.getAbsolutePath();
-                } else {
-                    System.out.println("No Selection ");
-                }
-                fileManager.saveImage(mergedImage, outputFileName);
-            }
-
+        if (progressBar.progressProperty().isBound())
             progressBar.progressProperty().unbind();
-            progressBar.setProgress(0);
-            progressText.setText("");
-            frames.setText("");
-            blackFrames.setText("");
-            darkImage = null;
-            lightFiles = new LinkedList<>();
-            darkFiles = new LinkedList<>();
-            enhanceBtn.setDisable(true);
-        });
+    }
 
-
-        progressText.textProperty().bind(service.messageProperty());
+    private void bindUIToService(Service service) {
+        unbindUIFromServices();
         progressBar.progressProperty().bind(service.progressProperty());
-        service.start();
+        progressText.textProperty().bind(service.messageProperty());
+    }
+
+    private void saveImage(Mat image) {
+        String outputFileName = System.currentTimeMillis() + ".jpg";
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.jpeg");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File imageFile = fileChooser.showSaveDialog(null);
+        if (imageFile != null) {
+            outputFileName = imageFile.getAbsolutePath();
+        } else {
+            System.out.println("No Selection ");
+        }
+
+        fileManager.saveImage(image, outputFileName);
+    }
+
+    private void locateStars(Mat image) {
+        hdrImage = image;
+        displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
+        starAlignmentService = new StarAlignmentService(imageProcessor, lightFiles, new StarStreak(startStar1, endStar1), new StarStreak(startStar2, endStar2));
+        bindUIToService(starAlignmentService);
+        starAlignmentService.setOnSucceeded(event -> {
+            unbindUIFromServices();
+            if (blackImageService != null) {
+                subtractionService = new SubtractionService(imageProcessor, blackImageService.getValue(), starAlignmentService.getValue());
+                bindUIToService(subtractionService);
+                subtractionService.setOnSucceeded(event1 -> {
+                    unbindUIFromServices();
+                    saveImage(subtractionService.getValue());
+                    if (autoMergeStars.isSelected()) {
+                        // TODO: auto align
+                    } else {
+                        resetUI();
+                    }
+                });
+                subtractionService.start();
+            } else {
+                saveImage(starAlignmentService.getValue());
+                if (autoMergeStars.isSelected()) {
+                    // TODO: auto align
+                } else {
+                    resetUI();
+                }
+            }
+        });
+        starAlignmentService.start();
 
     }
 
@@ -358,6 +282,7 @@ public class HomepageController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(window.getScene().getWindow());
             stage.showAndWait();
+            stage = null;
         } catch (IOException e) {
             e.printStackTrace();
         }

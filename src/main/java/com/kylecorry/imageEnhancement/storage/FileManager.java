@@ -1,5 +1,8 @@
 package com.kylecorry.imageEnhancement.storage;
 
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -54,6 +57,14 @@ public class FileManager {
 
     public BufferedImage loadImage(String filename) {
         return loadImage(new File(filename));
+    }
+
+    public Mat openImage(String filename) {
+        return Imgcodecs.imread(filename);
+    }
+
+    public void saveImage(Mat image, String filename) {
+        Imgcodecs.imwrite(filename, image);
     }
 
 }

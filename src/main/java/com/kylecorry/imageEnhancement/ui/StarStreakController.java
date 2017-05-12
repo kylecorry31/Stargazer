@@ -10,8 +10,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import org.opencv.core.*;
+import org.opencv.imgproc.Imgproc;
 
 import java.awt.*;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,7 +41,7 @@ public class StarStreakController implements Initializable {
 
     javafx.scene.image.Image image;
 
-    BufferedImage drawImage;
+    Mat drawImage;
 
 
     double initX;
@@ -49,8 +52,8 @@ public class StarStreakController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         firstStar = null;
         secondStar = null;
-        image = SwingFXUtils.toFXImage(HomepageController.hdrImage, null);
-        drawImage = ImageUtils.copyImage(HomepageController.hdrImage, HomepageController.hdrImage.getType());
+        image = ImageUtils.toImage(HomepageController.hdrImage);
+        drawImage = HomepageController.hdrImage.clone();
         hdrImage.setFitWidth(image.getWidth());
         hdrImage.setFitHeight(image.getHeight());
         hdrImage.setImage(image);
@@ -69,8 +72,9 @@ public class StarStreakController implements Initializable {
 
         helpText.setText("Drag across a star streak, then press done");
         hdrImage.setOnMousePressed(me -> {
-            drawImage = ImageUtils.copyImage(HomepageController.hdrImage, HomepageController.hdrImage.getType());
-            hdrImage.setImage(SwingFXUtils.toFXImage(drawImage, null));
+            drawImage.release();
+            drawImage = HomepageController.hdrImage.clone();
+            hdrImage.setImage(ImageUtils.toImage(drawImage));
             initX = me.getX();
             initY = me.getY();
             System.out.println(initX + " " + initY);
@@ -79,11 +83,10 @@ public class StarStreakController implements Initializable {
 
         hdrImage.setOnMouseReleased(me -> {
             if (me.getX() < maxX && me.getY() < maxY) {
-                Graphics2D graphics2D = drawImage.createGraphics();
-                graphics2D.setColor(java.awt.Color.GREEN);
-                graphics2D.drawLine((int) initX, (int) initY, (int) me.getX(), (int) me.getY());
-                graphics2D.dispose();
-                hdrImage.setImage(SwingFXUtils.toFXImage(drawImage, null));
+
+                Imgproc.line(drawImage, new org.opencv.core.Point(initX, initY), new org.opencv.core.Point(me.getX(), me.getY()), new Scalar(0, 255, 0));
+
+                hdrImage.setImage(ImageUtils.toImage(drawImage));
                 switch (counter) {
                     case 0:
                         firstStar = new StarPair(new Point((int) initX, (int) initY), new Point((int) me.getX(), (int) me.getY()));
@@ -121,6 +124,8 @@ public class StarStreakController implements Initializable {
                 }
                 break;
             default:
+                drawImage.release();
+                hdrImage.setImage(null);
                 Stage stage = (Stage) window.getScene().getWindow();
                 stage.close();
         }

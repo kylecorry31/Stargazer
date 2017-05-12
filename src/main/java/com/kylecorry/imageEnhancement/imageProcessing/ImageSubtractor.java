@@ -1,5 +1,8 @@
 package com.kylecorry.imageEnhancement.imageProcessing;
 
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -7,6 +10,12 @@ import java.awt.image.BufferedImage;
  * Created by Kylec on 5/8/2017.
  */
 class ImageSubtractor {
+
+    Mat subtract(Mat first, Mat second) {
+        Mat mat = new Mat();
+        Core.subtract(first, second, mat);
+        return mat;
+    }
 
     BufferedImage subtract(BufferedImage first, BufferedImage second) {
         BufferedImage difference = new BufferedImage(first.getWidth(), first.getHeight(), first.getType());
