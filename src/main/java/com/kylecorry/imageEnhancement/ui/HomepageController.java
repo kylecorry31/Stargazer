@@ -1,6 +1,9 @@
 package com.kylecorry.imageEnhancement.ui;
 
 import com.kylecorry.imageEnhancement.imageProcessing.*;
+import com.kylecorry.imageEnhancement.imageProcessing.stars.AutoAlign;
+import com.kylecorry.imageEnhancement.imageProcessing.stars.ManualAlign;
+import com.kylecorry.imageEnhancement.imageProcessing.stars.StarStreak;
 import com.kylecorry.imageEnhancement.storage.FileManager;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
@@ -10,16 +13,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.opencv.core.Mat;
+import org.opencv.core.*;
+import org.opencv.core.Point;
+import org.opencv.imgproc.Imgproc;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -29,6 +33,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.ResourceBundle;
 
 /**
@@ -71,6 +76,15 @@ public class HomepageController implements Initializable {
     @FXML
     CheckBox autoMergeStars;
 
+    @FXML
+    RadioButton autoAlign;
+
+    @FXML
+    RadioButton manualAlign;
+
+    @FXML
+    Label techniqueLbl;
+
     Mat darkImage;
 
     private ImageProcessor imageProcessor;
@@ -92,6 +106,9 @@ public class HomepageController implements Initializable {
         autoMergeStars.setDisable(true);
         alignStars.selectedProperty().addListener((observable, oldValue, newValue) -> {
             autoMergeStars.setDisable(!newValue);
+            autoAlign.setDisable(!newValue);
+            manualAlign.setDisable(!newValue);
+            techniqueLbl.setDisable(!newValue);
         });
     }
 
@@ -123,19 +140,20 @@ public class HomepageController implements Initializable {
                 subtractionService.start();
                 subtractionService.setOnSucceeded(event1 -> {
                     unbindUIFromServices();
-                    hdrService.getValue().release();
-                    hdrService = null;
                     saveImage(subtractionService.getValue());
-                    if (alignStars.isSelected())
-                        locateStars(subtractionService.getValue());
-                    else
+                    if (alignStars.isSelected()) {
+                        Mat black = new Mat();
+                        blackImageService.getValue().convertTo(black, CvType.CV_8U);
+                        locateStars(black, hdrService.getValue());
+                    } else
                         resetUI();
                 });
             } else {
                 saveImage(hdrService.getValue());
-                if (alignStars.isSelected())
-                    locateStars(hdrService.getValue());
-                else
+                if (alignStars.isSelected()) {
+                    Mat hdr = hdrService.getValue();
+                    locateStars(Mat.zeros(hdr.size(), CvType.CV_8U), hdr);
+                } else
                     resetUI();
             }
         });
@@ -203,10 +221,15 @@ public class HomepageController implements Initializable {
         fileManager.saveImage(image, outputFileName);
     }
 
-    private void locateStars(Mat image) {
-        hdrImage = image;
-        displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
-        starAlignmentService = new StarAlignmentService(imageProcessor, lightFiles, new StarStreak(startStar1, endStar1), new StarStreak(startStar2, endStar2));
+    private void locateStars(Mat blackImage, Mat hdrImage) {
+        if (autoAlign.isSelected()) {
+            starAlignmentService = new StarAlignmentService(imageProcessor, new AutoAlign(fileManager, lightFiles, blackImage), lightFiles.size());
+        } else {
+            HomepageController.hdrImage = hdrImage;
+            displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
+            starAlignmentService = new StarAlignmentService(imageProcessor, new ManualAlign(fileManager, lightFiles, new StarStreak(startStar1, startStar2), new StarStreak(endStar1, endStar2)), lightFiles.size());
+        }
+
         bindUIToService(starAlignmentService);
         starAlignmentService.setOnSucceeded(event -> {
             unbindUIFromServices();
@@ -217,7 +240,7 @@ public class HomepageController implements Initializable {
                     unbindUIFromServices();
                     saveImage(subtractionService.getValue());
                     if (autoMergeStars.isSelected()) {
-                        // TODO: auto align
+                        // TODO: auto merge
                     } else {
                         resetUI();
                     }
@@ -226,7 +249,7 @@ public class HomepageController implements Initializable {
             } else {
                 saveImage(starAlignmentService.getValue());
                 if (autoMergeStars.isSelected()) {
-                    // TODO: auto align
+                    // TODO: auto merge`
                 } else {
                     resetUI();
                 }

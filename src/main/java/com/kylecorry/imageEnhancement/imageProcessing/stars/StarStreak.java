@@ -1,6 +1,7 @@
-package com.kylecorry.imageEnhancement.imageProcessing;
+package com.kylecorry.imageEnhancement.imageProcessing.stars;
 
-import java.awt.*;
+
+import org.opencv.core.Point;
 
 /**
  * Created by Kylec on 5/11/2017.

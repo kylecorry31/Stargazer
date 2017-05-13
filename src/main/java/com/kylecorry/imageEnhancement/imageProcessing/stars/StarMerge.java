@@ -1,4 +1,6 @@
-package com.kylecorry.imageEnhancement.imageProcessing;
+package com.kylecorry.imageEnhancement.imageProcessing.stars;
+
+import com.kylecorry.imageEnhancement.imageProcessing.ImageUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

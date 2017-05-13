@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -50,6 +52,17 @@
          </image>
       </ImageView>
       <CheckBox fx:id="alignStars" layoutX="32.0" layoutY="384.0" mnemonicParsing="false" text="Align Stars (experimental)" />
-      <CheckBox fx:id="autoMergeStars" disable="true" layoutX="32.0" layoutY="421.0" mnemonicParsing="false" text="Automatically merge hdr and star alignment (highly experimental)" />
+      <CheckBox fx:id="autoMergeStars" disable="true" layoutX="266.0" layoutY="384.0" mnemonicParsing="false" text="Automatically merge hdr and star alignment (highly experimental)" visible="false" />
+      <RadioButton fx:id="autoAlign" disable="true" layoutX="34.0" layoutY="462.0" mnemonicParsing="false" selected="true" text="Auto align (works well on images with few obstructions)">
+         <toggleGroup>
+            <ToggleGroup fx:id="align" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="manualAlign" disable="true" layoutX="644.0" layoutY="462.0" mnemonicParsing="false" text="Semi-manual align (outline 2 star streaks)" toggleGroup="$align" />
+      <Label fx:id="techniqueLbl" disable="true" layoutX="34.0" layoutY="424.0" text="Alignment Technique">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

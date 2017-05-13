@@ -1,21 +1,17 @@
 package com.kylecorry.imageEnhancement.ui;
 
 import com.kylecorry.imageEnhancement.imageProcessing.ImageUtils;
-import javafx.embed.swing.SwingFXUtils;
+import com.kylecorry.imageEnhancement.imageProcessing.stars.StarStreak;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import org.opencv.core.*;
+import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
 
-import java.awt.*;
-import java.awt.Point;
-import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -32,21 +28,18 @@ public class StarStreakController implements Initializable {
     AnchorPane window;
 
     @FXML
-    javafx.scene.control.ScrollPane scrollPane;
-
-    @FXML
     javafx.scene.control.Label helpText;
 
-    StarPair firstStar, secondStar;
+    private StarStreak firstStar, secondStar;
 
-    javafx.scene.image.Image image;
+    private javafx.scene.image.Image image;
 
-    Mat drawImage;
+    private Mat drawImage;
 
 
-    double initX;
-    double initY;
-    int counter;
+    private double initX;
+    private double initY;
+    private int counter;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,12 +55,6 @@ public class StarStreakController implements Initializable {
 
         final double maxX = image.getWidth();
         final double maxY = image.getHeight();
-
-//        hdrImage.setOnMousePressed(me -> {
-//            initX = me.getX();
-//            initY = me.getY();
-//            me.consume();
-//        });
 
 
         helpText.setText("Drag across a star streak, then press done");
@@ -89,10 +76,10 @@ public class StarStreakController implements Initializable {
                 hdrImage.setImage(ImageUtils.toImage(drawImage));
                 switch (counter) {
                     case 0:
-                        firstStar = new StarPair(new Point((int) initX, (int) initY), new Point((int) me.getX(), (int) me.getY()));
+                        firstStar = new StarStreak(new Point(initX, initY), new Point(me.getX(), me.getY()));
                         break;
                     case 1:
-                        secondStar = new StarPair(new Point((int) initX, (int) initY), new Point((int) me.getX(), (int) me.getY()));
+                        secondStar = new StarStreak(new Point(initX, initY), new Point(me.getX(), me.getY()));
                         break;
                 }
             }
@@ -101,23 +88,22 @@ public class StarStreakController implements Initializable {
             initY = me.getY() > maxY ? maxY : me.getY();
         });
 
-//        hdrImage.setOnMouseClicked(event -> setStarPoint(new Point((int) event.getX(), (int) event.getY())));
     }
 
     public void doneBtnClicked() {
         switch (counter) {
             case 0:
                 if (firstStar != null) {
-                    HomepageController.startStar1 = firstStar.first;
-                    HomepageController.endStar1 = firstStar.second;
+                    HomepageController.startStar1 = firstStar.getStart();
+                    HomepageController.endStar1 = firstStar.getEnd();
                     counter++;
                     helpText.setText("Drag across a second star streak, then press done");
                 }
                 break;
             case 1:
                 if (secondStar != null) {
-                    HomepageController.startStar2 = secondStar.first;
-                    HomepageController.endStar2 = secondStar.second;
+                    HomepageController.startStar2 = secondStar.getStart();
+                    HomepageController.endStar2 = secondStar.getEnd();
                     counter++;
                     Stage stage = (Stage) window.getScene().getWindow();
                     stage.close();
@@ -132,39 +118,7 @@ public class StarStreakController implements Initializable {
     }
 
 
-    private void setStarPoint(Point pointClicked) {
-        System.out.println(pointClicked);
-        if (firstStar.first == null) {
-            firstStar.first = pointClicked;
-            HomepageController.startStar1 = pointClicked;
-            helpText.setText("Click on the end of the same star trail");
-        } else if (firstStar.second == null) {
-            firstStar.second = pointClicked;
-            HomepageController.endStar1 = pointClicked;
-            helpText.setText("Click on the start of another star trail");
-        } else if (secondStar.first == null) {
-            secondStar.first = pointClicked;
-            HomepageController.startStar2 = pointClicked;
-            helpText.setText("Click on the end of the same star trail");
-        } else if (secondStar.second == null) {
-            secondStar.second = pointClicked;
-            HomepageController.endStar2 = pointClicked;
-            Stage stage = (Stage) window.getScene().getWindow();
-            stage.close();
-        }
-    }
-
-    private static class StarPair {
-        Point first, second;
-
-        StarPair(Point first, Point second) {
-            this.first = first;
-            this.second = second;
-        }
-    }
-
-
-    public static void centerImage(ImageView imageView) {
+    private static void centerImage(ImageView imageView) {
         Image img = imageView.getImage();
         if (img != null && img.getWidth() != 0 && img.getHeight() != 0) {
             double w = 0;
@@ -186,8 +140,6 @@ public class StarStreakController implements Initializable {
             imageView.setX((imageView.getFitWidth() - w) / 2);
             imageView.setY((imageView.getFitHeight() - h) / 2);
 
-        } else {
-//            imageView.setImage(new Image("images/noImage.png"));
         }
     }
 

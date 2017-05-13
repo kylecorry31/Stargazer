@@ -1,13 +1,14 @@
 package com.kylecorry.imageEnhancement.imageProcessing;
 
+import com.kylecorry.imageEnhancement.imageProcessing.stars.*;
 import com.kylecorry.imageEnhancement.storage.FileManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import org.opencv.core.Mat;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.opencv.core.Point;
+;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Created by Kylec on 5/11/2017.
@@ -41,35 +42,33 @@ public class ImageProcessor {
     }
 
     public Mat alignStars(List<String> frameFileNames, StarStreak star1, StarStreak star2) {
-        StarAligner starAligner = new StarAligner(fileManager);
-        imageNumber.bind(starAligner.imageNumber);
-        Mat image = starAligner.alignStars(frameFileNames, star1.getStart(), star1.getEnd(), star2.getStart(), star2.getEnd());
+        return alignStars(new ManualAlign(fileManager, frameFileNames, star1, star2));
+    }
+
+    public PriorityQueue<StarFinder.StarPair> matchStars(List<Point> first, List<Point> second) {
+        StarFinder finder = new StarFinder();
+        return finder.matchStars(first, second);
+    }
+
+    public Mat filterStars(Mat image, Mat blackFrame) {
+        StarFinder finder = new StarFinder();
+        return finder.filterStars(image, blackFrame);
+    }
+
+    public List<Point> findStars(Mat image, Mat blackFrame) {
+        StarFinder finder = new StarFinder();
+        return finder.locateStars2(image, blackFrame);
+    }
+
+    public Mat alignStars(List<String> lightFiles, Mat blackFile) {
+        return alignStars(new AutoAlign(fileManager, lightFiles, blackFile));
+    }
+
+    public Mat alignStars(ProgressTrackableAligner alignmentTechnique) {
+        StarAligner aligner = new StarAligner(alignmentTechnique);
+        imageNumber.bind(aligner.progressProperty());
+        Mat image = aligner.align();
         imageNumber.unbind();
         return image;
     }
-
-    public BufferedImage alignStarsAndForeground(BufferedImage alignedStarsImage, BufferedImage reducedNoiseImage) {
-        StarMerge starMerge = new StarMerge();
-        return starMerge.mergeStars(alignedStarsImage, reducedNoiseImage);
-    }
-
-    private Color getAverage(Color color) {
-        int total = color.getRed() + color.getBlue() + color.getGreen();
-        int average = total / 3;
-        return new Color(average, average, average);
-    }
-
-    private BufferedImage grayscale(BufferedImage image) {
-        BufferedImage gray = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                Color color = new Color(image.getRGB(x, y));
-                Color average = getAverage(color);
-                gray.setRGB(x, y, average.getRGB());
-            }
-        }
-        return gray;
-    }
-
-
 }

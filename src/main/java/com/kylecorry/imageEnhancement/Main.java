@@ -7,11 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
 /**
  * Created by Kylec on 5/8/2017.
  */
@@ -21,16 +16,6 @@ public class Main extends Application {
         String opencvpath = System.getProperty("user.dir") + "\\libs\\";
         System.load(opencvpath + Core.NATIVE_LIBRARY_NAME + ".dll");
         launch(args);
-    }
-
-    public static BufferedImage getImage(String filename) {
-        try {
-            BufferedImage image =  ImageIO.read(new File(filename));
-            return image;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 
