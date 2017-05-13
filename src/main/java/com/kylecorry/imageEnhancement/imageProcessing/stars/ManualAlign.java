@@ -1,6 +1,5 @@
 package com.kylecorry.imageEnhancement.imageProcessing.stars;
 
-import com.kylecorry.imageEnhancement.imageProcessing.ProgressTrackable;
 import com.kylecorry.imageEnhancement.imageProcessing.RotationMath;
 import com.kylecorry.imageEnhancement.storage.FileManager;
 import org.opencv.core.*;
@@ -31,14 +30,14 @@ public class ManualAlign extends ProgressTrackableAligner {
         org.opencv.core.Point cvCenter = new org.opencv.core.Point(center.x, center.y);
         double totalAngleChange = RotationMath.angleBetween(center, streak1.getStart(), streak1.getEnd());
 
-        Mat current = fileManager.openImage(files.get(0));
+        Mat current = fileManager.loadImage(files.get(0));
         Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
         Imgproc.accumulate(current, average);
 
         for (int i = 1; i < files.size(); i++) {
             setProgress(i + 1);
             System.out.println("Aligning stars image " + (i + 1) + " of " + files.size());
-            current = fileManager.openImage(files.get(i));
+            current = fileManager.loadImage(files.get(i));
 
             double angle = -Math.toDegrees(totalAngleChange * i / (double) files.size());
 

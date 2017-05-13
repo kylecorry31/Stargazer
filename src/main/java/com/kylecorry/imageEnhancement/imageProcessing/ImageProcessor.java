@@ -6,7 +6,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -57,7 +56,7 @@ public class ImageProcessor {
 
     public List<Point> findStars(Mat image, Mat blackFrame) {
         StarFinder finder = new StarFinder();
-        return finder.locateStars2(image, blackFrame);
+        return finder.locateStars(image, blackFrame);
     }
 
     public Mat alignStars(List<String> lightFiles, Mat blackFile) {

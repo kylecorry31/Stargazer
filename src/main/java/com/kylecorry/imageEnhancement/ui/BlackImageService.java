@@ -1,7 +1,6 @@
 package com.kylecorry.imageEnhancement.ui;
 
 import com.kylecorry.imageEnhancement.imageProcessing.ImageProcessor;
-import com.kylecorry.imageEnhancement.storage.FileManager;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import org.opencv.core.Mat;

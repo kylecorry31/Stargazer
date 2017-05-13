@@ -3,10 +3,7 @@ package com.kylecorry.imageEnhancement.storage;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,35 +28,7 @@ public class FileManager {
         return getAllFileNamesInDirectory(new File(directory));
     }
 
-    public boolean saveImage(BufferedImage image, File file) {
-        try {
-            ImageIO.write(image, "JPEG", file);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean saveImage(BufferedImage image, String filename) {
-        return saveImage(image, new File(filename));
-    }
-
-    public BufferedImage loadImage(File file) {
-        try {
-            BufferedImage image = ImageIO.read(file);
-            return image;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public BufferedImage loadImage(String filename) {
-        return loadImage(new File(filename));
-    }
-
-    public Mat openImage(String filename) {
+    public Mat loadImage(String filename) {
         return Imgcodecs.imread(filename);
     }
 

@@ -5,32 +5,13 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by Kylec on 5/9/2017.
  */
 public class StarFinder {
 
-    List<Point> locateStars(Mat img) {
-        StarFilter filter = new StarFilter();
-        filter.process(img);
-        List<MatOfPoint> stars = filter.filterContoursOutput();
-        List<Point> starPoints = new LinkedList<>();
-        for (MatOfPoint star : stars) {
-            Moments moments = Imgproc.moments(star);
-            starPoints.add(new Point(moments.get_m10() / moments.get_m00(), moments.get_m01() / moments.get_m00()));
-        }
-        filter.blurOutput().release();
-        filter.cvDilateOutput().release();
-        filter.cvThresholdOutput().release();
-        filter.desaturateOutput().release();
-        filter.filterContoursOutput().forEach(MatOfPoint::release);
-        filter.findContoursOutput().forEach(MatOfPoint::release);
-        return starPoints;
-    }
-
-    public Mat filterStars(Mat image, Mat blackImage){
+    public Mat filterStars(Mat image, Mat blackImage) {
         Mat img = new Mat();
         Imgproc.cvtColor(image, img, Imgproc.COLOR_BGR2GRAY);
         MatOfDouble mean = new MatOfDouble();
@@ -44,17 +25,17 @@ public class StarFinder {
         return img;
     }
 
-    public Mat findStars(Mat image, Mat blackImage){
-        List<Point> stars = locateStars2(image, blackImage);
+    public Mat findStars(Mat image, Mat blackImage) {
+        List<Point> stars = locateStars(image, blackImage);
 
         Mat output = new Mat(image.size(), 0);
-        for(Point star: stars){
+        for (Point star : stars) {
             Imgproc.rectangle(output, new Point(star.x - 2, star.y - 2), new Point(star.x + 2, star.y + 2), new Scalar(255, 255, 255));
         }
         return output;
     }
 
-    public List<Point> locateStars2(Mat image, Mat blackImage) {
+    public List<Point> locateStars(Mat image, Mat blackImage) {
         Mat img = filterStars(image, blackImage);
         StarFilter2 filter = new StarFilter2();
         filter.process(img);

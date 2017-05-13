@@ -29,9 +29,9 @@ public class StarAligner {
 
 //    Mat alignStars2(List<String> files, Mat blackFrame) {
 //        imageNumber.set(1);
-//        Mat current = fileManager.openImage(files.get(0));
+//        Mat current = fileManager.loadImage(files.get(0));
 //        StarFinder finder = new StarFinder();
-//        List<Point> lastStars = finder.locateStars2(current, blackFrame);
+//        List<Point> lastStars = finder.locateStars(current, blackFrame);
 //        Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
 //        Imgproc.accumulate(current, average);
 //        double lastAngle = 0;
@@ -39,8 +39,8 @@ public class StarAligner {
 //            imageNumber.set(i + 1);
 //            System.out.println("Aligning stars image " + (i + 1) + " of " + files.size());
 //            current.release();
-//            current = fileManager.openImage(files.get(i));
-//            List<Point> currentStars = finder.locateStars2(current, blackFrame);
+//            current = fileManager.loadImage(files.get(i));
+//            List<Point> currentStars = finder.locateStars(current, blackFrame);
 //            PriorityQueue<StarFinder.StarPair> stars = finder.matchStars(lastStars, currentStars);
 //            StarFinder.StarPair first = stars.poll();
 //            StarFinder.StarPair second = stars.poll();

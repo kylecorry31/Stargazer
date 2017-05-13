@@ -1,6 +1,5 @@
 package com.kylecorry.imageEnhancement.imageProcessing.stars;
 
-import com.kylecorry.imageEnhancement.imageProcessing.ProgressTrackable;
 import com.kylecorry.imageEnhancement.storage.FileManager;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -29,7 +28,7 @@ public class AutoAlign extends ProgressTrackableAligner {
     @Override
     public Mat align() {
         setProgress(1);
-        Mat current = fileManager.openImage(files.get(0));
+        Mat current = fileManager.loadImage(files.get(0));
         StarFinder finder = new StarFinder();
         Mat firstStarImage = finder.findStars(current, blackFrame);
         Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
@@ -41,7 +40,7 @@ public class AutoAlign extends ProgressTrackableAligner {
         for (int i = 1; i < files.size(); i++) {
             setProgress(i + 1);
             System.out.println("Aligning stars image " + (i + 1) + " of " + files.size());
-            current = fileManager.openImage(files.get(i));
+            current = fileManager.loadImage(files.get(i));
             Mat currentStarImage = finder.findStars(current, blackFrame);
             try {
                 Video.findTransformECC(currentStarImage, firstStarImage, warpMatrix, warpMode);

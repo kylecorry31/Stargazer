@@ -27,8 +27,8 @@ public class StarFilter2 {
         return filterContoursOutput;
     }
 
-    private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
-    private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
+    private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<>();
+    private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<>();
 
     /**
      * This is the primary method that runs the entire pipeline and updates the outputs.
@@ -102,8 +102,7 @@ public class StarFilter2 {
         final MatOfInt hull = new MatOfInt();
         output.clear();
         //operation
-        for (int i = 0; i < inputContours.size(); i++) {
-            final MatOfPoint contour = inputContours.get(i);
+        for (final MatOfPoint contour : inputContours) {
             final Rect bb = Imgproc.boundingRect(contour);
             if (bb.width < minWidth || bb.width > maxWidth) continue;
             if (bb.height < minHeight || bb.height > maxHeight) continue;
@@ -115,14 +114,14 @@ public class StarFilter2 {
             MatOfPoint mopHull = new MatOfPoint();
             mopHull.create((int) hull.size().height, 1, CvType.CV_32SC2);
             for (int j = 0; j < hull.size().height; j++) {
-                int index = (int)hull.get(j, 0)[0];
-                double[] point = new double[] { contour.get(index, 0)[0], contour.get(index, 0)[1]};
+                int index = (int) hull.get(j, 0)[0];
+                double[] point = new double[]{contour.get(index, 0)[0], contour.get(index, 0)[1]};
                 mopHull.put(j, 0, point);
             }
             final double solid = 100 * area / Imgproc.contourArea(mopHull);
             if (solid < solidity[0] || solid > solidity[1]) continue;
-            if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount)	continue;
-            final double ratio = bb.width / (double)bb.height;
+            if (contour.rows() < minVertexCount || contour.rows() > maxVertexCount) continue;
+            final double ratio = bb.width / (double) bb.height;
             if (ratio < minRatio || ratio > maxRatio) continue;
             output.add(contour);
         }

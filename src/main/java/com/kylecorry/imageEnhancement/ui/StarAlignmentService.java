@@ -1,14 +1,10 @@
 package com.kylecorry.imageEnhancement.ui;
 
 import com.kylecorry.imageEnhancement.imageProcessing.ImageProcessor;
-import com.kylecorry.imageEnhancement.imageProcessing.stars.IAlign;
 import com.kylecorry.imageEnhancement.imageProcessing.stars.ProgressTrackableAligner;
-import com.kylecorry.imageEnhancement.imageProcessing.stars.StarAligner;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import org.opencv.core.Mat;
-
-import java.util.List;
 
 /**
  * Created by Kylec on 5/12/2017.

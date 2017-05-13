@@ -5,9 +5,7 @@ import com.kylecorry.imageEnhancement.imageProcessing.stars.AutoAlign;
 import com.kylecorry.imageEnhancement.imageProcessing.stars.ManualAlign;
 import com.kylecorry.imageEnhancement.imageProcessing.stars.StarStreak;
 import com.kylecorry.imageEnhancement.storage.FileManager;
-import javafx.application.Platform;
 import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,17 +21,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.imgproc.Imgproc;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.ResourceBundle;
 
 /**

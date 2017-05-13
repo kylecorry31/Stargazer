@@ -5,7 +5,6 @@ apply plugin: 'java'
 
 apply plugin: 'application'
 mainClassName = "com.kylecorry.imageEnhancement.Main"
-applicationDefaultJvmArgs = ["-Djava.library.path=../libs/"]
 
 sourceCompatibility = 1.8
 
@@ -28,7 +27,6 @@ task makeJar(type: Jar) {
     with jar
 
 }
-
 
 repositories {
     mavenCentral()

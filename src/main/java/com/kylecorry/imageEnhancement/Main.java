@@ -5,7 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.opencv.core.Core;
+
+import java.io.File;
 
 /**
  * Created by Kylec on 5/8/2017.
@@ -13,8 +14,16 @@ import org.opencv.core.Core;
 public class Main extends Application {
 
     public static void main(String args[]) {
-        String opencvpath = System.getProperty("user.dir") + "\\libs\\";
-        System.load(opencvpath + Core.NATIVE_LIBRARY_NAME + ".dll");
+        try {
+            System.load(new File("../lib/opencv_java320.dll").getAbsolutePath());
+        } catch (UnsatisfiedLinkError e) {
+            try {
+                System.load(new File("libs/opencv_java320.dll").getAbsolutePath());
+            } catch (UnsatisfiedLinkError e1) {
+                System.err.println("Could not load opencv - FATAL");
+                System.exit(1);
+            }
+        }
         launch(args);
     }
 

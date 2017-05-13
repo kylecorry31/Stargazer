@@ -1,7 +1,5 @@
 package com.kylecorry.imageEnhancement.imageProcessing;
 
-import com.kylecorry.imageEnhancement.storage.FileManager;
-import javafx.scene.image.*;
 import javafx.scene.image.Image;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -33,7 +31,4 @@ public class ImageUtils {
         return image;
     }
 
-    public static BufferedImage toRGB(BufferedImage source) {
-        return copyImage(source, BufferedImage.TYPE_INT_RGB);
-    }
 }
