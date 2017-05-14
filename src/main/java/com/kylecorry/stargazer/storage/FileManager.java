@@ -12,18 +12,33 @@ import java.util.List;
  */
 public class FileManager {
 
-    public List<String> getAllFileNamesInDirectory(File folder) {
+    /**
+     * Get the absolute paths to all of the files in the specified directory.
+     *
+     * @param directory The directory to scan.
+     * @return The absolute paths of all of the files in the specified directory.
+     */
+    public List<String> getAllFileNamesInDirectory(File directory) {
         List<String> files = new LinkedList<>();
+        if (!directory.exists() || !directory.isDirectory()) {
+            return files;
+        }
 
-        File[] listOfFiles = folder.listFiles();
+        File[] listOfFiles = directory.listFiles();
         for (int i = 0; i < (listOfFiles != null ? listOfFiles.length : 0); i++) {
             if (listOfFiles[i].isFile()) {
-                files.add(folder.getAbsolutePath() + "/" + listOfFiles[i].getName());
+                files.add(listOfFiles[i].getAbsolutePath());
             }
         }
         return files;
     }
 
+    /**
+     * Get the absolute paths to all of the files in the specified directory.
+     *
+     * @param directory The name of the directory to scan.
+     * @return The absolute paths of all of the files in the specified directory.
+     */
     public List<String> getAllFileNamesInDirectory(String directory) {
         return getAllFileNamesInDirectory(new File(directory));
     }
@@ -34,6 +49,10 @@ public class FileManager {
 
     public void saveImage(Mat image, String filename) {
         Imgcodecs.imwrite(filename, image);
+    }
+
+    public boolean deleteFile(String filename) {
+        return new File(filename).delete();
     }
 
 }

@@ -14,16 +14,7 @@ import java.io.File;
 public class Main extends Application {
 
     public static void main(String args[]) {
-        try {
-            System.load(new File("../lib/opencv_java320.dll").getAbsolutePath());
-        } catch (UnsatisfiedLinkError e) {
-            try {
-                System.load(new File("libs/opencv_java320.dll").getAbsolutePath());
-            } catch (UnsatisfiedLinkError e1) {
-                System.err.println("Could not load opencv - FATAL");
-                System.exit(1);
-            }
-        }
+        OpenCVManager.load();
         launch(args);
     }
 
