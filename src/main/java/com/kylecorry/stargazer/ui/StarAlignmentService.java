@@ -30,7 +30,7 @@ public class StarAlignmentService extends Service<Mat> {
             protected Mat call() throws Exception {
                 updateProgress(0, 1.0);
 
-                imageProcessor.imageNumber.addListener((observable, oldValue, newValue) -> {
+                imageProcessor.progressProperty().addListener((observable, oldValue, newValue) -> {
                     updateMessage("Aligning stars in frame " + newValue.intValue() + " of " + numFiles);
                     updateProgress(newValue.intValue() / (double) numFiles, 1.0);
                 });

@@ -29,7 +29,7 @@ class HDRService extends Service<Mat> {
             protected Mat call() throws Exception {
                 updateProgress(0, 1.0);
 
-                imageProcessor.imageNumber.addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {
+                imageProcessor.progressProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {
                     updateMessage("Processing frame " + newValue.intValue() + " of " + lightFiles.size());
                     updateProgress(newValue.intValue() / (double) lightFiles.size(), 1);
                 }));

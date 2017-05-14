@@ -6,8 +6,6 @@ import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.ProgressTrackableAligner;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.StarAligner;
 import com.kylecorry.stargazer.storage.FileManager;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
@@ -17,10 +15,9 @@ import java.util.PriorityQueue;
 /**
  * Created by Kylec on 5/11/2017.
  */
-public class ImageProcessor {
+public class ImageProcessor extends ProgressTrackable {
 
     private FileManager fileManager;
-    public IntegerProperty imageNumber = new SimpleIntegerProperty(1, "imageNumber");
 
     public ImageProcessor(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -28,9 +25,9 @@ public class ImageProcessor {
 
     public Mat reduceNoise(List<String> frameFileNames) {
         HDR hdr = new HDR(fileManager);
-        imageNumber.bind(hdr.imageNumber);
+        progressProperty().bind(hdr.progressProperty());
         Mat image = hdr.reduceNoise(frameFileNames);
-        imageNumber.unbind();
+        progressProperty().unbind();
         return image;
     }
 
@@ -60,9 +57,9 @@ public class ImageProcessor {
 
     public Mat alignStars(ProgressTrackableAligner alignmentTechnique) {
         StarAligner aligner = new StarAligner(alignmentTechnique);
-        imageNumber.bind(aligner.progressProperty());
+        progressProperty().bind(aligner.progressProperty());
         Mat image = aligner.align();
-        imageNumber.unbind();
+        progressProperty().unbind();
         return image;
     }
 }

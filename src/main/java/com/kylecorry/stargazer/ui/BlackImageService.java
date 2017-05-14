@@ -27,7 +27,7 @@ public class BlackImageService extends Service<Mat> {
             protected Mat call() throws Exception {
                 updateProgress(0, 1.0);
 
-                imageProcessor.imageNumber.addListener((observable, oldValue, newValue) -> {
+                imageProcessor.progressProperty().addListener((observable, oldValue, newValue) -> {
                     updateMessage("Processing black frame " + newValue.intValue() + " of " + blackFiles.size());
                     updateProgress(newValue.intValue() / (double) blackFiles.size(), 1.0);
                 });
