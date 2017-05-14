@@ -1,0 +1,63 @@
+* {
+    -color-primary: #2c4b7c;
+    -color-primary-dark: #233d66;
+    -color-primary-light: #3c6ab2;
+    -color-accent: #cfdb00;
+    -color-background: #303030;
+    -background-color: white;
+        -fx-text-fill: WHITE;
+}
+
+.button-raised {
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 14px;
+    -jfx-button-type: RAISED;
+    -fx-background-color: -color-accent;
+    -fx-pref-width: 200;
+    -fx-text-fill: BLACK;
+}
+
+.custom-jfx-check-box {
+    -jfx-checked-color: -color-accent;
+    -jfx-unchecked-color: -color-accent;
+}
+
+.custom-jfx-radio-button {
+    -jfx-selected-color: -color-accent;
+    -jfx-unselected-color: -color-accent;
+}
+
+.custom-jfx-progress-bar > .bar {
+    -fx-background-color: -color-primary-light
+    -fx-background-radius: 0;
+    -fx-background-insets: 0, 0, 0, 0;
+}
+
+.link {
+    -fx-text-fill: -color-accent;
+}
+
+.root {
+    -fx-background-color: -color-background;
+}
+
+
+
+/*
+.root{
+    -fx-base: -color-accent;
+    -fx-background: -background-color;
+}
+
+.button {
+    -fx-background: -color-accent;
+}
+
+.header {
+    -fx-text-color: -color-primary;
+}
+
+.title {
+    -fx-text-fill: white;
+    -fx-background-color: -color-primary;
+}*/

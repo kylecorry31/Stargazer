@@ -35,6 +35,6 @@
          </image>
       </ImageView>
       <Label layoutX="14.0" layoutY="390.0" prefHeight="53.0" prefWidth="287.0" text="While more detail can be seen, there is much more noise and a purple tint" textAlignment="CENTER" wrapText="true" />
-      <Label layoutX="339.0" layoutY="390.0" prefHeight="78.0" prefWidth="287.0" text="This image has much less noise, but has less detail, but it can be brightened using other software" textAlignment="CENTER" wrapText="true" />
+      <Label layoutX="339.0" layoutY="390.0" prefHeight="78.0" prefWidth="287.0" text="This image has much less noise overall, and a more accurate color." textAlignment="CENTER" wrapText="true" />
    </children>
 </AnchorPane>

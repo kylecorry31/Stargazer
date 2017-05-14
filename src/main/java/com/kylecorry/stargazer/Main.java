@@ -32,8 +32,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/homepage.fxml"));
         Parent root = loader.load();
+        Scene scene = new Scene(root, 1024, 768);
         primaryStage.setTitle("Stargazer");
-        primaryStage.setScene(new Scene(root, 1024, 768));
+        scene.getStylesheets().add("/styles/styles.css");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 }

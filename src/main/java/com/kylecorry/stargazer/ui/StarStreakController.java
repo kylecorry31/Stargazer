@@ -55,7 +55,7 @@ public class StarStreakController implements Initializable {
         final double maxY = image.getHeight();
 
 
-        helpText.setText("Drag across a star streak, then press done");
+        helpText.setText("Drag across a star trail");
         hdrImage.setOnMousePressed(me -> {
             drawImage.release();
             drawImage = HomepageController.hdrImage.clone();
@@ -95,7 +95,7 @@ public class StarStreakController implements Initializable {
                     HomepageController.startStar1 = firstStar.getStart();
                     HomepageController.endStar1 = firstStar.getEnd();
                     counter++;
-                    helpText.setText("Drag across a second star streak, then press done");
+                    helpText.setText("Drag across another star trail");
                 }
                 break;
             case 1:

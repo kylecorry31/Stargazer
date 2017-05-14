@@ -36,4 +36,5 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile fileTree(dir: 'libs', include: ['*'])
+    compile 'com.jfoenix:jfoenix:1.2.0'
 }

@@ -1,5 +1,9 @@
 package com.kylecorry.stargazer.ui;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXRadioButton;
 import com.kylecorry.stargazer.imageProcessing.*;
 import com.kylecorry.stargazer.imageProcessing.stars.AutoAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.ManualAlign;
@@ -9,12 +13,17 @@ import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.*;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -42,10 +51,10 @@ public class HomepageController implements Initializable {
     public static Mat hdrImage;
 
     @FXML
-    Button framesBtn;
+    JFXButton framesBtn;
 
     @FXML
-    Button blackFramesBtn;
+    JFXButton blackFramesBtn;
 
     @FXML
     AnchorPane window;
@@ -57,25 +66,25 @@ public class HomepageController implements Initializable {
     Label blackFrames;
 
     @FXML
-    Button enhanceBtn;
+    JFXButton enhanceBtn;
 
     @FXML
     Label progressText;
 
     @FXML
-    ProgressBar progressBar;
+    JFXProgressBar progressBar;
 
     @FXML
-    CheckBox alignStars;
+    JFXCheckBox alignStars;
 
     @FXML
     CheckBox autoMergeStars;
 
     @FXML
-    RadioButton autoAlign;
+    JFXRadioButton autoAlign;
 
     @FXML
-    RadioButton manualAlign;
+    JFXRadioButton manualAlign;
 
     @FXML
     Label techniqueLbl;
@@ -222,7 +231,7 @@ public class HomepageController implements Initializable {
         } else {
             HomepageController.hdrImage = hdrImage;
             displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
-            starAlignmentService = new StarAlignmentService(imageProcessor, new ManualAlign(fileManager, lightFiles, new StarStreak(startStar1, startStar2), new StarStreak(endStar1, endStar2)), lightFiles.size());
+            starAlignmentService = new StarAlignmentService(imageProcessor, new ManualAlign(fileManager, lightFiles, new StarStreak(startStar1, endStar1), new StarStreak(startStar2, endStar2)), lightFiles.size());
         }
 
         bindUIToService(starAlignmentService);
@@ -295,7 +304,9 @@ public class HomepageController implements Initializable {
         Parent root = null;
         try {
             root = FXMLLoader.load(getClass().getResource(fxml));
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/styles/styles.css");
+            stage.setScene(scene);
             stage.setTitle(title);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(window.getScene().getWindow());

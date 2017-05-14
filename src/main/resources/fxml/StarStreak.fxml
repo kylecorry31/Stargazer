@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
@@ -20,6 +20,6 @@
          </content>
       </ScrollPane>
       <Label layoutX="424.0" layoutY="66.0" text="Use the scroll bars to scroll" />
-      <Button fx:id="doneBtn" layoutX="830.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#doneBtnClicked" text="Done" />
+      <JFXButton fx:id="doneBtn" layoutX="762.0" layoutY="29.0" onMouseClicked="#doneBtnClicked" styleClass="button-raised" text="NEXT" />
    </children>
 </AnchorPane>
