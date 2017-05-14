@@ -28,7 +28,7 @@
 }
 
 .custom-jfx-progress-bar > .bar {
-    -fx-background-color: -color-primary-light
+    -fx-background-color: -color-primary-light;
     -fx-background-radius: 0;
     -fx-background-insets: 0, 0, 0, 0;
 }

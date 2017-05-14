@@ -1,4 +1,4 @@
-package com.kylecorry.stargazer.imageProcessing.stars;
+package com.kylecorry.stargazer.imageProcessing.stars.alignment;
 
 import org.opencv.core.Mat;
 

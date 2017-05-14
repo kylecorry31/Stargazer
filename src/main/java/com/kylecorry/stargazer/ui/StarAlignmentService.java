@@ -1,7 +1,7 @@
 package com.kylecorry.stargazer.ui;
 
 import com.kylecorry.stargazer.imageProcessing.ImageProcessor;
-import com.kylecorry.stargazer.imageProcessing.stars.ProgressTrackableAligner;
+import com.kylecorry.stargazer.imageProcessing.stars.alignment.ProgressTrackableAligner;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import org.opencv.core.Mat;

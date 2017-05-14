@@ -1,6 +1,7 @@
-package com.kylecorry.stargazer.imageProcessing.stars;
+package com.kylecorry.stargazer.imageProcessing.stars.alignment;
 
 import com.kylecorry.stargazer.imageProcessing.RotationMath;
+import com.kylecorry.stargazer.imageProcessing.stars.StarStreak;
 import com.kylecorry.stargazer.storage.FileManager;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;

@@ -1,11 +1,16 @@
 package com.kylecorry.stargazer.imageProcessing;
 
 import com.kylecorry.stargazer.imageProcessing.stars.*;
+import com.kylecorry.stargazer.imageProcessing.stars.alignment.AutoAlign;
+import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
+import com.kylecorry.stargazer.imageProcessing.stars.alignment.ProgressTrackableAligner;
+import com.kylecorry.stargazer.imageProcessing.stars.alignment.StarAligner;
 import com.kylecorry.stargazer.storage.FileManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -47,16 +52,6 @@ public class ImageProcessor {
     public PriorityQueue<StarFinder.StarPair> matchStars(List<Point> first, List<Point> second) {
         StarFinder finder = new StarFinder();
         return finder.matchStars(first, second);
-    }
-
-    public Mat filterStars(Mat image, Mat blackFrame) {
-        StarFinder finder = new StarFinder();
-        return finder.filterStars(image, blackFrame);
-    }
-
-    public List<Point> findStars(Mat image, Mat blackFrame) {
-        StarFinder finder = new StarFinder();
-        return finder.locateStars(image, blackFrame);
     }
 
     public Mat alignStars(List<String> lightFiles, Mat blackFile) {

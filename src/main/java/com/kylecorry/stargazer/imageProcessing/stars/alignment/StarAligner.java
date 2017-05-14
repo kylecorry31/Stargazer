@@ -1,4 +1,4 @@
-package com.kylecorry.stargazer.imageProcessing.stars;
+package com.kylecorry.stargazer.imageProcessing.stars.alignment;
 
 import javafx.beans.property.IntegerProperty;
 import org.opencv.core.*;

@@ -1,4 +1,4 @@
-package com.kylecorry.stargazer.imageProcessing.stars;
+package com.kylecorry.stargazer.imageProcessing.stars.filters;
 
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Kylec on 5/13/2017.
  */
-public class StarFilter2 {
+class BackgroundSubtractionGRIPFilter {
 
     /**
      * This method is a generated getter for the output of a Find_Contours.

@@ -1,5 +1,7 @@
-package com.kylecorry.stargazer.imageProcessing.stars;
+package com.kylecorry.stargazer.imageProcessing.stars.alignment;
 
+import com.kylecorry.stargazer.imageProcessing.stars.filters.BackgroundSubtractionFilter;
+import com.kylecorry.stargazer.imageProcessing.stars.filters.StarFilter;
 import com.kylecorry.stargazer.storage.FileManager;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -18,19 +20,27 @@ public class AutoAlign extends ProgressTrackableAligner {
     private FileManager fileManager;
     private Mat blackFrame;
     private List<String> files;
+    private StarFilter filter;
 
     public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame) {
         this.fileManager = fileManager;
         this.blackFrame = blackFrame;
         this.files = files;
+        this.filter = new StarFilter(new BackgroundSubtractionFilter());
+    }
+
+    public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame, StarFilter filter) {
+        this.fileManager = fileManager;
+        this.blackFrame = blackFrame;
+        this.files = files;
+        this.filter = filter;
     }
 
     @Override
     public Mat align() {
         setProgress(1);
         Mat current = fileManager.loadImage(files.get(0));
-        StarFinder finder = new StarFinder();
-        Mat firstStarImage = finder.findStars(current, blackFrame);
+        Mat firstStarImage = filter.filterStars(current, blackFrame);
         Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
         Imgproc.accumulate(current, average);
         current.release();
@@ -39,16 +49,15 @@ public class AutoAlign extends ProgressTrackableAligner {
         int converged = 1;
         for (int i = 1; i < files.size(); i++) {
             setProgress(i + 1);
-            System.out.println("Aligning stars image " + (i + 1) + " of " + files.size());
             current = fileManager.loadImage(files.get(i));
-            Mat currentStarImage = finder.findStars(current, blackFrame);
+            Mat currentStarImage = filter.filterStars(current, blackFrame);
             try {
                 Video.findTransformECC(currentStarImage, firstStarImage, warpMatrix, warpMode);
                 Imgproc.warpAffine(current, current, warpMatrix, current.size());
                 Imgproc.accumulate(current, average);
                 converged++;
             } catch (Exception e) {
-                System.err.println("Could not align");
+                System.err.println("Could not align frame " + (i + 1));
             }
             currentStarImage.release();
             current.release();
