@@ -192,3 +192,4 @@ gradle-app.setting
 *.dat
 
 Output/
+testing/
