@@ -22,7 +22,6 @@ public class ImageUtils {
         return b;
     }
 
-    // TODO: fix this mess
     public static Image toImage(Mat m) {
         MatOfByte buffer = new MatOfByte();
         Imgcodecs.imencode(".jpg", m, buffer);
