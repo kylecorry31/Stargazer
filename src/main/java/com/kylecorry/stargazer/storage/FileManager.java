@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Kylec on 5/11/2017.
+ * A class to manage files.
  */
 public class FileManager {
 
@@ -43,14 +43,32 @@ public class FileManager {
         return getAllFileNamesInDirectory(new File(directory));
     }
 
+    /**
+     * Load an image from a file.
+     *
+     * @param filename The filename where the image is located at.
+     * @return The image as a {@link Mat}.
+     */
     public Mat loadImage(String filename) {
         return Imgcodecs.imread(filename);
     }
 
+    /**
+     * Save an image to a file.
+     *
+     * @param image    The image as a {@link Mat}.
+     * @param filename The filename where the image should be saved.
+     */
     public void saveImage(Mat image, String filename) {
         Imgcodecs.imwrite(filename, image);
     }
 
+    /**
+     * Delete a file.
+     *
+     * @param filename The filename of the file to delete.
+     * @return True if the file was successfully deleted.
+     */
     public boolean deleteFile(String filename) {
         return new File(filename).delete();
     }
