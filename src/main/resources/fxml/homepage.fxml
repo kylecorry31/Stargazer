@@ -26,12 +26,12 @@
             </Label>
          </center>
       </JFXToolbar>
-      <Label layoutX="32.0" layoutY="96.0" prefWidth="81.0" styleClass="header" text="Frames">
+      <Label layoutX="32.0" layoutY="96.0" prefWidth="100.0" styleClass="header" text="Frames">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="129.0" layoutY="101.5" onMouseClicked="#frameHelp" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="148.0" layoutY="101.5" onMouseClicked="#frameHelp" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/help.png" />
          </image>
@@ -39,12 +39,12 @@
       <Label layoutX="32.0" layoutY="131.0" text="Select a folder containing the frames captured. Be sure to use a tripod! If high ISO is used, be sure to take many photos (~ 32 to 64)" />
       <JFXButton fx:id="framesBtn" buttonType="RAISED" layoutX="32.0" layoutY="160.0" onMouseClicked="#selectFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD FRAMES" />
       <Label fx:id="frames" layoutX="256.0" layoutY="160.0" prefHeight="40.0" prefWidth="736.0" />
-      <Label layoutX="32.0" layoutY="232.0" styleClass="header" text="Black Frames">
+      <Label layoutX="32.0" layoutY="232.0" prefWidth="200.0" styleClass="header" text="Black Frames">
          <font>
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="196.0" layoutY="237.5" onMouseClicked="#blackFrameHelp" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="230.0" layoutY="237.5" onMouseClicked="#blackFrameHelp" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/help.png" />
          </image>
