@@ -20,9 +20,11 @@ public class BackgroundSubtractionFilter implements IFilter {
         MatOfDouble mean = new MatOfDouble();
         MatOfDouble stdev = new MatOfDouble();
         Core.meanStdDev(img, mean, stdev);
-        Mat dark = new Mat();
-        Imgproc.cvtColor(blackFrame, dark, Imgproc.COLOR_BGR2GRAY);
-        Core.subtract(img, dark, img);
+        if(blackFrame.channels() == 3 || blackFrame.channels() == 4){
+            Mat dark = new Mat();
+            Imgproc.cvtColor(blackFrame, dark, Imgproc.COLOR_BGR2GRAY);
+            Core.subtract(img, dark, img);
+        }
         double thresh = mean.get(0, 0)[0] + 2 * stdev.get(0, 0)[0];
         Imgproc.threshold(img, img, thresh, 255, Imgproc.THRESH_TOZERO);
         return img;
