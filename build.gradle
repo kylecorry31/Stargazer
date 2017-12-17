@@ -1,10 +1,10 @@
-group 'com.kylecorry.imageEnhancement'
-version '0.1'
+group 'com.kylecorry.stargazer'
+version '0.2'
 
 apply plugin: 'java'
 
 apply plugin: 'application'
-mainClassName = "com.kylecorry.imageEnhancement.Main"
+mainClassName = "com.kylecorry.stargazer.Main"
 
 sourceCompatibility = 1.8
 
@@ -12,7 +12,7 @@ task makeJar(type: Jar) {
 
     manifest {
 
-        attributes 'Implementation-Title': "Image Enhancement",
+        attributes 'Implementation-Title': "Stargazer",
 
                 'Implementation-Version': version,
 
@@ -36,4 +36,5 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile fileTree(dir: 'libs', include: ['*'])
+    compile 'com.jfoenix:jfoenix:1.2.0'
 }
