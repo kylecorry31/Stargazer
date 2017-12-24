@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXRadioButton?>
-<?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -12,64 +11,62 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.HomepageController">
    <children>
-      <JFXToolbar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="1024.0">
-         <center>
-            <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="title" text="Stargazer" BorderPane.alignment="CENTER">
-               <font>
-                  <Font size="32.0" />
-               </font>
-            </Label>
-         </center>
-      </JFXToolbar>
-      <Label layoutX="32.0" layoutY="96.0" prefWidth="100.0" styleClass="header" text="Frames">
+      <Label layoutX="596.0" layoutY="34.0" prefHeight="30.0" prefWidth="141.0" styleClass="header" text="Star Photos">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="148.0" layoutY="101.5" onMouseClicked="#frameHelp" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="715.0" layoutY="37.0" onMouseClicked="#frameHelp" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/help.png" />
          </image>
       </ImageView>
-      <Label layoutX="32.0" layoutY="131.0" text="Select a folder containing the frames captured. Be sure to use a tripod! If high ISO is used, be sure to take many photos (~ 32 to 64)" />
-      <JFXButton fx:id="framesBtn" buttonType="RAISED" layoutX="32.0" layoutY="160.0" onMouseClicked="#selectFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD FRAMES" />
-      <Label fx:id="frames" layoutX="256.0" layoutY="160.0" prefHeight="40.0" prefWidth="736.0" />
-      <Label layoutX="32.0" layoutY="232.0" prefWidth="200.0" styleClass="header" text="Black Frames">
+      <Label layoutX="596.0" layoutY="64.0" prefHeight="59.0" prefWidth="416.0" text="Select a folder containing the frames captured. Be sure to use a tripod! If high ISO is used, be sure to take many photos (~ 32 to 64)" wrapText="true" />
+      <JFXButton fx:id="framesBtn" buttonType="RAISED" layoutX="596.0" layoutY="127.0" onMouseClicked="#selectFrames" prefHeight="38.0" prefWidth="166.0" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD PHOTOS" />
+      <Label fx:id="frames" layoutX="596.0" layoutY="175.0" prefHeight="40.0" prefWidth="416.0" text="No folder selected" />
+      <Label layoutX="596.0" layoutY="218.0" prefHeight="30.0" prefWidth="141.0" styleClass="header" text="Dark Photos">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="230.0" layoutY="237.5" onMouseClicked="#blackFrameHelp" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="715.0" layoutY="221.0" onMouseClicked="#blackFrameHelp" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/help.png" />
          </image>
       </ImageView>
-      <Label layoutX="32.0" layoutY="267.0" prefHeight="47.0" prefWidth="952.0" text="Cover the lense of your camera with something black like tape or a black bag. Take about the same number of frames as the actual frames above with the exact same settings. This is optional, but recommended to remove a great deal of sensor noise." textFill="WHITE" wrapText="true" />
-      <JFXButton fx:id="blackFramesBtn" buttonType="RAISED" layoutX="32.0" layoutY="322.0" onMouseClicked="#selectBlackFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD BLACK FRAMES" />
-      <Label fx:id="blackFrames" layoutX="256.0" layoutY="322.0" prefHeight="40.0" prefWidth="736.0" />
-      <JFXCheckBox fx:id="alignStars" layoutX="24.0" layoutY="396.0" styleClass="custom-jfx-check-box" text="Align stars (experimental)" />
+      <Label layoutX="596.0" layoutY="250.0" prefHeight="80.0" prefWidth="416.0" text="Cover the lense of your camera with something black like tape or a black bag. Take about the same number of frames as the actual frames above with the exact same settings. This is optional, but recommended to remove a great deal of sensor noise." textFill="WHITE" wrapText="true" />
+      <JFXButton fx:id="blackFramesBtn" buttonType="RAISED" layoutX="596.0" layoutY="337.0" onMouseClicked="#selectBlackFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD BLACK FRAMES" />
+      <Label fx:id="blackFrames" layoutX="596.0" layoutY="381.0" prefHeight="40.0" prefWidth="416.0" text="No folder selected" />
+      <JFXCheckBox fx:id="alignStars" layoutX="590.0" layoutY="437.0" styleClass="custom-jfx-check-box" text="Align stars (experimental)" />
       <CheckBox fx:id="autoMergeStars" disable="true" layoutX="266.0" layoutY="396.0" mnemonicParsing="false" text="Automatically merge hdr and star alignment (highly experimental)" visible="false" />
-      <Label fx:id="techniqueLbl" disable="true" layoutX="32.0" layoutY="433.0" text="Alignment Technique">
+      <Label fx:id="techniqueLbl" disable="true" layoutX="598.0" layoutY="471.0" text="Alignment Technique">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <JFXRadioButton fx:id="autoAlign" disable="true" layoutX="16.0" layoutY="470.0" selected="true" styleClass="custom-jfx-radio-button" text="Auto align (works well on images with few obstructions)">
+      <JFXRadioButton fx:id="autoAlign" disable="true" layoutX="584.0" layoutY="513.0" selected="true" styleClass="custom-jfx-radio-button" text="Auto align (works well on images with few obstructions)">
          <toggleGroup>
             <ToggleGroup fx:id="align" />
          </toggleGroup>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="manualAlign" disable="true" layoutX="603.0" layoutY="470.0" styleClass="custom-jfx-radio-button" text="Semi-manual align (outline 2 star streaks)" toggleGroup="$align" />
-      <JFXButton fx:id="enhanceBtn" buttonType="RAISED" disable="true" layoutX="412.0" layoutY="523.0" onMouseClicked="#createEnhancedImage" ripplerFill="#2c4b7c" styleClass="button-raised" text="ENHANCE IMAGE" />
-      <Label fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="212.0" layoutY="579.0" prefHeight="21.0" prefWidth="600.0" textFill="RED" />
-      <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="616.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
-      <Label layoutX="32.0" layoutY="709.0" text="Inspired by this article: " />
-      <Label layoutX="32.0" layoutY="672.0" text="Created by Kyle Corry" />
-      <Hyperlink layoutX="186.0" layoutY="705.0" onMouseClicked="#openResearchBlog" styleClass="link" text="https://research.googleblog.com/2017/04/experimental-nighttime-photography-with.html" />
+      <JFXRadioButton fx:id="manualAlign" disable="true" layoutX="584.0" layoutY="541.0" styleClass="custom-jfx-radio-button" text="Semi-manual align (outline 3 star streaks)" toggleGroup="$align" />
+      <JFXButton fx:id="enhanceBtn" buttonType="RAISED" disable="true" layoutX="596.0" layoutY="589.0" onMouseClicked="#createEnhancedImage" ripplerFill="#2c4b7c" styleClass="button-raised" text="ENHANCE IMAGE" />
+      <Label fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="212.0" layoutY="679.0" prefHeight="21.0" prefWidth="600.0" textFill="RED" />
+      <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="716.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
+      <ImageView fitHeight="466.0" fitWidth="479.0" layoutX="60.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/main-graphic-acorn.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="60.0" layoutY="565.0" lineSpacing="2.0" prefHeight="87.0" prefWidth="465.0" style="-fx-font-size: 16px;" text="Select you star photos, and a set of photos with the camera covered [dark](optional). You can also attempt to align the stars in the photos to remove the streaks left from long exposures." wrapText="true" />
+      <Label alignment="CENTER" layoutX="118.0" layoutY="529.0" prefHeight="40.0" prefWidth="349.0" text="Select your star photos">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

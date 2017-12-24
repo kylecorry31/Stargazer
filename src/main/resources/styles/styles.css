@@ -1,11 +1,17 @@
+@font-face {
+    font-family: 'Fira Sans Light';
+    src: url('../fonts/Fira_Sans/FiraSans-Light.ttf');
+}
+
 * {
     -color-primary: #2c4b7c;
     -color-primary-dark: #233d66;
     -color-primary-light: #3c6ab2;
     -color-accent: #cfdb00;
     -color-background: #303030;
+    -fx-font-family: 'Fira Sans Light';
     -background-color: white;
-        -fx-text-fill: WHITE;
+    -fx-text-fill: WHITE;
 }
 
 .button-raised {
