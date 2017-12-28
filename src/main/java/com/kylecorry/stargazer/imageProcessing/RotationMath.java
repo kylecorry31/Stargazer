@@ -34,7 +34,8 @@ public class RotationMath {
 
 
     static class Pair {
-        double x, y;
+        final double x;
+        final double y;
 
         Pair(double x, double y) {
             this.x = x;

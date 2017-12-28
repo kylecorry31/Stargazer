@@ -13,8 +13,8 @@ import java.util.List;
  */
 class HDRService extends Service<Mat> {
 
-    private ImageProcessor imageProcessor;
-    private List<String> lightFiles;
+    private final ImageProcessor imageProcessor;
+    private final List<String> lightFiles;
 
     public HDRService(ImageProcessor imageProcessor, List<String> lightFiles) {
         this.imageProcessor = imageProcessor;
@@ -26,7 +26,7 @@ class HDRService extends Service<Mat> {
         return new Task<Mat>() {
 
             @Override
-            protected Mat call() throws Exception {
+            protected Mat call() {
                 updateProgress(0, 1.0);
 
                 imageProcessor.progressProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> {

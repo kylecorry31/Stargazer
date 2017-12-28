@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Fira Sans Light';
+    src: url('../fonts/Fira_Sans/FiraSans-Light.ttf');
+}
+
+@font-face {
+    font-family: 'Fira Sans Thin';
+    src: url('../fonts/Fira_Sans/FiraSans-Thin.ttf');
+}
+
 * {
     -color-primary: #2c4b7c;
     -color-primary-dark: #233d66;
@@ -5,7 +15,7 @@
     -color-accent: #cfdb00;
     -color-background: #303030;
     -background-color: white;
-        -fx-text-fill: WHITE;
+    -fx-text-fill: WHITE;
 }
 
 .button-raised {
@@ -28,7 +38,7 @@
 }
 
 .custom-jfx-progress-bar > .bar {
-    -fx-background-color: -color-primary-light;
+    -fx-background-color: -color-accent;
     -fx-background-radius: 0;
     -fx-background-insets: 0, 0, 0, 0;
 }
@@ -40,6 +50,18 @@
 .root {
     -fx-background-color: -color-background;
 }
+
+#desc-title, .header {
+    -fx-font-size: 20px;
+    -fx-font-family: 'Fira Sans Thin';
+}
+
+#desc-label, #star-photos-desc, #dark-photos-desc, .custom-jfx-radio-button, #progress-text, .folder-path, .custom-jfx-check-box {
+    -fx-font-size: 15px;
+    -fx-line-spacing: 2.5;
+    -fx-font-family: 'Fira Sans Light';
+}
+
 
 
 

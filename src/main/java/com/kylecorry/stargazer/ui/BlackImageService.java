@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * Created by Kylec on 5/12/2017.
  */
-public class BlackImageService extends Service<Mat> {
+class BlackImageService extends Service<Mat> {
 
-    private ImageProcessor imageProcessor;
+    private final ImageProcessor imageProcessor;
 
-    private List<String> blackFiles;
+    private final List<String> blackFiles;
 
     public BlackImageService(ImageProcessor imageProcessor, List<String> blackFiles) {
         this.imageProcessor = imageProcessor;
@@ -24,7 +24,7 @@ public class BlackImageService extends Service<Mat> {
     protected Task<Mat> createTask() {
         return new Task<Mat>() {
             @Override
-            protected Mat call() throws Exception {
+            protected Mat call() {
                 updateProgress(0, 1.0);
 
                 imageProcessor.progressProperty().addListener((observable, oldValue, newValue) -> {

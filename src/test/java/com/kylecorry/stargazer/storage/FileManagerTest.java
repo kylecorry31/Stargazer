@@ -9,7 +9,6 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class FileManagerTest {
     }
 
     @Test
-    public void saveAndLoadImage() throws Exception {
+    public void saveAndLoadImage() {
         Mat image = Mat.zeros(10, 10, CvType.CV_8UC3);
         fileManager.saveImage(image, "test.jpg");
         File file = new File("test.jpg");

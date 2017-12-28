@@ -83,11 +83,11 @@ public class HomepageController implements Initializable {
     @FXML
     Label techniqueLbl;
 
-    Mat darkImage;
+    private Mat darkImage;
 
     private ImageProcessor imageProcessor;
 
-    private FileManager fileManager;
+    private final FileManager fileManager;
     private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
 
 
@@ -293,9 +293,9 @@ public class HomepageController implements Initializable {
         displayPopup("/fxml/FrameHelp.fxml", "Averaging Frames");
     }
 
-    public void displayPopup(String fxml, String title) {
+    private void displayPopup(String fxml, String title) {
         Stage stage = new Stage();
-        Parent root = null;
+        Parent root;
         try {
             root = FXMLLoader.load(getClass().getResource(fxml));
             Scene scene = new Scene(root);
@@ -305,7 +305,6 @@ public class HomepageController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(window.getScene().getWindow());
             stage.showAndWait();
-            stage = null;
         } catch (IOException e) {
             e.printStackTrace();
         }

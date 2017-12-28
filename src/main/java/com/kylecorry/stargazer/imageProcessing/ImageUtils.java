@@ -14,14 +14,6 @@ import java.io.ByteArrayInputStream;
  */
 public class ImageUtils {
 
-    public static BufferedImage copyImage(BufferedImage source, int type) {
-        BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), type);
-        Graphics2D g = b.createGraphics();
-        g.drawImage(source, 0, 0, null);
-        g.dispose();
-        return b;
-    }
-
     public static Image toImage(Mat m) {
         MatOfByte buffer = new MatOfByte();
         Imgcodecs.imencode(".jpg", m, buffer);

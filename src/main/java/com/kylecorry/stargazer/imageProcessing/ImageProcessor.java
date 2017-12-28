@@ -7,17 +7,15 @@ import com.kylecorry.stargazer.imageProcessing.stars.alignment.ProgressTrackable
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.StarAligner;
 import com.kylecorry.stargazer.storage.FileManager;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 
 import java.util.List;
-import java.util.PriorityQueue;
 
 /**
  * Created by Kylec on 5/11/2017.
  */
 public class ImageProcessor extends ProgressTrackable {
 
-    private FileManager fileManager;
+    private final FileManager fileManager;
 
     public ImageProcessor(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -36,19 +34,8 @@ public class ImageProcessor extends ProgressTrackable {
         return subtractor.subtract(first, second);
     }
 
-    public Mat reduceNoise(List<String> frameFileNames, List<String> blackFrameFileNames) {
-        Mat black = reduceNoise(blackFrameFileNames);
-        Mat normal = reduceNoise(frameFileNames);
-        return subtractImages(normal, black);
-    }
-
     public Mat alignStars(List<String> frameFileNames, StarStreak star1, StarStreak star2) {
         return alignStars(new ManualAlign(fileManager, frameFileNames, star1, star2));
-    }
-
-    public PriorityQueue<StarFinder.StarPair> matchStars(List<Point> first, List<Point> second) {
-        StarFinder finder = new StarFinder();
-        return finder.matchStars(first, second);
     }
 
     public Mat alignStars(List<String> lightFiles, Mat blackFile) {
