@@ -17,16 +17,17 @@ class HDR extends ProgressTrackable {
     Mat reduceNoise(List<String> imageFiles) {
         setProgress(1);
         Mat current = fileManager.loadImage(imageFiles.get(0));
-        Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
-        Imgproc.accumulate(current, average);
+        Averager averager = new Averager(current.size());
+        averager.accumulate(current);
+        current.release();
         for (int i = 1; i < imageFiles.size(); i++) {
             setProgress(i + 1);
             current = fileManager.loadImage(imageFiles.get(i));
-            Imgproc.accumulate(current, average);
+            averager.accumulate(current);
             current.release();
         }
-        current.release();
-        Core.divide(average, Scalar.all(imageFiles.size()), average);
+        Mat average = averager.getAverage();
+        averager.release();
         return average;
     }
 
