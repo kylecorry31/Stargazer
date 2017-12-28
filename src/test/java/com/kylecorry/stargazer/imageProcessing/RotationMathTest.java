@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class RotationMathTest {
 
     @Test
-    public void centerOfRotation() throws Exception {
+    public void centerOfRotation() {
 
         Point a = new Point(10, -33);
         Point b = new Point(10, -18);

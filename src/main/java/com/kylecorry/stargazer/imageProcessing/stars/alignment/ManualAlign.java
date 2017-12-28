@@ -13,9 +13,10 @@ import java.util.List;
  */
 public class ManualAlign extends ProgressTrackableAligner {
 
-    private StarStreak streak1, streak2;
-    private FileManager fileManager;
-    private List<String> files;
+    private final StarStreak streak1;
+    private final StarStreak streak2;
+    private final FileManager fileManager;
+    private final List<String> files;
 
     public ManualAlign(FileManager fileManager, List<String> files, StarStreak streak1, StarStreak streak2) {
         this.streak1 = streak1;

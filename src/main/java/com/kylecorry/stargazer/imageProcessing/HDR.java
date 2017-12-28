@@ -1,8 +1,6 @@
 package com.kylecorry.stargazer.imageProcessing;
 
 import com.kylecorry.stargazer.storage.FileManager;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
@@ -10,7 +8,7 @@ import java.util.List;
 
 class HDR extends ProgressTrackable {
 
-    private FileManager fileManager;
+    private final FileManager fileManager;
 
     HDR(FileManager fileManager) {
         this.fileManager = fileManager;

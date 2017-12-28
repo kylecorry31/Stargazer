@@ -9,10 +9,11 @@ import org.opencv.core.Mat;
 /**
  * Created by Kylec on 5/12/2017.
  */
-public class SubtractionService extends Service<Mat> {
+class SubtractionService extends Service<Mat> {
 
-    private ImageProcessor imageProcessor;
-    private Mat blackImage, lightImage;
+    private final ImageProcessor imageProcessor;
+    private final Mat blackImage;
+    private final Mat lightImage;
 
     public SubtractionService(ImageProcessor imageProcessor, Mat blackImage, Mat lightImage) {
         this.imageProcessor = imageProcessor;
@@ -25,7 +26,7 @@ public class SubtractionService extends Service<Mat> {
         return new Task<Mat>() {
 
             @Override
-            protected Mat call() throws Exception {
+            protected Mat call() {
                 updateMessage("Calibrating normal frames using black frames");
                 updateProgress(0, 1.0);
                 Mat diff = imageProcessor.subtractImages(lightImage, blackImage);

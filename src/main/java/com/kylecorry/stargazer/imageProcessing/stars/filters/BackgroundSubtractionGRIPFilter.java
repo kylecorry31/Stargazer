@@ -27,8 +27,8 @@ class BackgroundSubtractionGRIPFilter {
         return filterContoursOutput;
     }
 
-    private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<>();
-    private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<>();
+    private final ArrayList<MatOfPoint> findContoursOutput = new ArrayList<>();
+    private final ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<>();
 
     /**
      * This is the primary method that runs the entire pipeline and updates the outputs.

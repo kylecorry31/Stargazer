@@ -17,16 +17,13 @@ import java.util.List;
  */
 public class AutoAlign extends ProgressTrackableAligner {
 
-    private FileManager fileManager;
-    private Mat blackFrame;
-    private List<String> files;
-    private StarFilter filter;
+    private final FileManager fileManager;
+    private final Mat blackFrame;
+    private final List<String> files;
+    private final StarFilter filter;
 
     public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame) {
-        this.fileManager = fileManager;
-        this.blackFrame = blackFrame;
-        this.files = files;
-        this.filter = new StarFilter(new BackgroundSubtractionFilter());
+       this(fileManager, files, blackFrame, new StarFilter(new BackgroundSubtractionFilter()));
     }
 
     public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame, StarFilter filter) {

@@ -9,14 +9,14 @@ import org.opencv.core.Mat;
 /**
  * Created by Kylec on 5/12/2017.
  */
-public class StarAlignmentService extends Service<Mat> {
+class StarAlignmentService extends Service<Mat> {
 
-    private ImageProcessor imageProcessor;
+    private final ImageProcessor imageProcessor;
 
-    private int numFiles;
+    private final int numFiles;
 
 
-    private ProgressTrackableAligner alignmentTechnique;
+    private final ProgressTrackableAligner alignmentTechnique;
 
     public StarAlignmentService(ImageProcessor imageProcessor, ProgressTrackableAligner alignmentTechnique, int numFiles) {
         this.imageProcessor = imageProcessor;
@@ -27,7 +27,7 @@ public class StarAlignmentService extends Service<Mat> {
     protected Task<Mat> createTask() {
         return new Task<Mat>() {
             @Override
-            protected Mat call() throws Exception {
+            protected Mat call() {
                 updateProgress(0, 1.0);
 
                 imageProcessor.progressProperty().addListener((observable, oldValue, newValue) -> {

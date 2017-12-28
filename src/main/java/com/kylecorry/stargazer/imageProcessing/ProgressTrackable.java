@@ -8,14 +8,14 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public abstract class ProgressTrackable {
 
-    private IntegerProperty progress = new SimpleIntegerProperty(0, "progress");
+    private final IntegerProperty progress = new SimpleIntegerProperty(0, "progress");
 
 
     public IntegerProperty progressProperty() {
         return progress;
     }
 
-    public void setProgress(int progress) {
+    protected void setProgress(int progress) {
         this.progress.set(progress);
     }
 

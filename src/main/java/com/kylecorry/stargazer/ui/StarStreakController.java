@@ -30,8 +30,6 @@ public class StarStreakController implements Initializable {
 
     private StarStreak firstStar, secondStar;
 
-    private javafx.scene.image.Image image;
-
     private Mat drawImage;
 
 
@@ -43,7 +41,7 @@ public class StarStreakController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         firstStar = null;
         secondStar = null;
-        image = ImageUtils.toImage(HomepageController.hdrImage);
+        Image image = ImageUtils.toImage(HomepageController.hdrImage);
         drawImage = HomepageController.hdrImage.clone();
         hdrImage.setFitWidth(image.getWidth());
         hdrImage.setFitHeight(image.getHeight());
@@ -119,13 +117,13 @@ public class StarStreakController implements Initializable {
     private static void centerImage(ImageView imageView) {
         Image img = imageView.getImage();
         if (img != null && img.getWidth() != 0 && img.getHeight() != 0) {
-            double w = 0;
-            double h = 0;
+            double w;
+            double h;
 
             double ratioX = imageView.getFitWidth() / img.getWidth();
             double ratioY = imageView.getFitHeight() / img.getHeight();
 
-            double reducCoeff = 0;
+            double reducCoeff;
             if (ratioX >= ratioY) {
                 reducCoeff = ratioY;
             } else {

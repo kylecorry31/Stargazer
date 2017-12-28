@@ -6,7 +6,7 @@ import org.opencv.core.Mat;
  * Created by Kylec on 5/14/2017.
  */
 public class StarFilter {
-    private IFilter filter;
+    private final IFilter filter;
 
     public StarFilter(IFilter filter) {
         this.filter = filter;
