@@ -3,41 +3,41 @@ package com.kylecorry.stargazer.imageProcessing;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
-class Averager {
+public class Averager {
 
     private Mat accumulator;
     private int count;
 
 
-    Averager(Size size, int type) {
+    public Averager(Size size, int type) {
         accumulator = Mat.zeros(size, type);
         count = 0;
     }
 
-    Averager(Size size) {
+    public Averager(Size size) {
         this(size, CvType.CV_32FC3);
     }
 
-    void accumulate(Mat image) {
+    public void accumulate(Mat image) {
         Imgproc.accumulate(image, accumulator);
         count++;
     }
 
-    int getCount(){
+    public int getCount(){
         return count;
     }
 
-    Mat getAccumulator(){
+    public Mat getAccumulator(){
         return accumulator;
     }
 
-    Mat getAverage() {
+    public Mat getAverage() {
         Mat average = new Mat();
         Core.divide(accumulator, Scalar.all(count), average);
         return average;
     }
 
-    void reset() {
+    public void reset() {
         accumulator.setTo(Scalar.all(0.0));
         count = 0;
     }
