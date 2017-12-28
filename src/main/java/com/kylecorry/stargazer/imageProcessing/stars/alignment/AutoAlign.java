@@ -1,5 +1,6 @@
 package com.kylecorry.stargazer.imageProcessing.stars.alignment;
 
+import com.kylecorry.stargazer.imageProcessing.Averager;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.BackgroundSubtractionFilter;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.StarFilter;
 import com.kylecorry.stargazer.storage.FileManager;
@@ -38,12 +39,11 @@ public class AutoAlign extends ProgressTrackableAligner {
         setProgress(1);
         Mat current = fileManager.loadImage(files.get(0));
         Mat firstStarImage = filter.filterStars(current, blackFrame);
-        Mat average = Mat.zeros(current.size(), CvType.CV_32FC(3));
-        Imgproc.accumulate(current, average);
+        Averager averager = new Averager(current.size());
+        averager.accumulate(current);
         current.release();
         int warpMode = Video.MOTION_EUCLIDEAN;
         Mat warpMatrix = Mat.eye(2, 3, CvType.CV_32F);
-        int converged = 1;
         for (int i = 1; i < files.size(); i++) {
             setProgress(i + 1);
             current = fileManager.loadImage(files.get(i));
@@ -51,8 +51,7 @@ public class AutoAlign extends ProgressTrackableAligner {
             try {
                 Video.findTransformECC(currentStarImage, firstStarImage, warpMatrix, warpMode);
                 Imgproc.warpAffine(current, current, warpMatrix, current.size());
-                Imgproc.accumulate(current, average);
-                converged++;
+                averager.accumulate(current);
             } catch (Exception e) {
                 System.err.println("Could not align frame " + (i + 1));
             }
@@ -62,7 +61,8 @@ public class AutoAlign extends ProgressTrackableAligner {
         firstStarImage.release();
         current.release();
         warpMatrix.release();
-        Core.divide(average, Scalar.all(converged), average);
+        Mat average = averager.getAverage();
+        averager.release();
         return average;
     }
 
