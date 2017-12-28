@@ -39,15 +39,15 @@ public class AveragerTest {
         public void accumulate() {
             averager.accumulate(image1);
             averager.accumulate(image2);
-            assertEquals(2, averager.count);
-            assertEquals(2.0, averager.accumulator.get(0, 0)[0], 0.0);
+            assertEquals(2, averager.getCount());
+            assertEquals(2.0, averager.getAccumulator().get(0, 0)[0], 0.0);
         }
 
         @Test
         public void getAverage() {
             averager.accumulate(image1);
             averager.accumulate(image2);
-            double average = averager.getAverage();
+            Mat average = averager.getAverage();
             assertEquals(1.0, average.get(0, 0)[0], 0.0);
             average.release();
             averager.accumulate(image2);
@@ -62,7 +62,7 @@ public class AveragerTest {
             averager.reset();
             assertEquals(0.0, averager.getAccumulator().get(0, 0)[0], 0.0);
             assertEquals(0, averager.getCount());
-            double average = averager.getAverage();
+            Mat average = averager.getAverage();
             assertEquals(0.0, average.get(0, 0)[0], 0.0);
             average.release();
         }
