@@ -51,7 +51,7 @@
     -fx-background-color: -color-background;
 }
 
-#desc-title, .header {
+.header {
     -fx-font-size: 20px;
     -fx-font-family: 'Fira Sans Thin';
 }
