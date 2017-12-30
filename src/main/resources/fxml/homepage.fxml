@@ -52,7 +52,7 @@
             <ToggleGroup fx:id="align" />
          </toggleGroup>
       </JFXRadioButton>
-      <JFXRadioButton fx:id="manualAlign" disable="true" layoutX="16.0" layoutY="450.0" styleClass="custom-jfx-radio-button" text="Semi-manual align (outline 3 star streaks)" toggleGroup="$align" />
+      <JFXRadioButton fx:id="manualAlign" disable="true" layoutX="16.0" layoutY="450.0" styleClass="custom-jfx-radio-button" text="Semi-manual align (outline 2 star streaks)" toggleGroup="$align" />
       <JFXButton fx:id="enhanceBtn" buttonType="RAISED" disable="true" layoutX="415.0" layoutY="600.0" onMouseClicked="#createEnhancedImage" ripplerFill="#2c4b7c" styleClass="button-raised" text="Enhance Photo" />
       <Label id="progress-text" fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="657.0" prefHeight="21.0" prefWidth="600.0" textFill="RED" />
       <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="693.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
