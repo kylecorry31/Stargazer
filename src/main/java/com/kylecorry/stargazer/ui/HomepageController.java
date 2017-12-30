@@ -9,6 +9,7 @@ import com.kylecorry.stargazer.imageProcessing.stars.alignment.AutoAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.StarStreak;
 import com.kylecorry.stargazer.storage.FileManager;
+import javafx.animation.FadeTransition;
 import javafx.concurrent.Service;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 
@@ -87,6 +89,8 @@ public class HomepageController implements Initializable {
 
     private ImageProcessor imageProcessor;
 
+    public static boolean wasSplashScreenLoaded = false;
+
     private final FileManager fileManager;
     private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
 
@@ -100,6 +104,9 @@ public class HomepageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if(!HomepageController.wasSplashScreenLoaded) {
+            loadSplashScreen();
+        }
         enhanceBtn.setDisable(true);
         autoMergeStars.setDisable(true);
         alignStars.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -109,6 +116,42 @@ public class HomepageController implements Initializable {
             techniqueLbl.setDisable(!newValue);
         });
     }
+
+    private void loadSplashScreen(){
+        try {
+            HomepageController.wasSplashScreenLoaded = true;
+            AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/splash.fxml"));
+            window.getChildren().setAll(pane);
+
+
+            FadeTransition fadeOut = new FadeTransition(new Duration(1000), pane);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+            fadeOut.setCycleCount(1);
+            fadeOut.setDelay(new Duration(3000));
+
+            fadeOut.play();
+
+            fadeOut.setOnFinished((e) -> {
+                try {
+                    AnchorPane parentPane = FXMLLoader.load(getClass().getResource("/fxml/homepage.fxml"));
+                    parentPane.setOpacity(0);
+                    window.getChildren().setAll(parentPane);
+                    FadeTransition fadeIn = new FadeTransition(new Duration(1000), parentPane);
+                    fadeIn.setFromValue(0);
+                    fadeIn.setToValue(1);
+                    fadeIn.setCycleCount(1);
+                    fadeIn.play();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void selectFrames() {
         DirectoryChooser chooser = new DirectoryChooser();

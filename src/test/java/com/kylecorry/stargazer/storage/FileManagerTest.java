@@ -72,6 +72,36 @@ public class FileManagerTest {
     }
 
     @Test
+    public void saveImageNoExtension(){
+        Mat image = Mat.zeros(10, 10, CvType.CV_8UC3);
+        fileManager.saveImage(image, "test");
+        File file = new File("test");
+        assertTrue(file.exists());
+        Mat retrieved = fileManager.loadImage("test");
+        Core.subtract(image, retrieved, image);
+        Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2GRAY);
+        assertEquals(0, Core.countNonZero(image));
+        image.release();
+        retrieved.release();
+        fileManager.deleteFile("test");
+    }
+
+    @Test
+    public void saveImageInvalidExtension(){
+        Mat image = Mat.zeros(10, 10, CvType.CV_8UC3);
+        fileManager.saveImage(image, "test.txt");
+        File file = new File("test.txt");
+        assertTrue(file.exists());
+        Mat retrieved = fileManager.loadImage("test.txt");
+        Core.subtract(image, retrieved, image);
+        Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2GRAY);
+        assertEquals(0, Core.countNonZero(image));
+        image.release();
+        retrieved.release();
+        fileManager.deleteFile("test.txt");
+    }
+
+    @Test
     public void deleteFile() throws Exception {
         File file = new File("test.txt");
         if (!file.exists()) {
