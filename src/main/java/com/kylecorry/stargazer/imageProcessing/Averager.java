@@ -27,7 +27,7 @@ public class Averager {
         return count;
     }
 
-    public Mat getAccumulator(){
+    Mat getAccumulator(){
         return accumulator;
     }
 
