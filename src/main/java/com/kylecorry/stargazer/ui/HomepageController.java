@@ -163,7 +163,9 @@ public class HomepageController implements Initializable {
                 enhanceBtn.setDisable(false);
             }
         } else {
-            System.out.println("No Selection ");
+            lightFiles.clear();
+            enhanceBtn.setDisable(true);
+            frames.setText("No folder selected");
         }
     }
 
@@ -219,8 +221,8 @@ public class HomepageController implements Initializable {
         unbindUIFromServices();
         progressBar.setProgress(0);
         progressText.setText("");
-        frames.setText("");
-        blackFrames.setText("");
+        frames.setText("No folder selected");
+        blackFrames.setText("No folder selected");
         if (darkImage != null)
             darkImage.release();
         darkImage = null;
@@ -310,7 +312,8 @@ public class HomepageController implements Initializable {
                 enhanceBtn.setDisable(false);
             }
         } else {
-            System.out.println("No Selection ");
+            darkFiles.clear();
+            blackFrames.setText("No folder selected");
         }
     }
 
