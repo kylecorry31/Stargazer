@@ -51,8 +51,9 @@ public class AveragerTest {
             assertEquals(1.0, average.get(0, 0)[0], 0.0);
             average.release();
             averager.accumulate(image2);
-            average = averager.getAverage();
-            assertEquals(4 / 3.0, average.get(0, 0)[0], 0.001);
+            averager.accumulate(image2);
+            average = averager.getAverage(); // Converts to integer
+            assertEquals(2, average.get(0, 0)[0], 0.001);
             average.release();
         }
 
