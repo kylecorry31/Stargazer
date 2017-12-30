@@ -58,6 +58,14 @@ public class AveragerTest {
         }
 
         @Test
+        public void getAverageNoData(){
+            Mat average = averager.getAverage();
+            assertEquals(0, averager.getCount());
+            assertEquals(0.0, average.get(0, 0)[0], 0.0);
+            average.release();
+        }
+
+        @Test
         public void reset() {
             averager.accumulate(image2);
             averager.reset();

@@ -33,7 +33,12 @@ public class Averager {
 
     public Mat getAverage() {
         Mat average = new Mat();
-        Core.divide(accumulator, Scalar.all(count), average);
+        if(count != 0) {
+            Core.divide(accumulator, Scalar.all(count), average);
+        } else {
+            average.release();
+            average = Mat.zeros(accumulator.size(), CvType.CV_8UC3);
+        }
         average.convertTo(average, CvType.CV_8UC3);
         return average;
     }
