@@ -135,6 +135,7 @@ public class HomepageController implements Initializable {
             fadeOut.setOnFinished((e) -> {
                 try {
                     AnchorPane parentPane = FXMLLoader.load(getClass().getResource("/fxml/homepage.fxml"));
+                    parentPane.setOpacity(0);
                     window.getChildren().setAll(parentPane);
                     FadeTransition fadeIn = new FadeTransition(new Duration(1000), parentPane);
                     fadeIn.setFromValue(0);
