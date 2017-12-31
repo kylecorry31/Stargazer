@@ -2,6 +2,7 @@ package com.kylecorry.stargazer.imageProcessing.stars.alignment;
 
 import com.kylecorry.stargazer.imageProcessing.Averager;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.BackgroundSubtractionFilter;
+import com.kylecorry.stargazer.imageProcessing.stars.filters.SparseLuminosityReductionFilter;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.StarFilter;
 import com.kylecorry.stargazer.storage.FileManager;
 import org.opencv.core.Core;
@@ -24,7 +25,7 @@ public class AutoAlign extends ProgressTrackableAligner {
     private final StarFilter filter;
 
     public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame) {
-       this(fileManager, files, blackFrame, new StarFilter(new BackgroundSubtractionFilter()));
+       this(fileManager, files, blackFrame, new StarFilter(new SparseLuminosityReductionFilter()));
     }
 
     public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame, StarFilter filter) {
