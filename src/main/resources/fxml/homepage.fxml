@@ -56,5 +56,6 @@
       <JFXButton fx:id="enhanceBtn" buttonType="RAISED" disable="true" layoutX="415.0" layoutY="600.0" onMouseClicked="#createEnhancedImage" ripplerFill="#2c4b7c" styleClass="button-raised" text="Enhance Photo" />
       <Label id="progress-text" fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="657.0" prefHeight="21.0" prefWidth="600.0" textFill="RED" />
       <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="693.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
+      <Label layoutX="24.0" layoutY="728.0" onMouseClicked="#about" styleClass="header" text="About" />
    </children>
 </AnchorPane>

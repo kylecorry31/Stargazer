@@ -339,6 +339,10 @@ public class HomepageController implements Initializable {
         displayPopup("/fxml/FrameHelp.fxml", "Averaging Frames");
     }
 
+    public void about() {
+        displayPopup("/fxml/About.fxml", "About Stargazer");
+    }
+
     private void displayPopup(String fxml, String title) {
         Stage stage = new Stage();
         Parent root;
@@ -355,13 +359,5 @@ public class HomepageController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    public void openResearchBlog() {
-        final String article = "https://research.googleblog.com/2017/04/experimental-nighttime-photography-with.html";
-        try {
-            Desktop.getDesktop().browse(URI.create(article));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    
 }
