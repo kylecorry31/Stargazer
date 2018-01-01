@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import javafx.scene.control.CheckBox?>
@@ -57,5 +58,6 @@
       <Label id="progress-text" fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="657.0" prefHeight="21.0" prefWidth="600.0" textFill="RED" />
       <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="693.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
       <Label layoutX="24.0" layoutY="728.0" onMouseClicked="#about" styleClass="header" text="About" />
+      <JFXComboBox fx:id="filter" labelFloat="true" layoutX="32.0" layoutY="493.0" prefHeight="26.0" prefWidth="323.0" promptText="Auto align filter" styleClass="custom-jfx-combo-box" />
    </children>
 </AnchorPane>
