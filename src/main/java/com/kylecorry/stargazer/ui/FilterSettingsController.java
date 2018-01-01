@@ -78,6 +78,7 @@ public class FilterSettingsController implements Initializable {
             Label sliderLabelDesc = new Label();
             sliderLabelDesc.setText(currentSetting.getDescription());
             sliderLabelDesc.getStyleClass().add("normal-text");
+            sliderLabelDesc.wrapTextProperty().setValue(true);
             settingsPane.getChildren().add(sliderLabelDesc);
             JFXSlider slider = new JFXSlider();
             slider.setMin(currentSetting.getMinValue());
