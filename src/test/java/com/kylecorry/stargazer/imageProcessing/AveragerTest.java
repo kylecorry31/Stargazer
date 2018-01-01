@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import org.junit.Assert.*;
 import org.junit.Before;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -54,6 +55,16 @@ public class AveragerTest {
             averager.accumulate(image2);
             average = averager.getAverage(); // Converts to integer
             assertEquals(2, average.get(0, 0)[0], 0.001);
+            average.release();
+        }
+
+        @Test
+        public void get16BitAverage(){
+            averager.accumulate(image1);
+            averager.accumulate(image2);
+            Mat average = averager.getAverage(CvType.CV_16UC3);
+            assertEquals(CvType.CV_16UC3, average.type());
+            assertEquals(1.0, average.get(0, 0)[0], 0.0);
             average.release();
         }
 

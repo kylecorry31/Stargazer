@@ -39,6 +39,7 @@ public class AutoAlign extends ProgressTrackableAligner {
     public Mat align() {
         setProgress(1);
         Mat current = fileManager.loadImage(files.get(0));
+        int type = current.type();
         Mat firstStarImage = filter.filterStars(current, blackFrame);
         Averager averager = new Averager(current.size());
         averager.accumulate(current);
@@ -62,7 +63,7 @@ public class AutoAlign extends ProgressTrackableAligner {
         firstStarImage.release();
         current.release();
         warpMatrix.release();
-        Mat average = averager.getAverage();
+        Mat average = averager.getAverage(type);
         averager.release();
         return average;
     }
