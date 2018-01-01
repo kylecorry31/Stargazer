@@ -371,6 +371,27 @@ public class HomepageController implements Initializable {
         displayPopup("/fxml/About.fxml", "About Stargazer");
     }
 
+    public void modifyFilterSettings() {
+        Stage stage = new Stage();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilterSettings.fxml"));
+            AnchorPane root = loader.load();
+            FilterSettingsController controller = loader.getController();
+            controller.setFilter(filter.getValue());
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/styles/styles.css");
+            stage.setScene(scene);
+            stage.setTitle("Adjust Filter Settings");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(window.getScene().getWindow());
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     private void displayPopup(String fxml, String title) {
         Stage stage = new Stage();
         Parent root;

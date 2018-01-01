@@ -59,5 +59,10 @@
       <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="693.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
       <Label layoutX="24.0" layoutY="728.0" onMouseClicked="#about" styleClass="header" text="About" />
       <JFXComboBox fx:id="filter" labelFloat="true" layoutX="32.0" layoutY="493.0" prefHeight="26.0" prefWidth="323.0" promptText="Auto align filter" styleClass="custom-jfx-combo-box" />
+      <ImageView fx:id="filterSettings" fitHeight="24.0" fitWidth="24.0" layoutX="365.0" layoutY="494.0" onMouseClicked="#modifyFilterSettings" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/help.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
