@@ -34,6 +34,7 @@ public class ManualAlign extends ProgressTrackableAligner {
         double totalAngleChange = RotationMath.angleBetween(center, streak1.getStart(), streak1.getEnd());
 
         Mat current = fileManager.loadImage(files.get(0));
+        int type = current.type();
         Averager averager = new Averager(current.size());
         averager.accumulate(current);
         current.release();
@@ -52,7 +53,7 @@ public class ManualAlign extends ProgressTrackableAligner {
             rot.release();
         }
 
-        Mat average = averager.getAverage();
+        Mat average = averager.getAverage(type);
         averager.release();
         return average;
     }

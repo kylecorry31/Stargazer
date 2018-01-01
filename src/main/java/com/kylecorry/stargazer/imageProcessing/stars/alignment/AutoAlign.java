@@ -2,6 +2,7 @@ package com.kylecorry.stargazer.imageProcessing.stars.alignment;
 
 import com.kylecorry.stargazer.imageProcessing.Averager;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.BackgroundSubtractionFilter;
+import com.kylecorry.stargazer.imageProcessing.stars.filters.SparseLuminosityReductionFilter;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.StarFilter;
 import com.kylecorry.stargazer.storage.FileManager;
 import org.opencv.core.Core;
@@ -24,7 +25,7 @@ public class AutoAlign extends ProgressTrackableAligner {
     private final StarFilter filter;
 
     public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame) {
-       this(fileManager, files, blackFrame, new StarFilter(new BackgroundSubtractionFilter()));
+       this(fileManager, files, blackFrame, new StarFilter(new SparseLuminosityReductionFilter()));
     }
 
     public AutoAlign(FileManager fileManager, List<String> files, Mat blackFrame, StarFilter filter) {
@@ -38,6 +39,7 @@ public class AutoAlign extends ProgressTrackableAligner {
     public Mat align() {
         setProgress(1);
         Mat current = fileManager.loadImage(files.get(0));
+        int type = current.type();
         Mat firstStarImage = filter.filterStars(current, blackFrame);
         Averager averager = new Averager(current.size());
         averager.accumulate(current);
@@ -61,7 +63,7 @@ public class AutoAlign extends ProgressTrackableAligner {
         firstStarImage.release();
         current.release();
         warpMatrix.release();
-        Mat average = averager.getAverage();
+        Mat average = averager.getAverage(type);
         averager.release();
         return average;
     }

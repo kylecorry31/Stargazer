@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.BlackFrameHelpController">
+   <children>
+      <Label layoutX="15.0" layoutY="14.0" prefHeight="65.0" prefWidth="616.0" text="This application was inspired by this article: https://research.googleblog.com/2017/04/experimental-nighttime-photography-with.html" wrapText="true" />
+      <Label layoutX="12.0" layoutY="109.0" prefHeight="30.0" prefWidth="616.0" styleClass="header" text="Sparse Luminosity Reduction Algorithm" />
+      <Label layoutX="14.0" layoutY="139.0" prefHeight="65.0" prefWidth="616.0" text="Graupe, D., Ebook Central - Academic Complete, Skillsoft Books ITPro Collection, &amp; Skillsoft Books EngineeringPro Collection. (2013;2014;). Principles of artificial neural networks (3rd;3;3rd; ed.). New Jersey: World Scientific." wrapText="true" />
+      <Label layoutX="15.0" layoutY="263.0" prefHeight="47.0" prefWidth="616.0" text="JFeonix (https://github.com/jfoenixadmin/JFoenixhttps://github.com/jfoenixadmin/JFoenix) Apache License 2.0" wrapText="true" />
+      <Label layoutX="15.0" layoutY="310.0" prefHeight="47.0" prefWidth="616.0" text="OpenCV (https://opencv.org/) 3-clause BSD License" wrapText="true" />
+      <Label layoutX="15.0" layoutY="233.0" prefHeight="30.0" prefWidth="616.0" styleClass="header" text="Libraries Used" />
+      <Label layoutX="14.0" layoutY="357.0" prefHeight="47.0" prefWidth="616.0" text="Apache Commons IO (https://commons.apache.org/proper/commons-io/) Apache License 2.0" />
+   </children>
+</AnchorPane>

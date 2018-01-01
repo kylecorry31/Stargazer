@@ -1,13 +1,11 @@
 package com.kylecorry.stargazer.ui;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXProgressBar;
-import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.*;
 import com.kylecorry.stargazer.imageProcessing.*;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.AutoAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.StarStreak;
+import com.kylecorry.stargazer.imageProcessing.stars.filters.*;
 import com.kylecorry.stargazer.storage.FileManager;
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Service;
@@ -18,12 +16,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 
@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -85,6 +86,12 @@ public class HomepageController implements Initializable {
     @FXML
     Label techniqueLbl;
 
+    @FXML
+    JFXComboBox<IFilter> filter;
+
+    @FXML
+    ImageView filterSettings;
+
     private Mat darkImage;
 
     private ImageProcessor imageProcessor;
@@ -109,11 +116,39 @@ public class HomepageController implements Initializable {
         }
         enhanceBtn.setDisable(true);
         autoMergeStars.setDisable(true);
+        filter.setDisable(true);
+        filterSettings.setVisible(false);
         alignStars.selectedProperty().addListener((observable, oldValue, newValue) -> {
             autoMergeStars.setDisable(!newValue);
             autoAlign.setDisable(!newValue);
             manualAlign.setDisable(!newValue);
             techniqueLbl.setDisable(!newValue);
+            if(autoAlign.isSelected()){
+                filter.setDisable(!newValue);
+                filterSettings.setVisible(newValue);
+            }
+        });
+        autoAlign.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            filter.setDisable(!newValue);
+            filterSettings.setVisible(newValue);
+        });
+
+        FilterFactory filterFactory = new FilterFactory();
+
+        List<IFilter> filters = filterFactory.getAllFilters();
+        filter.getItems().addAll(filters);
+        filter.setValue(filters.get(0));
+
+        filter.setConverter(new StringConverter<IFilter>() {
+            @Override
+            public String toString(IFilter iFilter) {
+                return iFilter.getName();
+            }
+
+            @Override
+            public IFilter fromString(String s) {
+                return filterFactory.getFilter(s);
+            }
         });
     }
 
@@ -128,7 +163,7 @@ public class HomepageController implements Initializable {
             fadeOut.setFromValue(1);
             fadeOut.setToValue(0);
             fadeOut.setCycleCount(1);
-            fadeOut.setDelay(new Duration(3000));
+            fadeOut.setDelay(new Duration(1500));
 
             fadeOut.play();
 
@@ -163,7 +198,9 @@ public class HomepageController implements Initializable {
                 enhanceBtn.setDisable(false);
             }
         } else {
-            System.out.println("No Selection ");
+            lightFiles.clear();
+            enhanceBtn.setDisable(true);
+            frames.setText("No folder selected");
         }
     }
 
@@ -219,8 +256,8 @@ public class HomepageController implements Initializable {
         unbindUIFromServices();
         progressBar.setProgress(0);
         progressText.setText("");
-        frames.setText("");
-        blackFrames.setText("");
+        frames.setText("No folder selected");
+        blackFrames.setText("No folder selected");
         if (darkImage != null)
             darkImage.release();
         darkImage = null;
@@ -264,7 +301,7 @@ public class HomepageController implements Initializable {
 
     private void locateStars(Mat blackImage, Mat hdrImage) {
         if (autoAlign.isSelected()) {
-            starAlignmentService = new StarAlignmentService(imageProcessor, new AutoAlign(fileManager, lightFiles, blackImage), lightFiles.size());
+            starAlignmentService = new StarAlignmentService(imageProcessor, new AutoAlign(fileManager, lightFiles, blackImage, new StarFilter(filter.getValue())), lightFiles.size());
         } else {
             HomepageController.hdrImage = hdrImage;
             displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
@@ -310,7 +347,8 @@ public class HomepageController implements Initializable {
                 enhanceBtn.setDisable(false);
             }
         } else {
-            System.out.println("No Selection ");
+            darkFiles.clear();
+            blackFrames.setText("No folder selected");
         }
     }
 
@@ -336,6 +374,34 @@ public class HomepageController implements Initializable {
         displayPopup("/fxml/FrameHelp.fxml", "Averaging Frames");
     }
 
+    public void about() {
+        displayPopup("/fxml/About.fxml", "About Stargazer");
+    }
+
+    public void modifyFilterSettings() {
+        Stage stage = new Stage();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilterSettings.fxml"));
+            AnchorPane root = loader.load();
+            FilterSettingsController controller = loader.getController();
+            controller.setFilter(filter.getValue());
+            if(lightFiles != null && !lightFiles.isEmpty()){
+                controller.setImage(lightFiles.get(0));
+            }
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/styles/styles.css");
+            stage.setScene(scene);
+            stage.setTitle("Adjust Filter Settings");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(window.getScene().getWindow());
+            stage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     private void displayPopup(String fxml, String title) {
         Stage stage = new Stage();
         Parent root;
@@ -352,13 +418,5 @@ public class HomepageController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    public void openResearchBlog() {
-        final String article = "https://research.googleblog.com/2017/04/experimental-nighttime-photography-with.html";
-        try {
-            Desktop.getDesktop().browse(URI.create(article));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    
 }
