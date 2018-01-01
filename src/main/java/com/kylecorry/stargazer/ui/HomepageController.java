@@ -128,7 +128,7 @@ public class HomepageController implements Initializable {
             fadeOut.setFromValue(1);
             fadeOut.setToValue(0);
             fadeOut.setCycleCount(1);
-            fadeOut.setDelay(new Duration(3000));
+            fadeOut.setDelay(new Duration(1500));
 
             fadeOut.play();
 
