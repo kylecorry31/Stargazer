@@ -13,6 +13,21 @@ import java.util.List;
  */
 public class BackgroundSubtractionFilter implements IFilter {
 
+    private FilterSettings settings;
+    private String stdevKey = "Standard deviations from mean";
+    private double stdev = 2;
+    private String stdevDesc = "The number of standard deviations from the mean to categorize the star.";
+    private String upperKey = "Max brightness";
+    private double upper = 255;
+    private String upperDesc = "The maximum brightness to consider being a star";
+
+
+    public BackgroundSubtractionFilter(){
+        settings = new FilterSettings();
+        settings.put(stdevKey, new FilterSetting(stdevKey, stdev, 0, 4, stdevDesc));
+        settings.put(upperKey, new FilterSetting(upperKey, upper, 0, 255, upperDesc));
+    }
+
 
     private Mat findStars(Mat lightFrame, Mat blackFrame) {
         Mat img = new Mat();
@@ -25,8 +40,8 @@ public class BackgroundSubtractionFilter implements IFilter {
             Core.subtract(img, dark, img);
         }
         Core.meanStdDev(img, mean, stdev);
-        double thresh = mean.get(0, 0)[0] + 2 * stdev.get(0, 0)[0];
-        Imgproc.threshold(img, img, thresh, 255, Imgproc.THRESH_TOZERO);
+        double thresh = mean.get(0, 0)[0] + settings.get(stdevKey).getValue() * stdev.get(0, 0)[0];
+        Imgproc.threshold(img, img, thresh, settings.get(upperKey).getValue(), Imgproc.THRESH_TOZERO);
         return img;
     }
 
@@ -58,5 +73,10 @@ public class BackgroundSubtractionFilter implements IFilter {
     @Override
     public String getName() {
         return "Background Subtraction Filter";
+    }
+
+    @Override
+    public FilterSettings getSettings() {
+        return settings;
     }
 }

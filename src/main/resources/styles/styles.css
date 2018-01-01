@@ -57,6 +57,20 @@
     -fx-background-insets: 0, 0, 0, 0;
 }
 
+.settingsPane, .settingsPaneHolder {
+    -fx-background-color: -color-background;
+}
+
+.custom-jfx-slider {
+    -jfx-default-thumb: -color-accent;
+    -jfx-default-track: WHITE;
+}
+
+.custom-jfx-slider .slider-value {
+    -fx-stroke: -color-background;
+    -fx-font-size: 10;
+}
+
 .link {
     -fx-text-fill: -color-accent;
 }
