@@ -61,7 +61,7 @@
       <JFXComboBox fx:id="filter" labelFloat="true" layoutX="32.0" layoutY="493.0" prefHeight="26.0" prefWidth="323.0" promptText="Auto align filter" styleClass="custom-jfx-combo-box" />
       <ImageView fx:id="filterSettings" fitHeight="24.0" fitWidth="24.0" layoutX="365.0" layoutY="494.0" onMouseClicked="#modifyFilterSettings" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/help.png" />
+            <Image url="@../images/settings.png" />
          </image>
       </ImageView>
    </children>
