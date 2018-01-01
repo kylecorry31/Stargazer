@@ -16,14 +16,16 @@ public class BackgroundSubtractionFilter implements IFilter {
     private FilterSettings settings;
     private String stdevKey = "Standard deviations from mean";
     private double stdev = 2;
+    private String stdevDesc = "The number of standard deviations from the mean to categorize the star.";
     private String upperKey = "Max brightness";
     private double upper = 255;
+    private String upperDesc = "The maximum brightness to consider being a star";
 
 
     public BackgroundSubtractionFilter(){
         settings = new FilterSettings();
-        settings.put(stdevKey, new FilterSetting(stdevKey, stdev, 0, 4, "TODO"));
-        settings.put(upperKey, new FilterSetting(upperKey, upper, 0, 255, "TODO"));
+        settings.put(stdevKey, new FilterSetting(stdevKey, stdev, 0, 4, stdevDesc));
+        settings.put(upperKey, new FilterSetting(upperKey, upper, 0, 255, upperDesc));
     }
 
 

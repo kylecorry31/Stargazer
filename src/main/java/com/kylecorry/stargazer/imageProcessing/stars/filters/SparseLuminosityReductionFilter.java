@@ -10,15 +10,17 @@ public class SparseLuminosityReductionFilter implements IFilter {
     private FilterSettings settings;
     private String rmsLowerKey = "Min difference from mean";
     private double rmsLowerDefault = 100;
+    private String rmsLowerDesc = "The minimum difference from the mean to be considered a star";
     private String rmsUpperKey = "Max difference from mean";
     private double rmsUpperDefault = 255;
+    private String rmsUpperDesc = "The maximum difference from the mean to considered a star";
 
 
 
     public SparseLuminosityReductionFilter() {
         settings = new FilterSettings();
-        settings.put(rmsLowerKey, new FilterSetting(rmsLowerKey, rmsLowerDefault, 0, 255, "TODO"));
-        settings.put(rmsUpperKey, new FilterSetting(rmsUpperKey, rmsUpperDefault, 0, 255, "TODO"));
+        settings.put(rmsLowerKey, new FilterSetting(rmsLowerKey, rmsLowerDefault, 0, 255, rmsLowerDesc));
+        settings.put(rmsUpperKey, new FilterSetting(rmsUpperKey, rmsUpperDefault, 0, 255, rmsUpperDesc));
     }
 
     @Override
@@ -32,7 +34,7 @@ public class SparseLuminosityReductionFilter implements IFilter {
         }
         Scalar mean = Core.mean(img);
         Mat rms = new Mat();
-        Core.absdiff(img, mean, rms);
+        Core.subtract(img, mean, rms);
         Imgproc.threshold(img, img, settings.get(rmsLowerKey).getValue(), settings.get(rmsUpperKey).getValue(), Imgproc.THRESH_BINARY);
         Core.bitwise_and(img, img, img, rms);
         rms.release();
