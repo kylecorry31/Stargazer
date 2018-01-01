@@ -32,6 +32,20 @@
     -jfx-unchecked-color: -color-accent;
 }
 
+.custom-jfx-combo-box {
+    -jfx-focus-color: -color-accent;
+    -jfx-unfocus-color: -color-accent;
+}
+
+.custom-jfx-combo-box > .combo-box-popup .list-view .jfx-list-cell {
+    -fx-background-color: -color-background;
+    -fx-border-color: -color-background;
+}
+
+.custom-jfx-combo-box > .combo-box-popup .list-view .jfx-list-cell:hover {
+    -fx-background-color: #94a000;
+}
+
 .custom-jfx-radio-button {
     -jfx-selected-color: -color-accent;
     -jfx-unselected-color: -color-accent;

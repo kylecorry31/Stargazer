@@ -1,13 +1,11 @@
 package com.kylecorry.stargazer.ui;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXProgressBar;
-import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.*;
 import com.kylecorry.stargazer.imageProcessing.*;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.AutoAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.StarStreak;
+import com.kylecorry.stargazer.imageProcessing.stars.filters.*;
 import com.kylecorry.stargazer.storage.FileManager;
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Service;
@@ -24,6 +22,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 
@@ -32,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -85,6 +85,9 @@ public class HomepageController implements Initializable {
     @FXML
     Label techniqueLbl;
 
+    @FXML
+    JFXComboBox<IFilter> filter;
+
     private Mat darkImage;
 
     private ImageProcessor imageProcessor;
@@ -109,11 +112,36 @@ public class HomepageController implements Initializable {
         }
         enhanceBtn.setDisable(true);
         autoMergeStars.setDisable(true);
+        filter.setDisable(true);
         alignStars.selectedProperty().addListener((observable, oldValue, newValue) -> {
             autoMergeStars.setDisable(!newValue);
             autoAlign.setDisable(!newValue);
             manualAlign.setDisable(!newValue);
             techniqueLbl.setDisable(!newValue);
+            if(autoAlign.isSelected()){
+                filter.setDisable(!newValue);
+            }
+        });
+        autoAlign.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            filter.setDisable(!newValue);
+        });
+
+        FilterFactory filterFactory = new FilterFactory();
+
+        List<IFilter> filters = filterFactory.getAllFilters();
+        filter.getItems().addAll(filters);
+        filter.setValue(filters.get(0));
+
+        filter.setConverter(new StringConverter<IFilter>() {
+            @Override
+            public String toString(IFilter iFilter) {
+                return iFilter.getName();
+            }
+
+            @Override
+            public IFilter fromString(String s) {
+                return filterFactory.getFilter(s);
+            }
         });
     }
 
@@ -266,7 +294,7 @@ public class HomepageController implements Initializable {
 
     private void locateStars(Mat blackImage, Mat hdrImage) {
         if (autoAlign.isSelected()) {
-            starAlignmentService = new StarAlignmentService(imageProcessor, new AutoAlign(fileManager, lightFiles, blackImage), lightFiles.size());
+            starAlignmentService = new StarAlignmentService(imageProcessor, new AutoAlign(fileManager, lightFiles, blackImage, new StarFilter(filter.getValue())), lightFiles.size());
         } else {
             HomepageController.hdrImage = hdrImage;
             displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
