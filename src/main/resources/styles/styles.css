@@ -84,7 +84,7 @@
     -fx-font-family: 'Fira Sans Thin';
 }
 
-#desc-label, #star-photos-desc, #dark-photos-desc, .custom-jfx-radio-button, #progress-text, .folder-path, .custom-jfx-check-box {
+#desc-label, #star-photos-desc, #dark-photos-desc, .custom-jfx-radio-button, #progress-text, .folder-path, .custom-jfx-check-box, .normal-text {
     -fx-font-size: 15px;
     -fx-line-spacing: 2.5;
     -fx-font-family: 'Fira Sans Light';
