@@ -5,6 +5,9 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
 public class NoFilter implements IFilter {
+
+    private FilterSettings settings = new FilterSettings();
+
     @Override
     public Mat filterStars(Mat lightFrame, Mat blackFrame) {
         Mat img = new Mat();
@@ -20,5 +23,10 @@ public class NoFilter implements IFilter {
     @Override
     public String getName() {
         return "No Filter";
+    }
+
+    @Override
+    public FilterSettings getSettings() {
+        return settings;
     }
 }

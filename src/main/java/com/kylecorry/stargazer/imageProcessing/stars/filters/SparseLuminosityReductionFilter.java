@@ -6,6 +6,21 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 public class SparseLuminosityReductionFilter implements IFilter {
+
+    private FilterSettings settings;
+    private String rmsLowerKey = "Min difference from mean";
+    private double rmsLowerDefault = 100;
+    private String rmsUpperKey = "Max difference from mean";
+    private double rmsUpperDefault = 255;
+
+
+
+    public SparseLuminosityReductionFilter() {
+        settings = new FilterSettings();
+        settings.put(rmsLowerKey, new FilterSetting(rmsLowerKey, rmsLowerDefault, 0, 255, "TODO"));
+        settings.put(rmsUpperKey, new FilterSetting(rmsUpperKey, rmsUpperDefault, 0, 255, "TODO"));
+    }
+
     @Override
     public Mat filterStars(Mat lightFrame, Mat blackFrame) {
         Mat img = new Mat();
@@ -16,10 +31,9 @@ public class SparseLuminosityReductionFilter implements IFilter {
             Core.subtract(img, dark, img);
         }
         Scalar mean = Core.mean(img);
-        double thresh = 100;
         Mat rms = new Mat();
         Core.absdiff(img, mean, rms);
-        Imgproc.threshold(img, img, thresh, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(img, img, settings.get(rmsLowerKey).getValue(), settings.get(rmsUpperKey).getValue(), Imgproc.THRESH_BINARY);
         Core.bitwise_and(img, img, img, rms);
         rms.release();
         return img;
@@ -28,5 +42,10 @@ public class SparseLuminosityReductionFilter implements IFilter {
     @Override
     public String getName() {
         return "Sparse Luminosity Reduction Filter";
+    }
+
+    @Override
+    public FilterSettings getSettings() {
+        return settings;
     }
 }

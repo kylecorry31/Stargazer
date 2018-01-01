@@ -9,4 +9,6 @@ public interface IFilter {
     Mat filterStars(Mat lightFrame, Mat blackFrame);
 
     String getName();
+
+    FilterSettings getSettings();
 }
