@@ -8,26 +8,6 @@ mainClassName = "com.kylecorry.stargazer.Main"
 
 sourceCompatibility = 1.8
 
-task makeJar(type: Jar) {
-
-    manifest {
-
-        attributes 'Implementation-Title': "Stargazer",
-
-                'Implementation-Version': version,
-
-                'Main-Class': mainClassName
-
-    }
-
-    baseName = project.name
-
-    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
-
-    with jar
-
-}
-
 repositories {
     mavenCentral()
 }
