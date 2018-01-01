@@ -7,4 +7,6 @@ import org.opencv.core.Mat;
  */
 public interface IFilter {
     Mat filterStars(Mat lightFrame, Mat blackFrame);
+
+    String getName();
 }

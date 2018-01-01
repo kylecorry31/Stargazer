@@ -19,7 +19,7 @@ public class BackgroundSubtractionFilter implements IFilter {
         Imgproc.cvtColor(lightFrame, img, Imgproc.COLOR_BGR2GRAY);
         MatOfDouble mean = new MatOfDouble();
         MatOfDouble stdev = new MatOfDouble();
-        if(blackFrame.channels() == 3 || blackFrame.channels() == 4){
+        if (blackFrame.channels() == 3 || blackFrame.channels() == 4) {
             Mat dark = new Mat();
             Imgproc.cvtColor(blackFrame, dark, Imgproc.COLOR_BGR2GRAY);
             Core.subtract(img, dark, img);
@@ -53,5 +53,10 @@ public class BackgroundSubtractionFilter implements IFilter {
             Imgproc.rectangle(output, new Point(star.x - 2, star.y - 2), new Point(star.x + 2, star.y + 2), new Scalar(255, 255, 255));
         }
         return output;
+    }
+
+    @Override
+    public String getName() {
+        return "Background Subtraction Filter";
     }
 }
