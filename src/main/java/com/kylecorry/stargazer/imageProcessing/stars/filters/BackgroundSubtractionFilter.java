@@ -22,7 +22,7 @@ public class BackgroundSubtractionFilter implements IFilter {
 
     public BackgroundSubtractionFilter(){
         settings = new FilterSettings();
-        settings.put(stdevKey, new FilterSetting(stdevKey, stdev, 0, 255, "TODO"));
+        settings.put(stdevKey, new FilterSetting(stdevKey, stdev, 0, 4, "TODO"));
         settings.put(upperKey, new FilterSetting(upperKey, upper, 0, 255, "TODO"));
     }
 
