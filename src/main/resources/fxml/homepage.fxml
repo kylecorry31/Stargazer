@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXRadioButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -41,7 +41,6 @@
       <Label id="dark-photos-desc" layoutX="32.0" layoutY="200.0" prefHeight="64.0" prefWidth="960.0" text="Cover the lense of your camera with something black like tape or a black bag. Take about the same number of photos as the actual photos above with the exact same settings. This is optional, but recommended to remove a great deal of sensor noise." textFill="WHITE" wrapText="true" />
       <JFXButton fx:id="blackFramesBtn" buttonType="RAISED" layoutX="32.0" layoutY="268.0" onMouseClicked="#selectBlackFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="Upload Dark Photos" />
       <Label fx:id="blackFrames" layoutX="248.0" layoutY="267.0" prefHeight="40.0" prefWidth="744.0" styleClass="folder-path" text="No folder selected" />
-      <JFXCheckBox fx:id="alignStars" layoutX="24.0" layoutY="339.0" styleClass="custom-jfx-check-box" text="Align stars (experimental)" />
       <CheckBox fx:id="autoMergeStars" disable="true" layoutX="266.0" layoutY="396.0" mnemonicParsing="false" text="Automatically merge hdr and star alignment (highly experimental)" visible="false" />
       <Label fx:id="techniqueLbl" disable="true" layoutX="32.0" layoutY="374.0" styleClass="header" text="Alignment Technique">
          <font>
@@ -64,5 +63,6 @@
             <Image url="@../images/settings.png" />
          </image>
       </ImageView>
+      <JFXToggleButton fx:id="alignStars" layoutX="16.0" layoutY="314.0" prefHeight="60.0" prefWidth="149.0" styleClass="custom-jfx-toggle-button" text="Align stars" toggleLineColor="#2ebfb1" />
    </children>
 </AnchorPane>

@@ -13,8 +13,9 @@
     -color-primary-dark: #233d66;
     -color-primary-light: #3c6ab2;
     -color-accent: #cfdb00;
+    -color-accent-50-opacity: #cfdb0080;
+    -color-white-30-opacity: #FFFFFF4D;
     -color-background: #303030;
-    -background-color: white;
     -fx-text-fill: WHITE;
 }
 
@@ -71,6 +72,13 @@
     -fx-font-size: 10;
 }
 
+.custom-jfx-toggle-button {
+    -jfx-toggle-color: -color-accent;
+    -jfx-toggle-line-color: -color-accent-50-opacity;
+    -jfx-untoggle-color: #BDBDBD;
+    -jfx-untoggle-line-color: -color-white-30-opacity;
+}
+
 .link {
     -fx-text-fill: -color-accent;
 }
@@ -82,11 +90,14 @@
 .header {
     -fx-font-size: 20px;
     -fx-font-family: 'Fira Sans Thin' !important;
+    -fx-text-fill: WHITE;
 }
 
-#desc-label, #star-photos-desc, #dark-photos-desc, .custom-jfx-radio-button, #progress-text, .folder-path, .custom-jfx-check-box, .normal-text {
+#desc-label, #star-photos-desc, #dark-photos-desc, .custom-jfx-radio-button, #progress-text,
+ .folder-path, .custom-jfx-check-box, .custom-jfx-toggle-button, .normal-text {
     -fx-font-size: 15px;
     -fx-line-spacing: 2.5;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
     -fx-font-family: 'Fira Sans Light';
 }
 

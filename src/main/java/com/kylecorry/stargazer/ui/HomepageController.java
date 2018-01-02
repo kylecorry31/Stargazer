@@ -72,7 +72,7 @@ public class HomepageController implements Initializable {
     JFXProgressBar progressBar;
 
     @FXML
-    JFXCheckBox alignStars;
+    JFXToggleButton alignStars;
 
     @FXML
     CheckBox autoMergeStars;
