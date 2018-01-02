@@ -3,14 +3,12 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXScrollPane?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.FilterSettingsController">
+<AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color: #303030;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.FilterSettingsController">
    <children>
-      <Label fx:id="title" alignment="CENTER" prefHeight="32.0" prefWidth="640.0" styleClass="header" text="Label" />
-      <JFXScrollPane fx:id="pane" layoutY="48.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="400.0" styleClass="settingsPaneHolder">
+      <JFXScrollPane fx:id="pane" layoutY="16.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="448.0" prefWidth="640.0" styleClass="settingsPaneHolder">
          <children>
             <VBox fx:id="settingsPane" minHeight="400.0" prefWidth="640.0" spacing="8.0" styleClass="settingsPane">
                <padding>
@@ -18,7 +16,7 @@
                </padding></VBox>
          </children>
       </JFXScrollPane>
-      <JFXButton fx:id="previewBtn" buttonType="RAISED" layoutX="112.0" layoutY="416.0" onMouseClicked="#previewFilter" ripplerFill="#2c4b7c" styleClass="button-raised" text="Preview" />
-      <JFXButton fx:id="doneBtn" buttonType="RAISED" layoutX="328.0" layoutY="416.0" onMouseClicked="#close" ripplerFill="#2c4b7c" styleClass="button-raised" text="Done" />
+      <JFXButton fx:id="previewBtn" buttonType="RAISED" layoutX="112.0" layoutY="416.0" onMouseClicked="#previewFilter" ripplerFill="#2c4b7c" styleClass="button-raised" text="PREVIEW" />
+      <JFXButton fx:id="doneBtn" buttonType="RAISED" layoutX="328.0" layoutY="416.0" onMouseClicked="#close" ripplerFill="#2c4b7c" styleClass="button-raised" text="DONE" />
    </children>
 </AnchorPane>

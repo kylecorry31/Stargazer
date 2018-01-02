@@ -13,11 +13,11 @@
             <Image url="@../images/main-graphic-acorn.png" />
          </image>
       </ImageView>
-      <Label id="desc-label" alignment="CENTER" layoutX="237.0" layoutY="604.0" prefHeight="52.0" prefWidth="550.0" text="Create high resolution astrophotography with your smartphone." wrapText="true">
+      <Label alignment="CENTER" layoutX="237.0" layoutY="604.0" prefHeight="52.0" prefWidth="550.0" styleClass="subheading" text="Create high resolution astrophotography with your smartphone." wrapText="true">
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Label alignment="CENTER" layoutX="237.0" layoutY="552.0" prefHeight="52.0" prefWidth="550.0" styleClass="header" text="Stargazer" textAlignment="CENTER" wrapText="true">
+      <Label alignment="CENTER" layoutX="237.0" layoutY="549.0" prefHeight="52.0" prefWidth="550.0" styleClass="display-2" text="Stargazer" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="16.0" />
          </font>
