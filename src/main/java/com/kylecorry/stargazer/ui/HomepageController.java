@@ -237,18 +237,8 @@ public class HomepageController implements Initializable {
     }
 
     private void saveImage(Mat image) {
-        String outputFileName = System.currentTimeMillis() + ".jpg";
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.jpeg");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File imageFile = fileChooser.showSaveDialog(null);
-        if (imageFile != null) {
-            outputFileName = imageFile.getAbsolutePath();
-        } else {
-            System.out.println("No Selection ");
-        }
-
-        fileManager.saveImage(image, outputFileName);
+        SaveImageController saveImageController = new SaveImageController();
+        saveImageController.saveImage(fileManager, image);
     }
 
     private void locateStars(Mat blackImage, Mat hdrImage) {
