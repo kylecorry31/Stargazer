@@ -73,17 +73,16 @@ public class FilterSettingsController implements Initializable {
 
     private void showFilterSettings(IFilter filter) {
         JFXScrollPane.smoothScrolling((ScrollPane) pane.getChildren().get(0));
-        title.setText(filter.getName());
         List<String> settings = filter.getSettings().possibleSettings();
         for (String setting : settings) {
             FilterSetting currentSetting = filter.getSettings().get(setting);
             Label sliderLabel = new Label();
             sliderLabel.setText(currentSetting.getName());
-            sliderLabel.getStyleClass().add("header");
+            sliderLabel.getStyleClass().add("title");
             settingsPane.getChildren().add(sliderLabel);
             Label sliderLabelDesc = new Label();
             sliderLabelDesc.setText(currentSetting.getDescription());
-            sliderLabelDesc.getStyleClass().add("normal-text");
+            sliderLabelDesc.getStyleClass().add("subheading");
             sliderLabelDesc.wrapTextProperty().setValue(true);
             settingsPane.getChildren().add(sliderLabelDesc);
             JFXSlider slider = new JFXSlider();

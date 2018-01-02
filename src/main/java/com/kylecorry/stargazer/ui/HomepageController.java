@@ -392,7 +392,7 @@ public class HomepageController implements Initializable {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/styles.css");
             stage.setScene(scene);
-            stage.setTitle("Adjust Filter Settings");
+            stage.setTitle("Adjust " + filter.getValue().getName() + " Settings");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(window.getScene().getWindow());
             stage.showAndWait();

@@ -1,12 +1,18 @@
 @font-face {
+    font-family: 'Fira Sans Medium';
+    src: url('../fonts/Fira_Sans/FiraSans-Medium.ttf');
+}
+
+@font-face {
+    font-family: 'Fira Sans Regular';
+    src: url('../fonts/Fira_Sans/FiraSans-Regular.ttf');
+}
+
+@font-face {
     font-family: 'Fira Sans Light';
     src: url('../fonts/Fira_Sans/FiraSans-Light.ttf');
 }
 
-@font-face {
-    font-family: 'Fira Sans Thin';
-    src: url('../fonts/Fira_Sans/FiraSans-Thin.ttf');
-}
 
 * {
     -color-primary: #2c4b7c;
@@ -22,6 +28,7 @@
 .button-raised {
     -fx-padding: 0.7em 0.57em;
     -fx-font-size: 14px;
+    -fx-font-family: 'Fira Sans Medium';
     -jfx-button-type: RAISED;
     -fx-background-color: -color-accent;
     -fx-pref-width: 200;
@@ -89,16 +96,17 @@
 
 .header {
     -fx-font-size: 20px;
-    -fx-font-family: 'Fira Sans Thin' !important;
+    -fx-font-family: 'Fira Sans Medium' !important;
     -fx-text-fill: WHITE;
 }
 
-#desc-label, #star-photos-desc, #dark-photos-desc, .custom-jfx-radio-button, #progress-text,
- .folder-path, .custom-jfx-check-box, .custom-jfx-toggle-button, .normal-text {
-    -fx-font-size: 15px;
+
+#desc-label, #star-photos-desc, #dark-photos-desc, #progress-text,
+ .folder-path, .custom-jfx-check-box, .normal-text {
+    -fx-font-size: 14px;
     -fx-line-spacing: 2.5;
     -fx-text-fill: rgba(255, 255, 255, 0.7);
-    -fx-font-family: 'Fira Sans Light';
+    -fx-font-family: 'Fira Sans Regular';
 }
 
 
@@ -108,6 +116,64 @@
 }
 
 
+.display-4 {
+    -fx-font-family: 'Fira Sans Light';
+    -fx-font-size: 112px;
+}
+
+.display-3 {
+    -fx-font-family: 'Fira Sans Regular';
+    -fx-font-size: 56px;
+}
+
+.display-2 {
+    -fx-font-family: 'Fira Sans Regular';
+    -fx-font-size: 45px;
+}
+
+.display-1 {
+    -fx-font-family: 'Fira Sans Regular';
+    -fx-font-size: 34px;
+}
+
+.headline {
+    -fx-font-family: 'Fira Sans Regular';
+    -fx-font-size: 24px;
+}
+
+.title {
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 20px;
+    -fx-text-fill: WHITE;
+}
+
+.subheading {
+    -fx-font-family: 'Fira Sans Regular';
+    -fx-font-size: 15px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.body-2, .custom-jfx-toggle-button, .custom-jfx-radio-button {
+    -fx-font-family: 'Fira Sans Medium';
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.body-1 {
+    -fx-font-family: 'Fira Sans Regular';
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.caption {
+    -fx-font-family: 'Fira Sans Regular';
+    -fx-font-size: 12px;
+}
+
+.button-text {
+    -fx-font-size: 14px;
+    -fx-font-family: 'Fira Sans Medium';
+}
 
 /*
 .root{

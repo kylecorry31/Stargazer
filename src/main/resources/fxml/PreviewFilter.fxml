@@ -5,11 +5,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.PreviewFilterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="768.0" style="-fx-background-color: #303030;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.PreviewFilterController">
    <children>
       <ImageView fx:id="previewImg" fitHeight="576.0" fitWidth="768.0" layoutY="32.0" onMouseClicked="#showFilteredImage" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="previewFilter" fitHeight="576.0" fitWidth="768.0" layoutY="32.0" onMouseClicked="#showNormalImage" pickOnBounds="true" preserveRatio="true" visible="false" />
-      <Label alignment="CENTER" layoutY="-2.0" prefHeight="32.0" prefWidth="768.0" styleClass="header" text="Click image to toggle filter" />
-      <JFXButton fx:id="previewBtn" buttonType="RAISED" layoutX="284.0" layoutY="612.0" onMouseClicked="#close" ripplerFill="#2c4b7c" styleClass="button-raised" text="Done" />
+      <Label alignment="CENTER" layoutY="-2.0" prefHeight="32.0" prefWidth="768.0" styleClass="title" text="Click image to toggle filter" />
+      <JFXButton fx:id="previewBtn" buttonType="RAISED" layoutX="284.0" layoutY="612.0" onMouseClicked="#close" ripplerFill="#2c4b7c" styleClass="button-raised" text="DONE" />
    </children>
 </AnchorPane>

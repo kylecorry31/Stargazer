@@ -6,20 +6,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.BlackFrameHelpController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" style="-fx-background-color: #303030;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.BlackFrameHelpController">
    <children>
-      <Label layoutX="209.0" layoutY="14.0" styleClass="header" text="Subtracting Black Frames">
+      <Label layoutX="206.0" layoutY="14.0" styleClass="title" text="Subtracting Black Frames">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="49.0" prefHeight="92.0" prefWidth="616.0" styleClass="normal-text" text="According to Florian Kainz in Google's Research Blog: subtracting the average of the &quot;black frames removed faint grid-like patterns caused by local variations in the sensor's black level.&quot;" wrapText="true" />
-      <Label layoutX="64.0" layoutY="369.0" styleClass="header" text="Without black frames">
+      <Label layoutX="14.0" layoutY="49.0" prefHeight="92.0" prefWidth="616.0" styleClass="body-2" text="According to Florian Kainz in Google's Research Blog: subtracting the average of the &quot;black frames removed faint grid-like patterns caused by local variations in the sensor's black level.&quot;" wrapText="true" />
+      <Label layoutX="85.0" layoutY="369.0" styleClass="subheading" text="Without black frames">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <Label layoutX="404.0" layoutY="369.0" styleClass="header" text="With black frames">
+      <Label layoutX="421.0" layoutY="369.0" styleClass="subheading" text="With black frames">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
@@ -34,7 +34,7 @@
             <Image url="@../images/hdrWithBlack.jpg" />
          </image>
       </ImageView>
-      <Label alignment="TOP_CENTER" layoutX="14.0" layoutY="401.0" prefHeight="53.0" prefWidth="287.0" styleClass="normal-text" text="While more detail can be seen, there is much more noise and a purple tint." textAlignment="CENTER" wrapText="true" />
-      <Label alignment="TOP_CENTER" layoutX="339.0" layoutY="401.0" prefHeight="53.0" prefWidth="287.0" styleClass="normal-text" text="This image has much less noise overall, and a more accurate color." textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="14.0" layoutY="401.0" prefHeight="53.0" prefWidth="287.0" styleClass="caption" text="While more detail can be seen, there is much more noise and a purple tint." textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="339.0" layoutY="401.0" prefHeight="53.0" prefWidth="287.0" styleClass="caption" text="This image has much less noise overall, and a more accurate color." textAlignment="CENTER" wrapText="true" />
    </children>
 </AnchorPane>
