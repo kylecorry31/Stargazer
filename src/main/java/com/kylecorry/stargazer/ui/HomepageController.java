@@ -96,8 +96,6 @@ public class HomepageController implements Initializable {
 
     private ImageProcessor imageProcessor;
 
-    public static boolean wasSplashScreenLoaded = false;
-
     private final FileManager fileManager;
     private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
 
@@ -111,7 +109,7 @@ public class HomepageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(!HomepageController.wasSplashScreenLoaded) {
+        if(!SplashScreenController.wasSplashScreenLoaded) {
             loadSplashScreen();
         }
         enhanceBtn.setDisable(true);
@@ -154,38 +152,8 @@ public class HomepageController implements Initializable {
     }
 
     private void loadSplashScreen(){
-        try {
-            HomepageController.wasSplashScreenLoaded = true;
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/splash.fxml"));
-            window.getChildren().setAll(pane);
-
-
-            FadeTransition fadeOut = new FadeTransition(new Duration(1000), pane);
-            fadeOut.setFromValue(1);
-            fadeOut.setToValue(0);
-            fadeOut.setCycleCount(1);
-            fadeOut.setDelay(new Duration(1500));
-
-            fadeOut.play();
-
-            fadeOut.setOnFinished((e) -> {
-                try {
-                    AnchorPane parentPane = FXMLLoader.load(getClass().getResource("/fxml/homepage.fxml"));
-                    parentPane.setOpacity(0);
-                    window.getChildren().setAll(parentPane);
-                    FadeTransition fadeIn = new FadeTransition(new Duration(1000), parentPane);
-                    fadeIn.setFromValue(0);
-                    fadeIn.setToValue(1);
-                    fadeIn.setCycleCount(1);
-                    fadeIn.play();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SplashScreenController splashScreenController = new SplashScreenController();
+        splashScreenController.init(window);
     }
 
     public void createEnhancedImage() {
@@ -339,29 +307,13 @@ public class HomepageController implements Initializable {
         if (directory != null) {
             lightFiles = fileManager.getAllFileNamesInDirectory(directory);
             frames.setText(directory.getAbsolutePath());
-            if (!lightFiles.isEmpty()) {
-                enhanceBtn.setDisable(false);
-            }
+            enhanceBtn.setDisable(lightFiles.isEmpty());
         } else {
             lightFiles.clear();
             enhanceBtn.setDisable(true);
             frames.setText("No folder selected");
         }
     }
-
-    private List<String> getAllFileNames(String directory) {
-        List<String> files = new LinkedList<>();
-        File folder = new File(directory);
-
-        File[] listOfFiles = folder.listFiles();
-        for (int i = 0; i < (listOfFiles != null ? listOfFiles.length : 0); i++) {
-            if (listOfFiles[i].isFile()) {
-                files.add(directory + "/" + listOfFiles[i].getName());
-            }
-        }
-        return files;
-    }
-
 
     public void blackFrameHelp() {
         displayPopup("/fxml/BlackFrameHelp.fxml", "Subtracting Black Frames");
