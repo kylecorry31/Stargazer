@@ -150,6 +150,7 @@ public class HomepageController implements Initializable {
                 return filterFactory.getFilter(s);
             }
         });
+
     }
 
     private void loadSplashScreen(){
@@ -184,23 +185,6 @@ public class HomepageController implements Initializable {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    public void selectFrames() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        File directory = chooser.showDialog(null);
-        if (directory != null) {
-            lightFiles = getAllFileNames(directory.getAbsolutePath());
-            frames.setText(directory.getAbsolutePath());
-            if (!lightFiles.isEmpty()) {
-                enhanceBtn.setDisable(false);
-            }
-        } else {
-            lightFiles.clear();
-            enhanceBtn.setDisable(true);
-            frames.setText("No folder selected");
         }
     }
 
@@ -338,17 +322,30 @@ public class HomepageController implements Initializable {
     }
 
     public void selectBlackFrames() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        File directory = chooser.showDialog(null);
+        DirectorySelectionController controller = new DirectorySelectionController();
+        File directory = controller.selectDirectory(fileManager);
         if (directory != null) {
-            darkFiles = getAllFileNames(directory.getAbsolutePath());
+            darkFiles = fileManager.getAllFileNamesInDirectory(directory);
             blackFrames.setText(directory.getAbsolutePath());
+        } else {
+            darkFiles.clear();
+            blackFrames.setText("No folder selected");
+        }
+    }
+
+    public void selectFrames() {
+        DirectorySelectionController controller = new DirectorySelectionController();
+        File directory = controller.selectDirectory(fileManager);
+        if (directory != null) {
+            lightFiles = fileManager.getAllFileNamesInDirectory(directory);
+            frames.setText(directory.getAbsolutePath());
             if (!lightFiles.isEmpty()) {
                 enhanceBtn.setDisable(false);
             }
         } else {
-            darkFiles.clear();
-            blackFrames.setText("No folder selected");
+            lightFiles.clear();
+            enhanceBtn.setDisable(true);
+            frames.setText("No folder selected");
         }
     }
 
