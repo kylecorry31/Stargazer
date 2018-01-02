@@ -51,6 +51,8 @@ public class FilterSettingsController implements Initializable {
     @FXML
     private JFXButton previewBtn;
 
+    private Stage stage;
+
     public void setFilter(IFilter filter) {
         this.filter = filter;
         if (initiliazed) {
@@ -65,6 +67,10 @@ public class FilterSettingsController implements Initializable {
         }
     }
 
+    public void setStage(Stage stage){
+        this.stage = stage;
+    }
+
     private void showFilterSettings(IFilter filter) {
         JFXScrollPane.smoothScrolling((ScrollPane) pane.getChildren().get(0));
         title.setText(filter.getName());
@@ -77,6 +83,8 @@ public class FilterSettingsController implements Initializable {
             settingsPane.getChildren().add(sliderLabel);
             Label sliderLabelDesc = new Label();
             sliderLabelDesc.setText(currentSetting.getDescription());
+            sliderLabelDesc.getStyleClass().add("normal-text");
+            sliderLabelDesc.wrapTextProperty().setValue(true);
             settingsPane.getChildren().add(sliderLabelDesc);
             JFXSlider slider = new JFXSlider();
             slider.setMin(currentSetting.getMinValue());
@@ -121,6 +129,7 @@ public class FilterSettingsController implements Initializable {
             AnchorPane root = loader.load();
             PreviewFilterController controller = loader.getController();
             controller.setImage(image, filtered);
+            controller.setStage(stage);
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/styles.css");
             stage.setScene(scene);
@@ -130,6 +139,12 @@ public class FilterSettingsController implements Initializable {
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void close(){
+        if (stage != null){
+            stage.close();
         }
     }
 }

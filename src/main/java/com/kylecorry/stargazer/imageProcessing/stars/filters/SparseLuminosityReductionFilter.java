@@ -35,8 +35,8 @@ public class SparseLuminosityReductionFilter implements IFilter {
         Scalar mean = Core.mean(img);
         Mat rms = new Mat();
         Core.subtract(img, mean, rms);
-        Imgproc.threshold(img, img, settings.get(rmsLowerKey).getValue(), settings.get(rmsUpperKey).getValue(), Imgproc.THRESH_BINARY);
-        Core.bitwise_and(img, img, img, rms);
+        Imgproc.threshold(rms, rms, settings.get(rmsLowerKey).getValue(), settings.get(rmsUpperKey).getValue(), Imgproc.THRESH_BINARY);
+        Core.bitwise_and(img, rms, img);
         rms.release();
         return img;
     }
