@@ -9,30 +9,45 @@ public class OpenCVManager {
 
     public static void load() {
         String os = System.getProperty("os.name");
+        String arch = System.getProperty("sun.arch.data.model");
+
 
         if (os.equalsIgnoreCase("linux")) {
             try {
-                System.load(new File("../lib/libopencv_java320.so").getAbsolutePath());
+                System.load(new File("../lib/libopencv_java340.so").getAbsolutePath());
             } catch (UnsatisfiedLinkError e) {
                 try {
-                    System.load(new File("libs/libopencv_java320.so").getAbsolutePath());
+                    System.load(new File("libs/libopencv_java340.so").getAbsolutePath());
                 } catch (UnsatisfiedLinkError e1) {
                     System.err.println("Could not load opencv - FATAL");
                     System.exit(1);
                 }
             }
         } else {
-
-            try {
-                System.load(new File("../lib/opencv_java320.dll").getAbsolutePath());
-            } catch (UnsatisfiedLinkError e) {
+            if (arch.equalsIgnoreCase("64")){
                 try {
-                    System.load(new File("libs/opencv_java320.dll").getAbsolutePath());
-                } catch (UnsatisfiedLinkError e1) {
-                    System.err.println("Could not load opencv - FATAL");
-                    System.exit(1);
+                    System.load(new File("../lib/opencv_java340_64.dll").getAbsolutePath());
+                } catch (UnsatisfiedLinkError e) {
+                    try {
+                        System.load(new File("libs/opencv_java340_64.dll").getAbsolutePath());
+                    } catch (UnsatisfiedLinkError e1) {
+                        System.err.println("Could not load opencv - FATAL");
+                        System.exit(1);
+                    }
+                }
+            } else {
+                try {
+                    System.load(new File("../lib/opencv_java340_32.dll").getAbsolutePath());
+                } catch (UnsatisfiedLinkError e) {
+                    try {
+                        System.load(new File("libs/opencv_java340_32.dll").getAbsolutePath());
+                    } catch (UnsatisfiedLinkError e1) {
+                        System.err.println("Could not load opencv - FATAL");
+                        System.exit(1);
+                    }
                 }
             }
+
         }
     }
 
