@@ -1,4 +1,4 @@
-# Stargazer
+# Stargazer [![Build Status](https://travis-ci.org/kylecorry31/Stargazer.svg?branch=develop)](https://travis-ci.org/kylecorry31/Stargazer)
 
 Create high resolution astrophotography with your smartphone.
 
