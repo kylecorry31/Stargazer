@@ -96,8 +96,6 @@ public class HomepageController implements Initializable {
 
     private ImageProcessor imageProcessor;
 
-    public static boolean wasSplashScreenLoaded = false;
-
     private final FileManager fileManager;
     private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
 
@@ -111,7 +109,7 @@ public class HomepageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(!HomepageController.wasSplashScreenLoaded) {
+        if(!SplashScreenController.wasSplashScreenLoaded) {
             loadSplashScreen();
         }
         enhanceBtn.setDisable(true);
@@ -150,58 +148,12 @@ public class HomepageController implements Initializable {
                 return filterFactory.getFilter(s);
             }
         });
+
     }
 
     private void loadSplashScreen(){
-        try {
-            HomepageController.wasSplashScreenLoaded = true;
-            AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/splash.fxml"));
-            window.getChildren().setAll(pane);
-
-
-            FadeTransition fadeOut = new FadeTransition(new Duration(1000), pane);
-            fadeOut.setFromValue(1);
-            fadeOut.setToValue(0);
-            fadeOut.setCycleCount(1);
-            fadeOut.setDelay(new Duration(1500));
-
-            fadeOut.play();
-
-            fadeOut.setOnFinished((e) -> {
-                try {
-                    AnchorPane parentPane = FXMLLoader.load(getClass().getResource("/fxml/homepage.fxml"));
-                    parentPane.setOpacity(0);
-                    window.getChildren().setAll(parentPane);
-                    FadeTransition fadeIn = new FadeTransition(new Duration(1000), parentPane);
-                    fadeIn.setFromValue(0);
-                    fadeIn.setToValue(1);
-                    fadeIn.setCycleCount(1);
-                    fadeIn.play();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void selectFrames() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        File directory = chooser.showDialog(null);
-        if (directory != null) {
-            lightFiles = getAllFileNames(directory.getAbsolutePath());
-            frames.setText(directory.getAbsolutePath());
-            if (!lightFiles.isEmpty()) {
-                enhanceBtn.setDisable(false);
-            }
-        } else {
-            lightFiles.clear();
-            enhanceBtn.setDisable(true);
-            frames.setText("No folder selected");
-        }
+        SplashScreenController splashScreenController = new SplashScreenController();
+        splashScreenController.init(window);
     }
 
     public void createEnhancedImage() {
@@ -285,18 +237,8 @@ public class HomepageController implements Initializable {
     }
 
     private void saveImage(Mat image) {
-        String outputFileName = System.currentTimeMillis() + ".jpg";
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.jpeg");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File imageFile = fileChooser.showSaveDialog(null);
-        if (imageFile != null) {
-            outputFileName = imageFile.getAbsolutePath();
-        } else {
-            System.out.println("No Selection ");
-        }
-
-        fileManager.saveImage(image, outputFileName);
+        SaveImageController saveImageController = new SaveImageController();
+        saveImageController.saveImage(fileManager, image);
     }
 
     private void locateStars(Mat blackImage, Mat hdrImage) {
@@ -338,33 +280,30 @@ public class HomepageController implements Initializable {
     }
 
     public void selectBlackFrames() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        File directory = chooser.showDialog(null);
+        DirectorySelectionController controller = new DirectorySelectionController();
+        File directory = controller.selectDirectory(fileManager);
         if (directory != null) {
-            darkFiles = getAllFileNames(directory.getAbsolutePath());
+            darkFiles = fileManager.getAllFileNamesInDirectory(directory);
             blackFrames.setText(directory.getAbsolutePath());
-            if (!lightFiles.isEmpty()) {
-                enhanceBtn.setDisable(false);
-            }
         } else {
             darkFiles.clear();
             blackFrames.setText("No folder selected");
         }
     }
 
-    private List<String> getAllFileNames(String directory) {
-        List<String> files = new LinkedList<>();
-        File folder = new File(directory);
-
-        File[] listOfFiles = folder.listFiles();
-        for (int i = 0; i < (listOfFiles != null ? listOfFiles.length : 0); i++) {
-            if (listOfFiles[i].isFile()) {
-                files.add(directory + "/" + listOfFiles[i].getName());
-            }
+    public void selectFrames() {
+        DirectorySelectionController controller = new DirectorySelectionController();
+        File directory = controller.selectDirectory(fileManager);
+        if (directory != null) {
+            lightFiles = fileManager.getAllFileNamesInDirectory(directory);
+            frames.setText(directory.getAbsolutePath());
+            enhanceBtn.setDisable(lightFiles.isEmpty());
+        } else {
+            lightFiles.clear();
+            enhanceBtn.setDisable(true);
+            frames.setText("No folder selected");
         }
-        return files;
     }
-
 
     public void blackFrameHelp() {
         displayPopup("/fxml/BlackFrameHelp.fxml", "Subtracting Black Frames");
