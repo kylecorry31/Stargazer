@@ -388,6 +388,7 @@ public class HomepageController implements Initializable {
             if(lightFiles != null && !lightFiles.isEmpty()){
                 controller.setImage(lightFiles.get(0));
             }
+            controller.setStage(stage);
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/styles.css");
             stage.setScene(scene);

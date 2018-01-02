@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import org.opencv.core.Mat;
 
 import java.net.URL;
@@ -21,6 +22,8 @@ public class PreviewFilterController implements Initializable{
     private Image image;
     private Image filteredImage;
 
+    private Stage stage;
+
     private boolean initialized = false;
 
     public void setImage(Mat image, Mat filtered){
@@ -31,6 +34,10 @@ public class PreviewFilterController implements Initializable{
         if(initialized){
             setPreview(this.image, this.filteredImage);
         }
+    }
+
+    public void setStage(Stage stage){
+        this.stage = stage;
     }
 
     private void setPreview(Image image, Image filteredImage){
@@ -53,6 +60,12 @@ public class PreviewFilterController implements Initializable{
         initialized = true;
         if(image != null && filteredImage != null){
             setPreview(image, filteredImage);
+        }
+    }
+
+    public void close(){
+        if (stage != null){
+            stage.close();
         }
     }
 }

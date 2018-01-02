@@ -18,6 +18,7 @@
                </padding></VBox>
          </children>
       </JFXScrollPane>
-      <JFXButton fx:id="previewBtn" buttonType="RAISED" layoutX="220.0" layoutY="416.0" onMouseClicked="#previewFilter" ripplerFill="#2c4b7c" styleClass="button-raised" text="Preview" />
+      <JFXButton fx:id="previewBtn" buttonType="RAISED" layoutX="112.0" layoutY="416.0" onMouseClicked="#previewFilter" ripplerFill="#2c4b7c" styleClass="button-raised" text="Preview" />
+      <JFXButton fx:id="doneBtn" buttonType="RAISED" layoutX="328.0" layoutY="416.0" onMouseClicked="#close" ripplerFill="#2c4b7c" styleClass="button-raised" text="Done" />
    </children>
 </AnchorPane>

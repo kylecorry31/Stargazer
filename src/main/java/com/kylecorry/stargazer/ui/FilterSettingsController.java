@@ -51,6 +51,8 @@ public class FilterSettingsController implements Initializable {
     @FXML
     private JFXButton previewBtn;
 
+    private Stage stage;
+
     public void setFilter(IFilter filter) {
         this.filter = filter;
         if (initiliazed) {
@@ -63,6 +65,10 @@ public class FilterSettingsController implements Initializable {
         if(initiliazed) {
             previewBtn.setDisable(false);
         }
+    }
+
+    public void setStage(Stage stage){
+        this.stage = stage;
     }
 
     private void showFilterSettings(IFilter filter) {
@@ -123,6 +129,7 @@ public class FilterSettingsController implements Initializable {
             AnchorPane root = loader.load();
             PreviewFilterController controller = loader.getController();
             controller.setImage(image, filtered);
+            controller.setStage(stage);
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/styles.css");
             stage.setScene(scene);
@@ -132,6 +139,12 @@ public class FilterSettingsController implements Initializable {
             stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void close(){
+        if (stage != null){
+            stage.close();
         }
     }
 }
