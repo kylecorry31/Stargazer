@@ -113,7 +113,7 @@ public class HomepageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(!SplashScreenController.wasSplashScreenLoaded) {
+        if(!SplashScreenController.wasSplashScreenLoaded()) {
             loadSplashScreen();
         }
         enhanceBtn.setDisable(true);

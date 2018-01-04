@@ -9,12 +9,16 @@ import javafx.util.Duration;
 import java.io.IOException;
 
 public class SplashScreenController {
-    public static boolean wasSplashScreenLoaded = false;
+    private static boolean wasSplashScreenLoaded = false;
+
+    public static boolean wasSplashScreenLoaded(){
+        return wasSplashScreenLoaded;
+    }
 
 
     public void init(Pane window){
         try {
-            SplashScreenController.wasSplashScreenLoaded = true;
+            wasSplashScreenLoaded = true;
             AnchorPane pane = FXMLLoader.load(getClass().getResource("/fxml/splash.fxml"));
             window.getChildren().setAll(pane);
 
