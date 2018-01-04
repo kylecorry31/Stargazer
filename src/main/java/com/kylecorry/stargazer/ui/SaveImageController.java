@@ -1,28 +1,43 @@
 package com.kylecorry.stargazer.ui;
 
-import com.kylecorry.stargazer.storage.FileManager;
-import javafx.stage.FileChooser;
+import com.kylecorry.stargazer.storage.FileNameGenerator;
+import com.kylecorry.stargazer.storage.FileSelector;
+import com.kylecorry.stargazer.storage.IFileManager;
 import org.opencv.core.Mat;
 
 import java.io.File;
 
 public class SaveImageController {
 
-    private String generateFileName(){
-        return System.currentTimeMillis() + ".jpg";
+    private FileSelector selector;
+    private IFileManager fileManager;
+    private FileNameGenerator fileNameGenerator;
+
+    public SaveImageController(IFileManager fileManager, FileSelector selector, FileNameGenerator fileNameGenerator) {
+        this.selector = selector;
+        this.fileManager = fileManager;
+        this.fileNameGenerator = fileNameGenerator;
     }
 
-    private String selectFileName(){
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files", "*.jpg", "*.jpeg");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File imageFile = fileChooser.showSaveDialog(null);
+
+    public boolean saveImage(Mat image) {
+        String outputFileName = selectFileName();
+        if(outputFileName == null)
+            return false;
+        return fileManager.saveImage(image, outputFileName);
+    }
+
+    private String selectFileName() {
+        File imageFile = selector.saveFile("Image files", "*.jpg", "*.jpeg");
         return imageFile != null ? imageFile.getAbsolutePath() : generateFileName();
     }
 
-    public void saveImage(FileManager fileManager, Mat image){
-        String outputFileName = selectFileName();
-        fileManager.saveImage(image, outputFileName);
+    private String generateFileName() {
+        String fileName = fileNameGenerator.generateFileName();
+        if(fileName == null)
+            return null;
+        return fileNameGenerator.generateFileName() + ".jpg";
     }
+
 
 }
