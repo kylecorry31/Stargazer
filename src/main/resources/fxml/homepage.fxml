@@ -42,7 +42,6 @@
       <JFXButton fx:id="blackFramesBtn" buttonType="RAISED" layoutX="32.0" layoutY="268.0" onMouseClicked="#selectBlackFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD DARK PHOTOS" />
       <Label fx:id="blackFrames" layoutX="248.0" layoutY="267.0" prefHeight="40.0" prefWidth="744.0" styleClass="body-2" text="No folder selected" />
       <JFXToggleButton fx:id="alignStars" layoutX="16.0" layoutY="314.0" prefHeight="60.0" prefWidth="149.0" styleClass="custom-jfx-toggle-button" text="Align stars" toggleLineColor="#2ebfb1" />
-      <CheckBox fx:id="autoMergeStars" disable="true" layoutX="266.0" layoutY="396.0" mnemonicParsing="false" text="Automatically merge hdr and star alignment (highly experimental)" visible="false" />
       <Label fx:id="techniqueLbl" disable="true" layoutX="32.0" layoutY="374.0" styleClass="title" text="Alignment Technique">
          <font>
             <Font name="System Bold" size="15.0" />

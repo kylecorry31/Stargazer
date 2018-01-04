@@ -75,9 +75,6 @@ public class HomepageController implements Initializable {
     JFXToggleButton alignStars;
 
     @FXML
-    CheckBox autoMergeStars;
-
-    @FXML
     JFXRadioButton autoAlign;
 
     @FXML
@@ -113,19 +110,17 @@ public class HomepageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(!SplashScreenController.wasSplashScreenLoaded()) {
+        if (!SplashScreenController.wasSplashScreenLoaded()) {
             loadSplashScreen();
         }
         enhanceBtn.setDisable(true);
-        autoMergeStars.setDisable(true);
         filter.setDisable(true);
         filterSettings.setVisible(false);
         alignStars.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            autoMergeStars.setDisable(!newValue);
             autoAlign.setDisable(!newValue);
             manualAlign.setDisable(!newValue);
             techniqueLbl.setDisable(!newValue);
-            if(autoAlign.isSelected()){
+            if (autoAlign.isSelected()) {
                 filter.setDisable(!newValue);
                 filterSettings.setVisible(newValue);
             }
@@ -155,7 +150,7 @@ public class HomepageController implements Initializable {
 
     }
 
-    private void loadSplashScreen(){
+    private void loadSplashScreen() {
         SplashScreenController splashScreenController = new SplashScreenController();
         splashScreenController.init(window);
     }
@@ -223,7 +218,6 @@ public class HomepageController implements Initializable {
         if (hdrImage != null)
             hdrImage.release();
         alignStars.setSelected(false);
-        autoMergeStars.setSelected(false);
         System.gc();
     }
 
@@ -263,20 +257,12 @@ public class HomepageController implements Initializable {
                 subtractionService.setOnSucceeded(event1 -> {
                     unbindUIFromServices();
                     saveImage(subtractionService.getValue());
-                    if (autoMergeStars.isSelected()) {
-                        // TODO: auto merge
-                    } else {
-                        resetUI();
-                    }
+                    resetUI();
                 });
                 subtractionService.start();
             } else {
                 saveImage(starAlignmentService.getValue());
-                if (autoMergeStars.isSelected()) {
-                    // TODO: auto merge`
-                } else {
-                    resetUI();
-                }
+                resetUI();
             }
         });
         starAlignmentService.start();
@@ -328,7 +314,7 @@ public class HomepageController implements Initializable {
             AnchorPane root = loader.load();
             FilterSettingsController controller = loader.getController();
             controller.setFilter(filter.getValue());
-            if(lightFiles != null && !lightFiles.isEmpty()){
+            if (lightFiles != null && !lightFiles.isEmpty()) {
                 controller.setImage(lightFiles.get(0));
             }
             controller.setStage(stage);
@@ -343,7 +329,6 @@ public class HomepageController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
 
     private void displayPopup(String fxml, String title) {
@@ -362,5 +347,5 @@ public class HomepageController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
 }
