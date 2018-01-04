@@ -14,8 +14,7 @@ public class DirectorySelectionController {
     }
 
     public File selectDirectory(){
-        DirectoryChooser chooser = new DirectoryChooser();
-        File directory = chooser.showDialog(null);
+        File directory = selector.openDirectory();
         if (directory != null) {
             return directory;
         } else {
