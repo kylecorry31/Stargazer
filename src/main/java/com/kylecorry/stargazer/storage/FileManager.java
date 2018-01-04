@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * A class to manage files.
  */
-public class FileManager {
+public class FileManager implements IFileManager {
 
     private static final List<String> SUPPORTED_FILE_TYPES = Arrays.asList("bmp", "dib", "jpeg", "jpg", "jpe", "jp2", "png", "webp",
                                                     "pbm", "pgm", "ppm", "sr", "ras", "tiff", "tif");
@@ -25,6 +25,7 @@ public class FileManager {
      * @param directory The directory to scan.
      * @return The absolute paths of all of the files in the specified directory.
      */
+    @Override
     public List<String> getAllFileNamesInDirectory(File directory) {
         List<String> files = new LinkedList<>();
         if (!directory.exists() || !directory.isDirectory()) {
@@ -46,6 +47,7 @@ public class FileManager {
      * @param directory The name of the directory to scan.
      * @return The absolute paths of all of the files in the specified directory.
      */
+    @Override
     public List<String> getAllFileNamesInDirectory(String directory) {
         return getAllFileNamesInDirectory(new File(directory));
     }
@@ -56,6 +58,7 @@ public class FileManager {
      * @param filename The filename where the image is located at.
      * @return The image as a {@link Mat}.
      */
+    @Override
     public Mat loadImage(String filename) {
         return Imgcodecs.imread(filename);
     }
@@ -66,17 +69,21 @@ public class FileManager {
      * @param image    The image as a {@link Mat}.
      * @param filename The filename where the image should be saved.
      */
-    public void saveImage(Mat image, String filename) {
+    @Override
+    public boolean saveImage(Mat image, String filename) {
         String extension = FilenameUtils.getExtension(filename);
         if(!SUPPORTED_FILE_TYPES.contains(extension.toLowerCase())){
-            saveImage(image, filename + "." + DEFAULT_FILE_EXTENSION);
+            boolean saved = saveImage(image, filename + "." + DEFAULT_FILE_EXTENSION);
             File savedImage = new File(filename + "." + DEFAULT_FILE_EXTENSION);
             savedImage.renameTo(new File(filename));
+            return saved;
         } else {
             try {
                 Imgcodecs.imwrite(filename, image);
+                return true;
             } catch (RuntimeException e) {
                 System.err.println("Could not save image to " + filename);
+                return false;
             }
         }
     }
@@ -87,6 +94,7 @@ public class FileManager {
      * @param filename The filename of the file to delete.
      * @return True if the file was successfully deleted.
      */
+    @Override
     public boolean deleteFile(String filename) {
         return new File(filename).delete();
     }

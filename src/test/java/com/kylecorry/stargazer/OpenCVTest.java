@@ -81,4 +81,14 @@ public class OpenCVTest {
         out.release();
     }
 
+    @Test
+    public void testConvertColor(){
+        Mat out = new Mat();
+        Imgproc.cvtColor(image1, out, Imgproc.COLOR_BGR2GRAY);
+        assertEquals(CvType.CV_8UC1, out.type());
+        assertEquals(image1.size(), out.size());
+
+        out.release();
+    }
+
 }

@@ -6,7 +6,7 @@ import com.kylecorry.stargazer.imageProcessing.stars.alignment.AutoAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.StarStreak;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.*;
-import com.kylecorry.stargazer.storage.FileManager;
+import com.kylecorry.stargazer.storage.*;
 import javafx.animation.FadeTransition;
 import javafx.concurrent.Service;
 import javafx.fxml.FXML;
@@ -97,6 +97,8 @@ public class HomepageController implements Initializable {
     private ImageProcessor imageProcessor;
 
     private final FileManager fileManager;
+    private final FileSelector fileSelector;
+    private final FileNameGenerator fileNameGenerator;
     private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
 
 
@@ -104,6 +106,8 @@ public class HomepageController implements Initializable {
         darkFiles = new LinkedList<>();
         lightFiles = new LinkedList<>();
         fileManager = new FileManager();
+        fileSelector = new DialogFileSelector();
+        fileNameGenerator = new TimeFileNameGenerator();
     }
 
 
@@ -237,8 +241,8 @@ public class HomepageController implements Initializable {
     }
 
     private void saveImage(Mat image) {
-        SaveImageController saveImageController = new SaveImageController();
-        saveImageController.saveImage(fileManager, image);
+        SaveImageController saveImageController = new SaveImageController(fileManager, fileSelector, fileNameGenerator);
+        saveImageController.saveImage(image);
     }
 
     private void locateStars(Mat blackImage, Mat hdrImage) {
@@ -280,8 +284,8 @@ public class HomepageController implements Initializable {
     }
 
     public void selectBlackFrames() {
-        DirectorySelectionController controller = new DirectorySelectionController();
-        File directory = controller.selectDirectory(fileManager);
+        DirectorySelectionController controller = new DirectorySelectionController(fileSelector);
+        File directory = controller.selectDirectory();
         if (directory != null) {
             darkFiles = fileManager.getAllFileNamesInDirectory(directory);
             blackFrames.setText(directory.getAbsolutePath());
@@ -292,8 +296,8 @@ public class HomepageController implements Initializable {
     }
 
     public void selectFrames() {
-        DirectorySelectionController controller = new DirectorySelectionController();
-        File directory = controller.selectDirectory(fileManager);
+        DirectorySelectionController controller = new DirectorySelectionController(fileSelector);
+        File directory = controller.selectDirectory();
         if (directory != null) {
             lightFiles = fileManager.getAllFileNamesInDirectory(directory);
             frames.setText(directory.getAbsolutePath());
