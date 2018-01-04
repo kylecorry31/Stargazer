@@ -29,6 +29,7 @@ class HDR extends ProgressTrackable {
         }
         Mat average = averager.getAverage(type);
         averager.release();
+        setProgress(0);
         return average;
     }
 
