@@ -14,12 +14,7 @@ public class DirectorySelectionController {
     }
 
     public File selectDirectory(){
-        File directory = selector.openDirectory();
-        if (directory != null) {
-            return directory;
-        } else {
-            return null;
-        }
+        return selector.openDirectory();
     }
 
 }
