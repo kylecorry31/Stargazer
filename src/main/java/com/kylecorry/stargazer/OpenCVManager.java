@@ -8,59 +8,86 @@ import java.net.URISyntaxException;
  */
 public class OpenCVManager {
 
-    public static void load() {
-        String os = System.getProperty("os.name");
-        String arch = System.getProperty("sun.arch.data.model");
-        String jarLocation = new File(OpenCVManager.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+    private final static String LIB_NAME_LINUX = "libopencv_java340.so";
+    private final static String LIB_NAME_WIN_64 = "opencv_java340_64.dll";
+    private final static String LIB_NAME_WIN_32 = "opencv_java340_32.dll";
 
-        if (os.equalsIgnoreCase("linux")) {
-            try {
-                System.load(new File("../lib/libopencv_java340.so").getAbsolutePath());
-            } catch (UnsatisfiedLinkError e) {
-                try {
-                    System.load(new File("libs/libopencv_java340.so").getAbsolutePath());
-                } catch (UnsatisfiedLinkError e1) {
-                    try {
-                        System.load(jarLocation + "/libopencv_java340.so");
-                    } catch(UnsatisfiedLinkError e2){
-                        System.err.println("Could not load opencv - FATAL");
-                        System.exit(1);
-                    }
-                }
+    private boolean isLoaded = false;
+
+    public class OpenCVLoadException extends RuntimeException {
+        public OpenCVLoadException() {
+            super("Could not locate OpenCV libraries.");
+        }
+    }
+
+    public class UnsupportedOperatingSystemException extends RuntimeException {
+        public UnsupportedOperatingSystemException() {
+            super("Your operating system is not supported.");
+        }
+    }
+
+    public class UnsupportedArchitectureException extends RuntimeException {
+        public UnsupportedArchitectureException() {
+            super("Your hardware architecture is not supported.");
+        }
+    }
+
+    private OpenCVManager() {
+    }
+
+    private static class OpenCVManagerHolder {
+        public static final OpenCVManager instance = new OpenCVManager();
+    }
+
+    public static OpenCVManager getInstance() {
+        return OpenCVManagerHolder.instance;
+    }
+
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
+    public void load(ISystemProperties systemProperties) {
+        OSInfo osInfo = new OSInfo(systemProperties);
+        OSInfo.OS os = osInfo.getOperatingSystem();
+        OSInfo.Architecture arch = osInfo.getArchitecture();
+        String jarLocation = new File(OpenCVManager.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent();
+        String libName;
+        if (os == OSInfo.OS.LINUX) {
+            libName = LIB_NAME_LINUX;
+        } else if (os == OSInfo.OS.WINDOWS) {
+            if (arch == OSInfo.Architecture.x64) {
+                libName = LIB_NAME_WIN_64;
+            } else if (arch == OSInfo.Architecture.x86) {
+                libName = LIB_NAME_WIN_32;
+            } else {
+                throw new UnsupportedArchitectureException();
             }
         } else {
-            if (arch.equalsIgnoreCase("64")){
-                try {
-                    System.load(new File("../lib/opencv_java340_64.dll").getAbsolutePath());
-                } catch (UnsatisfiedLinkError e) {
-                    try {
-                        System.load(new File("libs/opencv_java340_64.dll").getAbsolutePath());
-                    } catch (UnsatisfiedLinkError e1) {
-                        try {
-                            System.load(jarLocation + "/opencv_java340_64.dll");
-                        } catch(UnsatisfiedLinkError e2){
-                            System.err.println("Could not load opencv - FATAL");
-                            System.exit(1);
-                        }
-                    }
-                }
-            } else {
-                try {
-                    System.load(new File("../lib/opencv_java340_32.dll").getAbsolutePath());
-                } catch (UnsatisfiedLinkError e) {
-                    try {
-                        System.load(new File("libs/opencv_java340_32.dll").getAbsolutePath());
-                    } catch (UnsatisfiedLinkError e1) {
-                        try {
-                            System.load(jarLocation + "/opencv_java340_32.dll");
-                        } catch(UnsatisfiedLinkError e2){
-                            System.err.println("Could not load opencv - FATAL");
-                            System.exit(1);
-                        }
-                    }
-                }
-            }
+            throw new UnsupportedOperatingSystemException();
+        }
+        boolean loaded = tryLoadingLibraries("../lib/" + libName, "libs/" + libName, jarLocation + "/" + libName);
+        isLoaded = loaded;
+        if (!loaded) {
+            throw new OpenCVLoadException();
+        }
+    }
 
+    private boolean tryLoadingLibraries(String... libraryPaths) {
+        for (String path : libraryPaths) {
+            if (tryLoadingLibrary(path)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean tryLoadingLibrary(String libraryPath) {
+        try {
+            System.load(new File(libraryPath).getAbsolutePath());
+            return true;
+        } catch (UnsatisfiedLinkError e) {
+            return false;
         }
     }
 

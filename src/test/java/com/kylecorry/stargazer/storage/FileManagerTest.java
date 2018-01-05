@@ -1,6 +1,7 @@
 package com.kylecorry.stargazer.storage;
 
 import com.kylecorry.stargazer.OpenCVManager;
+import com.kylecorry.stargazer.SystemProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencv.core.Core;
@@ -23,7 +24,7 @@ public class FileManagerTest {
 
     @Before
     public void setup() {
-        OpenCVManager.load();
+        OpenCVManager.getInstance().load(new SystemProperties());
         fileManager = new FileManager();
     }
 

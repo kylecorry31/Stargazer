@@ -16,7 +16,7 @@ public class OpenCVTest {
 
     @Before
     public void setup() {
-        OpenCVManager.load();
+        OpenCVManager.getInstance().load(new SystemProperties());
         image1 = Mat.zeros(2, 2, 16);
         image2 = Mat.zeros(2, 2, 16);
         image1.setTo(Scalar.all(1.0));

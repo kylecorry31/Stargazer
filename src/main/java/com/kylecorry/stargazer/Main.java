@@ -13,7 +13,12 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static void main(String args[]) {
-        OpenCVManager.load();
+        try {
+            OpenCVManager.getInstance().load(new SystemProperties());
+        } catch (RuntimeException e){
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
         launch(args);
     }
 
