@@ -1,5 +1,6 @@
 package com.kylecorry.stargazer.ui;
 
+import com.kylecorry.stargazer.imageProcessing.BlendMode;
 import com.kylecorry.stargazer.imageProcessing.ImageProcessor;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
@@ -15,10 +16,16 @@ class HDRService extends Service<Mat> {
 
     private final ImageProcessor imageProcessor;
     private final List<String> lightFiles;
+    private final BlendMode blendMode;
 
-    public HDRService(ImageProcessor imageProcessor, List<String> lightFiles) {
+    public HDRService(ImageProcessor imageProcessor, List<String> lightFiles, BlendMode blendMode) {
         this.imageProcessor = imageProcessor;
         this.lightFiles = lightFiles;
+        this.blendMode = blendMode;
+    }
+
+    public HDRService(ImageProcessor imageProcessor, List<String> lightFiles) {
+        this(imageProcessor, lightFiles, BlendMode.AVERAGE);
     }
 
     @Override
@@ -34,7 +41,11 @@ class HDRService extends Service<Mat> {
                     updateProgress(newValue.intValue() / (double) lightFiles.size(), 1);
                 }));
 
-                return imageProcessor.reduceNoise(lightFiles);
+                if (blendMode == BlendMode.AVERAGE) {
+                    return imageProcessor.reduceNoise(lightFiles);
+                } else {
+                    return imageProcessor.streakLights(lightFiles);
+                }
             }
         };
     }

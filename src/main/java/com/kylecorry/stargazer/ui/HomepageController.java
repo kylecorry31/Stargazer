@@ -81,6 +81,9 @@ public class HomepageController implements Initializable {
     JFXRadioButton manualAlign;
 
     @FXML
+    JFXRadioButton priorityReduceNoise, priorityStarStreaks;
+
+    @FXML
     Label techniqueLbl;
 
     @FXML
@@ -159,8 +162,16 @@ public class HomepageController implements Initializable {
         enhanceBtn.setDisable(true);
         imageProcessor = new ImageProcessor(fileManager);
 
+        BlendMode blendMode;
+
+        if(priorityReduceNoise.isSelected()){
+            blendMode = BlendMode.AVERAGE;
+        } else {
+            blendMode = BlendMode.LIGHTEN;
+        }
+
         blackImageService = null;
-        hdrService = new HDRService(imageProcessor, lightFiles);
+        hdrService = new HDRService(imageProcessor, lightFiles, blendMode);
         hdrService.setOnSucceeded(event -> {
             unbindUIFromServices();
             if (blackImageService != null) {
@@ -218,6 +229,7 @@ public class HomepageController implements Initializable {
         if (hdrImage != null)
             hdrImage.release();
         alignStars.setSelected(false);
+        priorityReduceNoise.setSelected(true);
         System.gc();
     }
 

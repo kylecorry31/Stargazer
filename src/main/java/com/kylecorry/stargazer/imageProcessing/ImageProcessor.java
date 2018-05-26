@@ -22,9 +22,17 @@ public class ImageProcessor extends ProgressTrackable {
     }
 
     public Mat reduceNoise(List<String> frameFileNames) {
-        HDR hdr = new HDR(fileManager);
-        progressProperty().bind(hdr.progressProperty());
-        Mat image = hdr.reduceNoise(frameFileNames);
+        ImageBlender imageBlender = new ImageBlender(fileManager);
+        progressProperty().bind(imageBlender.progressProperty());
+        Mat image = imageBlender.reduceNoise(frameFileNames);
+        progressProperty().unbind();
+        return image;
+    }
+
+    public Mat streakLights(List<String> frameFileNames) {
+        ImageBlender imageBlender = new ImageBlender(fileManager);
+        progressProperty().bind(imageBlender.progressProperty());
+        Mat image = imageBlender.lighten(frameFileNames);
         progressProperty().unbind();
         return image;
     }

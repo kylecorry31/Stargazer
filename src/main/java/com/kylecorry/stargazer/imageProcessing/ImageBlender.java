@@ -6,11 +6,11 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.List;
 
-class HDR extends ProgressTrackable {
+class ImageBlender extends ProgressTrackable {
 
     private final FileManager fileManager;
 
-    HDR(FileManager fileManager) {
+    ImageBlender(FileManager fileManager) {
         this.fileManager = fileManager;
     }
 
@@ -31,6 +31,21 @@ class HDR extends ProgressTrackable {
         averager.release();
         setProgress(0);
         return average;
+    }
+
+    Mat lighten(List<String> imageFiles){
+        setProgress(1);
+        Mat current = fileManager.loadImage(imageFiles.get(0));
+        Mat avg = current.clone();
+        current.release();
+        for (int i = 1; i < imageFiles.size(); i++) {
+            setProgress(i + 1);
+            current = fileManager.loadImage(imageFiles.get(i));
+            Core.max(avg, current, avg);
+            current.release();
+        }
+        setProgress(0);
+        return avg;
     }
 
 }
