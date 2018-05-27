@@ -1,8 +1,9 @@
 package com.kylecorry.stargazer.imageProcessing;
 
+import com.kylecorry.stargazer.imageProcessing.blendModes.Blender;
+import com.kylecorry.stargazer.imageProcessing.blendModes.Lighten;
 import com.kylecorry.stargazer.storage.FileManager;
 import org.opencv.core.*;
-import org.opencv.imgproc.Imgproc;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ class ImageBlender extends ProgressTrackable {
     }
 
     Mat lighten(List<String> imageFiles){
+        Blender blender = new Lighten();
         setProgress(1);
         Mat current = fileManager.loadImage(imageFiles.get(0));
         Mat avg = current.clone();
@@ -41,7 +43,25 @@ class ImageBlender extends ProgressTrackable {
         for (int i = 1; i < imageFiles.size(); i++) {
             setProgress(i + 1);
             current = fileManager.loadImage(imageFiles.get(i));
-            Core.max(avg, current, avg);
+            Mat next = blender.blend(avg, current);
+            avg.release();
+            avg = next;
+            current.release();
+        }
+        setProgress(0);
+        return avg;
+    }
+
+
+    Mat darken(List<String> imageFiles){
+        setProgress(1);
+        Mat current = fileManager.loadImage(imageFiles.get(0));
+        Mat avg = current.clone();
+        current.release();
+        for (int i = 1; i < imageFiles.size(); i++) {
+            setProgress(i + 1);
+            current = fileManager.loadImage(imageFiles.get(i));
+            Core.min(avg, current, avg);
             current.release();
         }
         setProgress(0);

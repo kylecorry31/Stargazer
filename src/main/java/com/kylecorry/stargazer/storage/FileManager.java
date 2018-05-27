@@ -6,6 +6,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class FileManager implements IFileManager {
         }
 
         File[] listOfFiles = directory.listFiles();
+        Arrays.sort(listOfFiles, Comparator.comparingLong(File::lastModified));
         for (int i = 0; i < (listOfFiles != null ? listOfFiles.length : 0); i++) {
             if (listOfFiles[i].isFile()) {
                 files.add(listOfFiles[i].getAbsolutePath());

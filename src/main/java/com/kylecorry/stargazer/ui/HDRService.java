@@ -1,6 +1,6 @@
 package com.kylecorry.stargazer.ui;
 
-import com.kylecorry.stargazer.imageProcessing.BlendMode;
+import com.kylecorry.stargazer.imageProcessing.blendModes.BlendMode;
 import com.kylecorry.stargazer.imageProcessing.ImageProcessor;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
