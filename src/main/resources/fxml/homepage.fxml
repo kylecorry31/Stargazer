@@ -5,74 +5,122 @@
 <?import com.jfoenix.controls.JFXProgressBar?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #303030;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.HomepageController">
    <children>
-      <Label layoutX="32.0" layoutY="34.0" prefHeight="30.0" prefWidth="141.0" styleClass="title" text="Star Photos">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="149.0" layoutY="37.0" onMouseClicked="#frameHelp" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/help.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="32.0" layoutY="64.0" prefHeight="32.0" prefWidth="960.0" styleClass="body-1" text="Select a folder containing the photos captured. Be sure to use a tripod! If high ISO is used, be sure to take many photos (~ 32 to 64)" wrapText="true" />
-      <JFXButton fx:id="framesBtn" buttonType="RAISED" layoutX="32.0" layoutY="100.0" onMouseClicked="#selectFrames" prefHeight="38.0" prefWidth="166.0" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD PHOTOS" />
-      <Label fx:id="frames" layoutX="248.0" layoutY="99.0" prefHeight="40.0" prefWidth="750.0" styleClass="body-2" text="No folder selected" />
-      <Label layoutX="32.0" layoutY="170.0" prefHeight="30.0" prefWidth="141.0" styleClass="title" text="Dark Photos">
-         <font>
-            <Font name="System Bold" size="20.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="149.0" layoutY="173.0" onMouseClicked="#blackFrameHelp" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/help.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="32.0" layoutY="200.0" prefHeight="64.0" prefWidth="960.0" styleClass="body-1" text="Cover the lense of your camera with something black like tape or a black bag. Take about the same number of photos as the actual photos above with the exact same settings. This is optional, but recommended to remove a great deal of sensor noise." textFill="WHITE" wrapText="true" />
-      <JFXButton fx:id="blackFramesBtn" buttonType="RAISED" layoutX="32.0" layoutY="268.0" onMouseClicked="#selectBlackFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD DARK PHOTOS" />
-      <Label fx:id="blackFrames" layoutX="248.0" layoutY="267.0" prefHeight="40.0" prefWidth="744.0" styleClass="body-2" text="No folder selected" />
-      <JFXToggleButton fx:id="alignStars" layoutX="16.0" layoutY="314.0" prefHeight="60.0" prefWidth="149.0" styleClass="custom-jfx-toggle-button" text="Align stars" toggleLineColor="#2ebfb1" />
-      <Label fx:id="techniqueLbl" disable="true" layoutX="32.0" layoutY="374.0" styleClass="title" text="Alignment Technique">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-      </Label>
-      <JFXRadioButton fx:id="autoAlign" disable="true" layoutX="16.0" layoutY="415.0" selected="true" styleClass="custom-jfx-radio-button" text="Auto align (works well on images with few obstructions)">
-         <toggleGroup>
-            <ToggleGroup fx:id="align" />
-         </toggleGroup>
-      </JFXRadioButton>
-      <JFXRadioButton fx:id="manualAlign" disable="true" layoutX="16.0" layoutY="450.0" styleClass="custom-jfx-radio-button" text="Semi-manual align (outline 2 star streaks)" toggleGroup="$align" />
-      <JFXComboBox fx:id="filter" labelFloat="true" layoutX="32.0" layoutY="493.0" prefHeight="26.0" prefWidth="323.0" promptText="Auto align filter" styleClass="custom-jfx-combo-box" />
-      <ImageView fx:id="filterSettings" fitHeight="24.0" fitWidth="24.0" layoutX="365.0" layoutY="494.0" onMouseClicked="#modifyFilterSettings" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/settings.png" />
-         </image>
-      </ImageView>
       <JFXButton fx:id="enhanceBtn" buttonType="RAISED" disable="true" layoutX="415.0" layoutY="600.0" onMouseClicked="#createEnhancedImage" ripplerFill="#2c4b7c" styleClass="button-raised" text="ENHANCE PHOTO" />
       <Label fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="657.0" prefHeight="21.0" prefWidth="600.0" styleClass="subheading" textFill="RED" />
       <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="693.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
       <Label layoutX="24.0" layoutY="728.0" onMouseClicked="#about" styleClass="button-text" text="ABOUT" />
-      <HBox alignment="CENTER" layoutX="205.0" layoutY="41.0" spacing="32.0">
+      <VBox layoutY="-1.0" prefHeight="200.0" prefWidth="1024.0">
          <children>
-            <Label styleClass="body-1" text="Priority:" />
-            <JFXRadioButton fx:id="priorityReduceNoise" selected="true" styleClass="custom-jfx-radio-button" text="Reduce Noise">
-               <toggleGroup>
-                  <ToggleGroup fx:id="priority" />
-               </toggleGroup>
-            </JFXRadioButton>
-            <JFXRadioButton fx:id="priorityStarStreaks" styleClass="custom-jfx-radio-button" text="Star Streaks" toggleGroup="$priority" />
+            <VBox alignment="CENTER_LEFT" spacing="32.0">
+               <children>
+                  <VBox spacing="8.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="16.0">
+                           <children>
+                              <Label styleClass="title" text="Star Photos">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" onMouseClicked="#frameHelp" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/help.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <Label prefHeight="32.0" prefWidth="960.0" styleClass="body-1" text="Select a folder containing the photos captured. Be sure to use a tripod! If high ISO is used, be sure to take many photos (~ 32 to 64)" wrapText="true" />
+                        <HBox alignment="CENTER_LEFT" spacing="16.0">
+                           <children>
+                              <JFXButton fx:id="framesBtn" buttonType="RAISED" onMouseClicked="#selectFrames" prefHeight="38.0" prefWidth="166.0" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD PHOTOS" />
+                              <Label fx:id="frames" prefHeight="40.0" prefWidth="750.0" styleClass="body-2" text="No folder selected" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox spacing="8.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="16.0">
+                           <children>
+                              <Label styleClass="title" text="Dark Photos">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" onMouseClicked="#blackFrameHelp" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/help.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <Label prefHeight="64.0" prefWidth="960.0" styleClass="body-1" text="Cover the lense of your camera with something black like tape or a black bag. Take about the same number of photos as the actual photos above with the exact same settings. This is optional, but recommended to remove a great deal of sensor noise." textFill="WHITE" wrapText="true" />
+                        <HBox alignment="CENTER_LEFT" spacing="16.0">
+                           <children>
+                              <JFXButton fx:id="blackFramesBtn" buttonType="RAISED" onMouseClicked="#selectBlackFrames" ripplerFill="#2c4b7c" styleClass="button-raised" text="UPLOAD DARK PHOTOS" />
+                              <Label fx:id="blackFrames" prefHeight="40.0" prefWidth="744.0" styleClass="body-2" text="No folder selected" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT" spacing="16.0">
+                     <children>
+                        <JFXToggleButton fx:id="alignStars" styleClass="custom-jfx-toggle-button" text="Align stars" toggleLineColor="#2ebfb1" />
+                        <Label fx:id="techniqueLbl" disable="true" styleClass="title" text="Alignment Technique">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <JFXRadioButton fx:id="autoAlign" disable="true" selected="true" styleClass="custom-jfx-radio-button" text="Auto align (works well on images with few obstructions)">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="align" />
+                           </toggleGroup>
+                        </JFXRadioButton>
+                        <JFXRadioButton fx:id="manualAlign" disable="true" styleClass="custom-jfx-radio-button" text="Semi-manual align (outline 2 star streaks)" toggleGroup="$align" />
+                        <HBox alignment="CENTER_LEFT" spacing="16.0">
+                           <children>
+                              <JFXComboBox fx:id="filter" labelFloat="true" prefHeight="26.0" prefWidth="323.0" promptText="Auto align filter" styleClass="custom-jfx-combo-box" />
+                              <ImageView fx:id="filterSettings" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#modifyFilterSettings" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/settings.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <padding>
+                              <Insets top="16.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox alignment="CENTER_LEFT" spacing="32.0">
+                     <children>
+                        <Label styleClass="body-1" text="Priority:" />
+                        <JFXRadioButton fx:id="priorityReduceNoise" selected="true" styleClass="custom-jfx-radio-button" text="Reduce Noise">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="priority" />
+                           </toggleGroup>
+                        </JFXRadioButton>
+                        <JFXRadioButton fx:id="priorityStarStreaks" styleClass="custom-jfx-radio-button" text="Star Streaks" toggleGroup="$priority" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+               </padding>
+            </VBox>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </AnchorPane>
