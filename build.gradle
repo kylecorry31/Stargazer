@@ -1,5 +1,5 @@
 group 'com.kylecorry.stargazer'
-version '0.5'
+version '1.0'
 
 apply plugin: 'java'
 
