@@ -23,11 +23,11 @@ public class SplashScreenController {
             window.getChildren().setAll(pane);
 
 
-            FadeTransition fadeOut = new FadeTransition(new Duration(1000), pane);
+            FadeTransition fadeOut = new FadeTransition(new Duration(500), pane);
             fadeOut.setFromValue(1);
             fadeOut.setToValue(0);
             fadeOut.setCycleCount(1);
-            fadeOut.setDelay(new Duration(1500));
+            fadeOut.setDelay(new Duration(500));
 
             fadeOut.play();
 
@@ -36,7 +36,7 @@ public class SplashScreenController {
                     AnchorPane parentPane = FXMLLoader.load(getClass().getResource("/fxml/homepage.fxml"));
                     parentPane.setOpacity(0);
                     window.getChildren().setAll(parentPane);
-                    FadeTransition fadeIn = new FadeTransition(new Duration(1000), parentPane);
+                    FadeTransition fadeIn = new FadeTransition(new Duration(500), parentPane);
                     fadeIn.setFromValue(0);
                     fadeIn.setToValue(1);
                     fadeIn.setCycleCount(1);
