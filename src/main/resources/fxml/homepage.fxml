@@ -15,11 +15,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ProgressBar?>
 <AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #303030;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kylecorry.stargazer.ui.HomepageController">
    <children>
       <JFXButton fx:id="enhanceBtn" buttonType="RAISED" disable="true" layoutX="415.0" layoutY="600.0" onMouseClicked="#createEnhancedImage" ripplerFill="#2c4b7c" styleClass="button-raised" text="ENHANCE PHOTO" />
       <Label fx:id="progressText" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="657.0" prefHeight="21.0" prefWidth="600.0" styleClass="subheading" textFill="RED" />
-      <JFXProgressBar fx:id="progressBar" layoutX="262.0" layoutY="693.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
+      <ProgressBar fx:id="progressBar" layoutX="262.0" layoutY="693.0" prefHeight="24.0" prefWidth="500.0" progress="0.0" styleClass="custom-jfx-progress-bar" />
       <Label layoutX="24.0" layoutY="728.0" onMouseClicked="#about" styleClass="button-text" text="ABOUT" />
       <VBox layoutY="-1.0" prefHeight="200.0" prefWidth="1024.0">
          <children>

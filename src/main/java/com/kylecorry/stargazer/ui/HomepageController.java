@@ -3,18 +3,25 @@ package com.kylecorry.stargazer.ui;
 import com.jfoenix.controls.*;
 import com.kylecorry.stargazer.imageProcessing.*;
 import com.kylecorry.stargazer.imageProcessing.blendModes.BlendMode;
+import com.kylecorry.stargazer.imageProcessing.blendModes.Darken;
+import com.kylecorry.stargazer.imageProcessing.blendModes.Lighten;
+import com.kylecorry.stargazer.imageProcessing.blendModes.Multiply;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.AutoAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
 import com.kylecorry.stargazer.imageProcessing.stars.StarStreak;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.*;
+import com.kylecorry.stargazer.stars.*;
 import com.kylecorry.stargazer.storage.*;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
@@ -29,6 +36,9 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Kylec on 5/8/2017.
@@ -62,7 +72,7 @@ public class HomepageController implements Initializable {
     Label progressText;
 
     @FXML
-    JFXProgressBar progressBar;
+    ProgressBar progressBar;
 
     @FXML
     JFXToggleButton alignStars;
@@ -106,9 +116,6 @@ public class HomepageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (!SplashScreenController.wasSplashScreenLoaded()) {
-            loadSplashScreen();
-        }
         enhanceBtn.setDisable(true);
         filter.setDisable(true);
         filterSettings.setVisible(false);
@@ -146,65 +153,17 @@ public class HomepageController implements Initializable {
 
     }
 
-    private void loadSplashScreen() {
-        SplashScreenController splashScreenController = new SplashScreenController();
-        splashScreenController.init(window);
-    }
-
     public void createEnhancedImage() {
         enhanceBtn.setDisable(true);
-        imageProcessor = new ImageProcessor(fileManager);
-
-        BlendMode blendMode;
-
-        if(priorityReduceNoise.isSelected()){
-            blendMode = BlendMode.AVERAGE;
-        } else {
-            blendMode = BlendMode.LIGHTEN;
-        }
-
-        blackImageService = null;
-        hdrService = new HDRService(imageProcessor, lightFiles, blendMode);
-        hdrService.setOnSucceeded(event -> {
+        StarCombiner combiner = new StarCombiner(new AverageStarCombineStrategy());//new BlendedStarCombineStrategy(new Lighten()));
+        Service<Image> service = new StarCombinerService(lightFiles.stream().map(Image::fromFilenameOnTheFly).collect(toList()), combiner);
+        bindUIToService(service);
+        service.setOnSucceeded(event -> {
+            Image image = service.getValue();
+            saveImage(image.getMat());
             unbindUIFromServices();
-            if (blackImageService != null) {
-                subtractionService = new SubtractionService(imageProcessor, blackImageService.getValue(), hdrService.getValue());
-                bindUIToService(subtractionService);
-                subtractionService.start();
-                subtractionService.setOnSucceeded(event1 -> {
-                    unbindUIFromServices();
-                    saveImage(subtractionService.getValue());
-                    if (alignStars.isSelected()) {
-                        Mat black = new Mat();
-                        blackImageService.getValue().convertTo(black, CvType.CV_8U);
-                        locateStars(black, hdrService.getValue());
-                    } else
-                        resetUI();
-                });
-            } else {
-                saveImage(hdrService.getValue());
-                if (alignStars.isSelected()) {
-                    Mat hdr = hdrService.getValue();
-                    locateStars(Mat.zeros(hdr.size(), CvType.CV_8U), hdr);
-                } else
-                    resetUI();
-            }
         });
-
-        // Process black frames and/or start hdr service
-        if (!darkFiles.isEmpty()) {
-            blackImageService = new BlackImageService(new ImageProcessor(fileManager), darkFiles);
-            bindUIToService(blackImageService);
-            blackImageService.start();
-            blackImageService.setOnSucceeded(event -> {
-                bindUIToService(hdrService);
-                hdrService.start();
-            });
-        } else {
-            bindUIToService(hdrService);
-            hdrService.start();
-        }
-
+        service.start();
     }
 
     private void resetUI() {
