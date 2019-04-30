@@ -5,6 +5,7 @@ import com.kylecorry.stargazer.imageProcessing.blendModes.Darken;
 import com.kylecorry.stargazer.imageProcessing.blendModes.Lighten;
 import com.kylecorry.stargazer.imageProcessing.stars.filters.SparseLuminosityReductionFilter;
 import com.kylecorry.stargazer.stars.*;
+import com.kylecorry.stargazer.stars.starcombinestrategies.*;
 import com.kylecorry.stargazer.storage.*;
 import javafx.concurrent.Service;
 import javafx.fxml.FXML;
@@ -19,7 +20,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.opencv.core.*;
-import org.opencv.core.Point;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,9 +34,6 @@ import static java.util.stream.Collectors.toList;
 public class HomepageController implements Initializable {
 
     private List<String> darkFiles, lightFiles;
-
-    public static Point startStar1, endStar1, startStar2, endStar2;
-    public static Mat hdrImage;
 
     @FXML
     JFXButton framesBtn;
@@ -83,11 +80,11 @@ public class HomepageController implements Initializable {
         fileSelector = new DialogFileSelector();
         fileNameGenerator = new TimeFileNameGenerator();
         starCombineStrategies = new HashMap<>();
-        starCombineStrategies.put("Lighten", new BlendedStarCombineStrategy(new Lighten()));
-        starCombineStrategies.put("Darken", new BlendedStarCombineStrategy(new Darken()));
-        starCombineStrategies.put("Average", new AverageStarCombineStrategy());
-        starCombineStrategies.put("Align using streaks", new StreakAlignStarCombineStrategy(new SparseLuminosityReductionFilter()));
-        starCombineStrategies.put("Align using stars", new StarAlignStarCombineStrategy(new SparseLuminosityReductionFilter()));
+        starCombineStrategies.put("Streak stars", StarCombineFactory.streakStars());
+        starCombineStrategies.put("Remove stars", StarCombineFactory.removeStars());
+        starCombineStrategies.put("Reduce noise", StarCombineFactory.reduceNoise());
+        starCombineStrategies.put("Align using streaks", StarCombineFactory.alignStreaks());
+        starCombineStrategies.put("Align using stars", StarCombineFactory.alignStars());
     }
 
 
@@ -127,8 +124,6 @@ public class HomepageController implements Initializable {
         lightFiles = new LinkedList<>();
         darkFiles = new LinkedList<>();
         enhanceBtn.setDisable(true);
-        if (hdrImage != null)
-            hdrImage.release();
     }
 
     private void unbindUIFromServices() {

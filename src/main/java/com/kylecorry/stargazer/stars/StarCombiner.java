@@ -1,5 +1,7 @@
 package com.kylecorry.stargazer.stars;
 
+import com.kylecorry.stargazer.stars.starcombinestrategies.StarCombineStrategy;
+
 import java.util.List;
 import java.util.Objects;
 
