@@ -14,8 +14,8 @@ public interface Image {
         return new LoadedImage(mat);
     }
 
-    static Image fromFilenameOnTheFly(String filename){
-        return new OnTheFlyImage(filename);
+    static Image fromFilenameReducedMemory(String filename){
+        return new ReducedMemoryImage(filename);
     }
 
 }

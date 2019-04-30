@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * A class which loads the image every time getMat is called
  */
-public class OnTheFlyImage implements Image {
+public class ReducedMemoryImage implements Image {
 
     private String filename;
 
@@ -16,7 +16,7 @@ public class OnTheFlyImage implements Image {
      * Default constructor
      * @param filename the filename of the image
      */
-    public OnTheFlyImage(String filename) {
+    public ReducedMemoryImage(String filename) {
         this.filename = Objects.requireNonNull(filename);
     }
 

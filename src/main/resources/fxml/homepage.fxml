@@ -78,21 +78,9 @@
                   </VBox>
                   <VBox alignment="CENTER_LEFT" spacing="16.0">
                      <children>
-                        <JFXToggleButton fx:id="alignStars" styleClass="custom-jfx-toggle-button" text="Align stars" toggleLineColor="#2ebfb1" />
-                        <Label fx:id="techniqueLbl" disable="true" styleClass="title" text="Alignment Technique">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Label>
-                        <JFXRadioButton fx:id="autoAlign" disable="true" selected="true" styleClass="custom-jfx-radio-button" text="Auto align (works well on images with few obstructions)">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="align" />
-                           </toggleGroup>
-                        </JFXRadioButton>
-                        <JFXRadioButton fx:id="manualAlign" disable="true" styleClass="custom-jfx-radio-button" text="Semi-manual align (outline 2 star streaks)" toggleGroup="$align" />
                         <HBox alignment="CENTER_LEFT" spacing="16.0">
                            <children>
-                              <JFXComboBox fx:id="filter" labelFloat="true" prefHeight="26.0" prefWidth="323.0" promptText="Auto align filter" styleClass="custom-jfx-combo-box" />
+                              <JFXComboBox fx:id="filter" labelFloat="true" prefHeight="26.0" prefWidth="323.0" promptText="Image Stacking Technique" styleClass="custom-jfx-combo-box" />
                               <ImageView fx:id="filterSettings" fitHeight="24.0" fitWidth="24.0" onMouseClicked="#modifyFilterSettings" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/settings.png" />
@@ -105,17 +93,6 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <HBox alignment="CENTER_LEFT" spacing="32.0">
-                     <children>
-                        <Label styleClass="body-1" text="Priority:" />
-                        <JFXRadioButton fx:id="priorityReduceNoise" selected="true" styleClass="custom-jfx-radio-button" text="Reduce Noise">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="priority" />
-                           </toggleGroup>
-                        </JFXRadioButton>
-                        <JFXRadioButton fx:id="priorityStarStreaks" styleClass="custom-jfx-radio-button" text="Star Streaks" toggleGroup="$priority" />
-                     </children>
-                  </HBox>
                </children>
                <padding>
                   <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />

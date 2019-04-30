@@ -2,19 +2,11 @@ package com.kylecorry.stargazer.ui;
 
 import com.jfoenix.controls.*;
 import com.kylecorry.stargazer.imageProcessing.*;
-import com.kylecorry.stargazer.imageProcessing.blendModes.BlendMode;
 import com.kylecorry.stargazer.imageProcessing.blendModes.Darken;
 import com.kylecorry.stargazer.imageProcessing.blendModes.Lighten;
-import com.kylecorry.stargazer.imageProcessing.blendModes.Multiply;
-import com.kylecorry.stargazer.imageProcessing.stars.alignment.AutoAlign;
-import com.kylecorry.stargazer.imageProcessing.stars.alignment.ManualAlign;
-import com.kylecorry.stargazer.imageProcessing.stars.StarStreak;
-import com.kylecorry.stargazer.imageProcessing.stars.filters.*;
 import com.kylecorry.stargazer.stars.*;
 import com.kylecorry.stargazer.storage.*;
-import javafx.application.Platform;
 import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,17 +18,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -75,22 +63,7 @@ public class HomepageController implements Initializable {
     ProgressBar progressBar;
 
     @FXML
-    JFXToggleButton alignStars;
-
-    @FXML
-    JFXRadioButton autoAlign;
-
-    @FXML
-    JFXRadioButton manualAlign;
-
-    @FXML
-    JFXRadioButton priorityReduceNoise, priorityStarStreaks;
-
-    @FXML
-    Label techniqueLbl;
-
-    @FXML
-    JFXComboBox<IFilter> filter;
+    JFXComboBox<String> filter;
 
     @FXML
     ImageView filterSettings;
@@ -103,6 +76,7 @@ public class HomepageController implements Initializable {
     private final FileSelector fileSelector;
     private final FileNameGenerator fileNameGenerator;
     private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
+    private Map<String, StarCombineStrategy> starCombineStrategies;
 
 
     public HomepageController() {
@@ -111,57 +85,34 @@ public class HomepageController implements Initializable {
         fileManager = new FileManager();
         fileSelector = new DialogFileSelector();
         fileNameGenerator = new TimeFileNameGenerator();
+        starCombineStrategies = new HashMap<>();
+        starCombineStrategies.put("Lighten", new BlendedStarCombineStrategy(new Lighten()));
+        starCombineStrategies.put("Darken", new BlendedStarCombineStrategy(new Darken()));
+        starCombineStrategies.put("Average", new AverageStarCombineStrategy());
+        starCombineStrategies.put("Align", new AverageStarCombineStrategy()); // TODO: make align
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         enhanceBtn.setDisable(true);
-        filter.setDisable(true);
         filterSettings.setVisible(false);
-        alignStars.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            autoAlign.setDisable(!newValue);
-            manualAlign.setDisable(!newValue);
-            techniqueLbl.setDisable(!newValue);
-            if (autoAlign.isSelected()) {
-                filter.setDisable(!newValue);
-                filterSettings.setVisible(newValue);
-            }
-        });
-        autoAlign.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            filter.setDisable(!newValue);
-            filterSettings.setVisible(newValue);
-        });
-
-        FilterFactory filterFactory = new FilterFactory();
-
-        List<IFilter> filters = filterFactory.getAllFilters();
-        filter.getItems().addAll(filters);
-        filter.setValue(filters.get(0));
-
-        filter.setConverter(new StringConverter<IFilter>() {
-            @Override
-            public String toString(IFilter iFilter) {
-                return iFilter.getName();
-            }
-
-            @Override
-            public IFilter fromString(String s) {
-                return filterFactory.getFilter(s);
-            }
-        });
+        filter.getItems().addAll(starCombineStrategies.keySet().stream().sorted().collect(toList()));
+        filter.setValue(filter.getItems().get(0));
 
     }
 
     public void createEnhancedImage() {
         enhanceBtn.setDisable(true);
-        StarCombiner combiner = new StarCombiner(new AverageStarCombineStrategy());//new BlendedStarCombineStrategy(new Lighten()));
-        Service<Image> service = new StarCombinerService(lightFiles.stream().map(Image::fromFilenameOnTheFly).collect(toList()), combiner);
+        StarCombiner combiner = new StarCombiner(starCombineStrategies.get(filter.getValue()));
+        List<Image> images = lightFiles.stream().map(Image::fromFilenameReducedMemory).collect(toList());
+        Service<Image> service = new StarCombinerService(images, combiner);
         bindUIToService(service);
         service.setOnSucceeded(event -> {
             Image image = service.getValue();
-            saveImage(image.getMat());
+            saveImage(image);
             unbindUIFromServices();
+            resetUI();
         });
         service.start();
     }
@@ -180,9 +131,6 @@ public class HomepageController implements Initializable {
         enhanceBtn.setDisable(true);
         if (hdrImage != null)
             hdrImage.release();
-        alignStars.setSelected(false);
-        priorityReduceNoise.setSelected(true);
-        System.gc();
     }
 
     private void unbindUIFromServices() {
@@ -198,40 +146,11 @@ public class HomepageController implements Initializable {
         progressText.textProperty().bind(service.messageProperty());
     }
 
-    private void saveImage(Mat image) {
+    private void saveImage(Image image) {
         SaveImageController saveImageController = new SaveImageController(fileManager, fileSelector, fileNameGenerator);
-        saveImageController.saveImage(image);
+        saveImageController.saveImage(image.getMat());
     }
 
-    private void locateStars(Mat blackImage, Mat hdrImage) {
-        if (autoAlign.isSelected()) {
-            starAlignmentService = new StarAlignmentService(imageProcessor, new AutoAlign(fileManager, lightFiles, blackImage, new StarFilter(filter.getValue())), lightFiles.size());
-        } else {
-            HomepageController.hdrImage = hdrImage;
-            displayPopup("/fxml/StarStreak.fxml", "Star Streak Identifier");
-            starAlignmentService = new StarAlignmentService(imageProcessor, new ManualAlign(fileManager, lightFiles, new StarStreak(startStar1, endStar1), new StarStreak(startStar2, endStar2)), lightFiles.size());
-        }
-
-        bindUIToService(starAlignmentService);
-        starAlignmentService.setOnSucceeded(event -> {
-            unbindUIFromServices();
-            if (blackImageService != null) {
-                subtractionService = new SubtractionService(imageProcessor, blackImageService.getValue(), starAlignmentService.getValue());
-                bindUIToService(subtractionService);
-                subtractionService.setOnSucceeded(event1 -> {
-                    unbindUIFromServices();
-                    saveImage(subtractionService.getValue());
-                    resetUI();
-                });
-                subtractionService.start();
-            } else {
-                saveImage(starAlignmentService.getValue());
-                resetUI();
-            }
-        });
-        starAlignmentService.start();
-
-    }
 
     public void selectBlackFrames() {
         DirectorySelectionController controller = new DirectorySelectionController(fileSelector);
@@ -277,7 +196,7 @@ public class HomepageController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilterSettings.fxml"));
             AnchorPane root = loader.load();
             FilterSettingsController controller = loader.getController();
-            controller.setFilter(filter.getValue());
+//            controller.setFilter(filter.getValue());
             if (lightFiles != null && !lightFiles.isEmpty()) {
                 controller.setImage(lightFiles.get(0));
             }
@@ -285,7 +204,7 @@ public class HomepageController implements Initializable {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/styles.css");
             stage.setScene(scene);
-            stage.setTitle("Adjust " + filter.getValue().getName() + " Settings");
+//            stage.setTitle("Adjust " + filter.getValue().getName() + " Settings");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(window.getScene().getWindow());
             stage.showAndWait();
