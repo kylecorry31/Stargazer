@@ -1,9 +1,9 @@
 package com.kylecorry.stargazer.ui;
 
 import com.jfoenix.controls.*;
-import com.kylecorry.stargazer.imageProcessing.*;
 import com.kylecorry.stargazer.imageProcessing.blendModes.Darken;
 import com.kylecorry.stargazer.imageProcessing.blendModes.Lighten;
+import com.kylecorry.stargazer.imageProcessing.stars.filters.SparseLuminosityReductionFilter;
 import com.kylecorry.stargazer.stars.*;
 import com.kylecorry.stargazer.storage.*;
 import javafx.concurrent.Service;
@@ -70,12 +70,9 @@ public class HomepageController implements Initializable {
 
     private Mat darkImage;
 
-    private ImageProcessor imageProcessor;
-
     private final FileManager fileManager;
     private final FileSelector fileSelector;
     private final FileNameGenerator fileNameGenerator;
-    private Service<Mat> blackImageService, hdrService, subtractionService, starAlignmentService;
     private Map<String, StarCombineStrategy> starCombineStrategies;
 
 
@@ -89,7 +86,8 @@ public class HomepageController implements Initializable {
         starCombineStrategies.put("Lighten", new BlendedStarCombineStrategy(new Lighten()));
         starCombineStrategies.put("Darken", new BlendedStarCombineStrategy(new Darken()));
         starCombineStrategies.put("Average", new AverageStarCombineStrategy());
-        starCombineStrategies.put("Align", new AverageStarCombineStrategy()); // TODO: make align
+        starCombineStrategies.put("Align using streaks", new StreakAlignStarCombineStrategy(new SparseLuminosityReductionFilter()));
+        starCombineStrategies.put("Align using stars", new StarAlignStarCombineStrategy(new SparseLuminosityReductionFilter()));
     }
 
 

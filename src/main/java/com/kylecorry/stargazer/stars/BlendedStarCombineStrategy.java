@@ -32,7 +32,6 @@ public class BlendedStarCombineStrategy implements StarCombineStrategy {
             avg = next;
             current.release();
         }
-        progressTrackerStrategy.setProgress(0);
         return Image.fromMat(avg);
     }
 }

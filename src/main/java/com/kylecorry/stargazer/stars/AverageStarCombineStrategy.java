@@ -23,7 +23,6 @@ public class AverageStarCombineStrategy implements StarCombineStrategy {
         }
         Mat average = averager.getAverage(type);
         averager.release();
-        progressTrackerStrategy.setProgress(0);
         return Image.fromMat(average);
     }
 }

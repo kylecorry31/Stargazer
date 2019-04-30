@@ -1,5 +1,7 @@
 package com.kylecorry.stargazer.stars;
 
+import com.kylecorry.stargazer.imageProcessing.blendModes.Lighten;
+
 import java.util.List;
 
 /**
@@ -14,4 +16,8 @@ public interface StarCombineStrategy {
      * @return the combined image
      */
     Image combine(List<Image> images, ProgressTrackerStrategy progressTrackerStrategy);
+
+    static StarCombineStrategy lighten(){
+        return new BlendedStarCombineStrategy(new Lighten());
+    }
 }

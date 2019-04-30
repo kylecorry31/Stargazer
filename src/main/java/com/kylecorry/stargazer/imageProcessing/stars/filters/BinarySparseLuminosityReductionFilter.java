@@ -9,7 +9,7 @@ public class BinarySparseLuminosityReductionFilter implements IFilter {
 
     private FilterSettings settings;
     private String rmsLowerKey = "Min difference from mean";
-    private double rmsLowerDefault = 100;
+    private double rmsLowerDefault = 70;
     private String rmsLowerDesc = "The minimum difference from the mean to be considered a star";
     private String rmsUpperKey = "Max difference from mean";
     private double rmsUpperDefault = 255;
